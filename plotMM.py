@@ -15,7 +15,7 @@ from ROOT import *
 ################
 
 Mediator  = "Axial"
-METXonly  = True
+METXonly  = False
 
 #################
 ### Analyses ####
@@ -69,7 +69,7 @@ color["dijet"]      = kBlue
 text["monojet"]    = "Mono-jet [DUMMY - EXO-16-037]"
 text["monoZ"]      = "Mono-Z [EXO-16-038]"
 text["monophoton"] = "Mono-\gamma  [DUMMY - EXO-16-039]"
-text["relic"]      = "\Omega_{c} x h^{2} \leq 0.12"
+text["relic"]      = "\Omega_{c} x h^{2} \geq 0.12"
 text["chi"]        = "chi (exp.excl.)"
 text["dijet"]      = "Dijet [EXO-16-032]"
 

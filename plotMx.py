@@ -46,7 +46,7 @@ for analysis in analyses:
 ### Add legend  ###
 ###################
 
-C=TCanvas("C","C",600,600)
+C=TCanvas("C","C",1000,600)
 C.cd(1)
 C.cd(1).SetLogx()
 C.cd(1).SetLogy()
@@ -55,14 +55,14 @@ tgraph["LUX"].SetTitle("DD Summer 2016")
 tgraph["LUX"].GetXaxis().SetTitle("m_{DM} [GeV]")
 tgraph["LUX"].GetYaxis().SetTitle("#sigma_{SI} [cm^{2}]")
 tgraph["LUX"].GetXaxis().SetTitleOffset(1.0)
-tgraph["LUX"].GetYaxis().SetTitleOffset(1.5)
+tgraph["LUX"].GetYaxis().SetTitleOffset(1.0)
 tgraph["LUX"].GetXaxis().SetTitleSize(0.045)
 tgraph["LUX"].GetYaxis().SetTitleSize(0.045)
 tgraph["LUX"].GetXaxis().SetRangeUser(0,1000)
 #tgraph[""].GetYaxis().SetRangeUser(0,1200)
 tgraph["LUX"].Draw()
 
-leg=C.BuildLegend(0.15,0.50,0.45,0.88)
+leg=C.BuildLegend(0.50,0.50,0.80,0.88)
 leg.SetBorderSize(0)
 leg.SetTextFont(42)
 leg.Clear()
@@ -88,6 +88,13 @@ for analysis in analyses:
     tgraph[analysis].Draw("same")
 
 leg.Draw()
+C.Update()
+
+#################
+### Save plot ###
+#################
+
+C.SaveAs("DD.pdf")
 
 ###########
 ### FIN ###

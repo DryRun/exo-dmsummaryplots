@@ -26,14 +26,16 @@ analyses = ["BSM",
             "monojet",
             "DMtt_obs",
             "METbb_DMtt_obs",
-            "METbb_DMbb_obs",
-            "METbb_DMhf_obs"]
+            "METbb_DMbb_obs"
+            #,"METbb_DMhf_obs"
+            ]
 
 if not ObsOnly: analyses=["BSM","monojet",
                           "DMtt_exp","DMtt_obs",
-                          "METbb_DMhf_exp","METbb_DMhf_obs",
                           "METbb_DMtt_exp","METbb_DMtt_obs",
-                          "METbb_DMbb_exp","METbb_DMbb_obs"]
+                          "METbb_DMbb_exp","METbb_DMbb_obs"
+                          #"METbb_DMhf_exp","METbb_DMhf_obs",
+                          ]
 
 tgraph    = {}
 color     = {}
@@ -84,13 +86,13 @@ color["METbb_DMhf_exp"] = kGreen-1
 
 text["BSM"]        = "BSM Theory DMF"
 text["monojet"]    = "Mono-V/j [EXO-16-037] (obs)"
-text["DMtt_obs"]       = "MET+tt: DM+tt [EXO-16-005] (obs)"
-text["METbb_DMbb_obs"] = "MET+bb: DM+bb [B2G-15-007] (obs)"
-text["METbb_DMtt_obs"] = "MET+bb: DM+tt [B2G-15-007] (obs)"
+text["DMtt_obs"]       = "DM+tt [EXO-16-005] (obs)"
+text["METbb_DMbb_obs"] = "DM+bb [B2G-15-007] (obs)"
+text["METbb_DMtt_obs"] = "DM+tt (nj<4) [B2G-15-007] (obs)"
 text["METbb_DMhf_obs"] = "MET+bb: DM+HF [B2G-15-007] (obs)"
-text["DMtt_exp"]       = "MET+tt: DM+tt [EXO-16-005] (exp)"
-text["METbb_DMbb_exp"] = "MET+bb: DM+bb [B2G-15-007] (exp)"
-text["METbb_DMtt_exp"] = "MET+bb: DM+tt [B2G-15-007] (exp)"
+text["DMtt_exp"]       = "DM+tt [EXO-16-005] (exp)"
+text["METbb_DMbb_exp"] = "DM+bb [B2G-15-007] (exp)"
+text["METbb_DMtt_exp"] = "DM+tt (nj<4) [B2G-15-007] (exp)"
 text["METbb_DMhf_exp"] = "MET+bb: DM+HF [B2G-15-007] (exp)"
 
 ####################

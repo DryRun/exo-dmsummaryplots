@@ -14,14 +14,14 @@ from ROOT import *
 ### Settings ###
 ################
 
-Mediator  = "Axial"
-METXonly  = False
+Mediator  = "Vector"
+METXonly  = True
 
 #################
 ### Analyses ####
 #################
 
-metx = ["monojet","monophoton","monoZ"]
+metx = ["monojet","monophoton","monoZ","monotop"]
 analyses = ["relic"]+metx
 if not METXonly: analyses = ["relic","dijet"]+metx
 
@@ -41,6 +41,7 @@ if Mediator == "Vector":
     filepath["relic"]      = "Relic/relicContour_V_g25.root"
     filepath["monojet"]    = "Monojet/ScanMM/monojet_dummy.dat"
     filepath["monoZ"]      = "MonoZll/ScanMM/monoz_vector_gq0p25_cl95_2015.txt"
+    filepath["monotop"]    = "Monotop/ScanMM/vector_rebinned.root"
 elif Mediator == "Axial":
     filepath["dijet"]      = "Dijet/ScanMM/Dijet_MM_A_2016ICHEP_obs.dat"
     filepath["monophoton"] = "Monophoton/ScanMM/monophoton_dummy.dat"
@@ -55,6 +56,7 @@ elif Mediator == "Axial":
 linestyle["relic"]      = kDotted
 linestyle["dijet"]      = kSolid
 linestyle["monoZ"]      = kSolid
+linestyle["monotop"]    = kSolid
 ### dummies dashed
 linestyle["monojet"]    = kDashed
 linestyle["monophoton"] = kDashed
@@ -62,11 +64,13 @@ linestyle["monophoton"] = kDashed
 color["monojet"]    = kRed
 color["monophoton"] = kOrange
 color["monoZ"]      = kYellow
+color["monotop"]    = kGreen
 color["relic"]      = kGray
 color["chi"]        = kBlack
 color["dijet"]      = kBlue
 
 text["monojet"]    = "Mono-jet [DUMMY - EXO-16-037]"
+text["monotop"]    = "Mono-t (FC) [EXO-16-040]"
 text["monoZ"]      = "Mono-Z [EXO-16-038]"
 text["monophoton"] = "Mono-\gamma  [DUMMY - EXO-16-039]"
 text["relic"]      = "\Omega_{c} x h^{2} \geq 0.12"
@@ -85,6 +89,8 @@ for analysis in analyses:
         mylist = TFile(filepath["relic"]).Get("mytlist")
         print "==> Relic list length = ",mylist.GetSize()
         tgraph["relic"] = mylist.At(0)
+    elif analysis == "monotop":
+        tgraph["monotop"] = TFile(filepath[analysis]).Get("observed")
     else :
         tgraph[analysis] = TGraph(filepath[analysis])
 

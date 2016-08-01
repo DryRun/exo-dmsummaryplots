@@ -15,7 +15,7 @@ from ROOT import *
 ################
 
 Mediator  = "Vector"
-METXonly  = True
+METXonly  = False
 
 #################
 ### Analyses ####
@@ -23,7 +23,7 @@ METXonly  = True
 
 metx = ["monojet","monophoton","monoZ","monotop"]
 analyses = ["relic"]+metx
-if not METXonly: analyses = ["relic","dijet"]+metx
+if not METXonly: analyses = ["relic","dijet","trijet"]+metx
 
 tgraph    = {}
 color     = {}
@@ -37,7 +37,8 @@ linestyle = {}
 
 if Mediator == "Vector":
     filepath["dijet"]      = "Dijet/ScanMM/Dijet_MM_V_2016ICHEP_obs.dat"
-    filepath["monophoton"] = "Monophoton/ScanMM/monophoton_dummy.dat"
+    filepath["trijet"]     = "Trijet/ScanMM/Trijet_MM_V_2016ICHEP_obs.dat"
+    filepath["monophoton"] = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
     filepath["relic"]      = "Relic/relicContour_V_g25.root"
     filepath["monojet"]    = "Monojet/ScanMM/monojet_dummy.dat"
     filepath["monoZ"]      = "MonoZll/ScanMM/monoz_vector_gq0p25_cl95_2015.txt"
@@ -53,29 +54,38 @@ elif Mediator == "Axial":
 ### Plot settings ###
 #####################
 
+### Planck
 linestyle["relic"]      = kDotted
+### Met-less
 linestyle["dijet"]      = kSolid
+linestyle["trijet"]     = kSolid
+### MET+X
+linestyle["monophoton"] = kSolid
 linestyle["monoZ"]      = kSolid
 linestyle["monotop"]    = kSolid
 ### dummies dashed
 linestyle["monojet"]    = kDashed
-linestyle["monophoton"] = kDashed
 
+### Planck
+color["relic"]      = kGray
+### Met-less
+color["dijet"]      = kBlue
+color["trijet"]     = kGreen
+color["chi"]        = kBlack
+### MET+X
 color["monojet"]    = kRed
 color["monophoton"] = kOrange
 color["monoZ"]      = kYellow
-color["monotop"]    = kGreen
-color["relic"]      = kGray
-color["chi"]        = kBlack
-color["dijet"]      = kBlue
+color["monotop"]    = kViolet
 
-text["monojet"]    = "Mono-jet [DUMMY - EXO-16-037]"
-text["monotop"]    = "Mono-t (FC) [EXO-16-040]"
-text["monoZ"]      = "Mono-Z [EXO-16-038]"
-text["monophoton"] = "Mono-\gamma  [DUMMY - EXO-16-039]"
 text["relic"]      = "\Omega_{c} x h^{2} \geq 0.12"
-text["chi"]        = "chi (exp.excl.)"
 text["dijet"]      = "Dijet [EXO-16-032]"
+text["trijet"]     = "Trijet [EXO-16-030]"
+text["chi"]        = "chi (exp.excl.)"
+text["monojet"]    = "Mono-jet [DUMMY - EXO-16-037]"
+text["monoZ"]      = "Mono-Z [EXO-16-038]"
+text["monophoton"] = "Mono-\gamma  [EXO-16-039]"
+text["monotop"]    = "Mono-t (FC) [EXO-16-040]"
 
 ####################
 ### Get datfiles ###
@@ -91,6 +101,8 @@ for analysis in analyses:
         tgraph["relic"] = mylist.At(0)
     elif analysis == "monotop":
         tgraph["monotop"] = TFile(filepath[analysis]).Get("observed")
+    elif analysis == "monophoton":
+        tgraph["monophoton"] = TFile(filepath[analysis]).Get("monophoton_obs")
     else :
         tgraph[analysis] = TGraph(filepath[analysis])
 

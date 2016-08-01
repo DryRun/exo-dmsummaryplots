@@ -21,7 +21,8 @@ METXonly  = False
 ### Analyses ####
 #################
 
-metx = ["monojet","monophoton","monoZ","monotop"]
+metx     = ["monojet","monophoton","monoZ","monotop"]
+if Mediator == "Axial": ["monojet","monophoton","monoZ"]
 analyses = ["relic"]+metx
 if not METXonly: analyses = ["relic","dijet","trijet"]+metx
 
@@ -45,6 +46,7 @@ if Mediator == "Vector":
     filepath["monotop"]    = "Monotop/ScanMM/vector_rebinned.root"
 elif Mediator == "Axial":
     filepath["dijet"]      = "Dijet/ScanMM/Dijet_MM_A_2016ICHEP_obs.dat"
+    filepath["trijet"]     = "Trijet/ScanMM/Trijet_MM_A_2016ICHEP_obs.dat"
     filepath["monophoton"] = "Monophoton/ScanMM/monophoton_dummy.dat"
     filepath["relic"]      = "Relic/relicContour_A_g25.root"
     filepath["monojet"]    = "Monojet/ScanMM/monojet_dummy.dat"

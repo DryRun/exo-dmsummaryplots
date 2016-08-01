@@ -14,7 +14,7 @@ from ROOT import *
 ### Settings ###
 ################
 
-Mediator  = "Vector"
+Mediator  = "Axial"
 METXonly  = False
 Monotop   = False
 
@@ -89,7 +89,7 @@ text["relic"]      = "\Omega_{c} x h^{2} \geq 0.12"
 text["dijet"]      = "Dijet obs. [EXO-16-032]"
 text["trijet"]     = "Trijet obs. [EXO-16-030]"
 text["chi"]        = "chi obs. (exp.excl.)"
-text["monojet"]    = "Mono-jet obs. [DUMMY - EXO-16-037]"
+text["monojet"]    = "Mono-jet obs. [EXO-16-037]"
 text["monoZ"]      = "Mono-Z obs. [EXO-16-038]"
 text["monophoton"] = "Mono-\gamma obs. [EXO-16-039]"
 text["monotop"]    = "Mono-t (FC) obs. [EXO-16-040]"
@@ -133,12 +133,12 @@ if METXonly:
     tgraph["relic"].GetXaxis().SetRangeUser(0,2000)
     tgraph["relic"].GetYaxis().SetRangeUser(0, 700)
 else:        
-    tgraph["relic"].GetXaxis().SetRangeUser(0,4000)
+    tgraph["relic"].GetXaxis().SetRangeUser(0,3800)
     tgraph["relic"].GetYaxis().SetRangeUser(0,1300)
 tgraph["relic"].Draw()
 
 if METXonly: leg=C.BuildLegend(0.15,0.60,0.45,0.88)
-else:        leg=C.BuildLegend(0.63,0.15,0.90,0.45)
+else:        leg=C.BuildLegend(0.70,0.15,0.90,0.45)
 leg.SetBorderSize(0)
 leg.SetTextFont(42)
 leg.Clear()

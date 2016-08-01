@@ -14,7 +14,7 @@ from ROOT import *
 ### Settings ###
 ################
 
-Mediator  = "Axial"
+Mediator  = "Vector"
 METXonly  = False
 Monotop   = False
 

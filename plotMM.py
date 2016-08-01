@@ -16,15 +16,20 @@ from ROOT import *
 
 Mediator  = "Vector"
 METXonly  = False
+Monotop   = False
 
 #################
 ### Analyses ####
 #################
 
-metx     = ["monojet","monophoton","monoZ","monotop"]
-if Mediator == "Axial": ["monojet","monophoton","monoZ"]
-analyses = ["relic"]+metx
-if not METXonly: analyses = ["relic","dijet","trijet"]+metx
+
+if Mediator == "Axial": metx = ["monojet","monophoton","monoZ"]
+else                  : metx = ["monojet","monophoton","monoZ"]
+
+if Mediator=="Vector" and Monotop : metx+=["monotop"]
+
+if METXonly: analyses = ["relic"]+metx
+else       : analyses = ["relic","dijet","trijet"]+metx
 
 tgraph    = {}
 color     = {}
@@ -47,7 +52,7 @@ if Mediator == "Vector":
 elif Mediator == "Axial":
     filepath["dijet"]      = "Dijet/ScanMM/Dijet_MM_A_2016ICHEP_obs.dat"
     filepath["trijet"]     = "Trijet/ScanMM/Trijet_MM_A_2016ICHEP_obs.dat"
-    filepath["monophoton"] = "Monophoton/ScanMM/monophoton_dummy.dat"
+    filepath["monophoton"] = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
     filepath["relic"]      = "Relic/relicContour_A_g25.root"
     filepath["monojet"]    = "Monojet/ScanMM/monojet_dummy.dat"
     filepath["monoZ"]      = "MonoZll/ScanMM/monoz_axial_gq0p25_cl95_2015.txt"
@@ -66,28 +71,28 @@ linestyle["monophoton"] = kSolid
 linestyle["monoZ"]      = kSolid
 linestyle["monotop"]    = kSolid
 ### dummies dashed
-linestyle["monojet"]    = kDashed
+linestyle["monojet"]    = kSolid
 
 ### Planck
 color["relic"]      = kGray
 ### Met-less
-color["dijet"]      = kBlue
-color["trijet"]     = kGreen
-color["chi"]        = kBlack
+color["dijet"]      = kAzure
+color["trijet"]     = kAzure+1
+color["chi"]        = kBlue
 ### MET+X
-color["monojet"]    = kRed
-color["monophoton"] = kOrange
-color["monoZ"]      = kYellow
-color["monotop"]    = kViolet
+color["monojet"]    = kRed+1#kRed+1
+color["monophoton"] = kOrange+10#kRed+2
+color["monoZ"]      = kOrange-3#kRed+3
+color["monotop"]    = kViolet+1
 
 text["relic"]      = "\Omega_{c} x h^{2} \geq 0.12"
-text["dijet"]      = "Dijet [EXO-16-032]"
-text["trijet"]     = "Trijet [EXO-16-030]"
-text["chi"]        = "chi (exp.excl.)"
-text["monojet"]    = "Mono-jet [DUMMY - EXO-16-037]"
-text["monoZ"]      = "Mono-Z [EXO-16-038]"
-text["monophoton"] = "Mono-\gamma  [EXO-16-039]"
-text["monotop"]    = "Mono-t (FC) [EXO-16-040]"
+text["dijet"]      = "Dijet obs. [EXO-16-032]"
+text["trijet"]     = "Trijet obs. [EXO-16-030]"
+text["chi"]        = "chi obs. (exp.excl.)"
+text["monojet"]    = "Mono-jet obs. [DUMMY - EXO-16-037]"
+text["monoZ"]      = "Mono-Z obs. [EXO-16-038]"
+text["monophoton"] = "Mono-\gamma obs. [EXO-16-039]"
+text["monotop"]    = "Mono-t (FC) obs. [EXO-16-040]"
 
 ####################
 ### Get datfiles ###
@@ -129,15 +134,15 @@ if METXonly:
     tgraph["relic"].GetYaxis().SetRangeUser(0, 700)
 else:        
     tgraph["relic"].GetXaxis().SetRangeUser(0,4000)
-    tgraph["relic"].GetYaxis().SetRangeUser(0,1200)
+    tgraph["relic"].GetYaxis().SetRangeUser(0,1300)
 tgraph["relic"].Draw()
 
-if METXonly: leg=C.BuildLegend(0.15,0.60,0.40,0.88)
+if METXonly: leg=C.BuildLegend(0.15,0.60,0.45,0.88)
 else:        leg=C.BuildLegend(0.63,0.15,0.90,0.45)
 leg.SetBorderSize(0)
 leg.SetTextFont(42)
 leg.Clear()
-leg.SetHeader(Mediator+" (g_{q}=0.25, g_{DM}=1) obs.excl.95%CL")
+leg.SetHeader(Mediator+" mediator, Dirac DM (g_{q}=0.25, g_{DM}=1)")
 
 ############
 ### Draw ###

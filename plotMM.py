@@ -14,7 +14,7 @@ from ROOT import *
 ### Settings ###
 ################
 
-Mediator  = "Vector"
+Mediator  = "Axial"
 METXonly  = False
 Monotop   = False
 
@@ -42,19 +42,19 @@ linestyle = {}
 #############
 
 if Mediator == "Vector":
+    filepath["relic"]      = "Relic/relicContour_V_g25.root"
     filepath["dijet"]      = "Dijet/ScanMM/Dijet_MM_V_2016ICHEP_obs.dat"
     filepath["trijet"]     = "Trijet/ScanMM/Trijet_MM_V_2016ICHEP_obs.dat"
+    filepath["monojet"]    = "Monojet/ScanMM/Monojet_V_MM_ICHEP2016_obs.root"
     filepath["monophoton"] = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
-    filepath["relic"]      = "Relic/relicContour_V_g25.root"
-    filepath["monojet"]    = "Monojet/ScanMM/monojet_dummy.dat"
     filepath["monoZ"]      = "MonoZll/ScanMM/monoz_vector_gq0p25_cl95_2015.txt"
     filepath["monotop"]    = "Monotop/ScanMM/vector_rebinned.root"
 elif Mediator == "Axial":
+    filepath["relic"]      = "Relic/relicContour_A_g25.root"
     filepath["dijet"]      = "Dijet/ScanMM/Dijet_MM_A_2016ICHEP_obs.dat"
     filepath["trijet"]     = "Trijet/ScanMM/Trijet_MM_A_2016ICHEP_obs.dat"
+    filepath["monojet"]    = "Monojet/ScanMM/Monojet_AV_MM_ICHEP2016_obs.root"
     filepath["monophoton"] = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
-    filepath["relic"]      = "Relic/relicContour_A_g25.root"
-    filepath["monojet"]    = "Monojet/ScanMM/monojet_dummy.dat"
     filepath["monoZ"]      = "MonoZll/ScanMM/monoz_axial_gq0p25_cl95_2015.txt"
 
 #####################
@@ -90,7 +90,7 @@ text["dijet"]      = "Dijet obs. [EXO-16-032]"
 text["trijet"]     = "Trijet obs. [EXO-16-030]"
 text["chi"]        = "chi obs. (exp.excl.)"
 text["monojet"]    = "Mono-jet obs. [EXO-16-037]"
-text["monoZ"]      = "Mono-Z obs. [EXO-16-038]"
+text["monoZ"]      = "Mono-Z obs. [EXO-16-010]"
 text["monophoton"] = "Mono-\gamma obs. [EXO-16-039]"
 text["monotop"]    = "Mono-t (FC) obs. [EXO-16-040]"
 
@@ -106,12 +106,10 @@ for analysis in analyses:
         mylist = TFile(filepath["relic"]).Get("mytlist")
         print "==> Relic list length = ",mylist.GetSize()
         tgraph["relic"] = mylist.At(0)
-    elif analysis == "monotop":
-        tgraph["monotop"] = TFile(filepath[analysis]).Get("observed")
-    elif analysis == "monophoton":
-        tgraph["monophoton"] = TFile(filepath[analysis]).Get("monophoton_obs")
-    else :
-        tgraph[analysis] = TGraph(filepath[analysis])
+    elif analysis == "monojet"    : tgraph["monojet"]    = TFile(filepath[analysis]).Get("monojet_obs")
+    elif analysis == "monophoton" : tgraph["monophoton"] = TFile(filepath[analysis]).Get("monophoton_obs")
+    elif analysis == "monotop"    : tgraph["monotop"]    = TFile(filepath[analysis]).Get("observed")
+    else                          : tgraph[analysis]     = TGraph(filepath[analysis])
 
 ###################
 ### Make Canvas ###
@@ -138,7 +136,7 @@ else:
 tgraph["relic"].Draw()
 
 if METXonly: leg=C.BuildLegend(0.15,0.60,0.45,0.88)
-else:        leg=C.BuildLegend(0.70,0.15,0.90,0.45)
+else:        leg=C.BuildLegend(0.70,0.15,0.88,0.45)
 leg.SetBorderSize(0)
 leg.SetTextFont(42)
 leg.Clear()

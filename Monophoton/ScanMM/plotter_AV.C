@@ -13,12 +13,6 @@
 #include "TPaveText.h"
 #include "TLegend.h"
 
-TH2D* Monophoton_observed;
-TH2D* Monophoton_expected50;
-TGraph2D* r_limit_histo = new TGraph2D();
-TGraph2D* r_limit_histo_expected50 = new TGraph2D();
-
-
 void plotter_AV()
 {
   TCanvas *c = new TCanvas("c","canvas",700,640);
@@ -4866,13 +4860,11 @@ yaxis_right->SetTitle("");
 yaxis_right->SetLabelOffset(999);
 yaxis_right->Draw("SAME");
 
- TFile* f= new TFile("monophoton_AV.root","RECREATE");
- Monophoton_observed->Write("h_obs");
- Monophoton_expected50->Write("h_exp");
- r_limit_histo->Write("g_obs");
- r_limit_histo_expected50->Write("g_exp");
-
-
+TFile* f= new TFile("monophoton_AV.root","RECREATE");
+Monophoton_observed->Write("h_obs");
+Monophoton_expected50->Write("h_exp");
+r_limit_histo->Write("g_obs");
+r_limit_histo_expected50->Write("g_exp");
 
 c->SaveAs("AV.png");
 c->SaveAs("AV.pdf");

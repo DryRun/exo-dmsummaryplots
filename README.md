@@ -1,6 +1,6 @@
 Welcome to the CMS EXO MET+X Combination repository!
 
-This project contains the scriptsfor the 2016 MET+X combination/summary plots, and corresponding files.
+This project contains the scripts for the 2016 MET+X combination/summary plots, and corresponding files.
 
 In particular, for each analysis, the directories are:
 - Cards: Data cards (in the CMS Combine format) and corresponding root files 
@@ -17,4 +17,4 @@ Parameters to be adjusted
 - With or w.o. dijet analyses
 
 Happy Combining!
-- CMS EXO MET+X Combination WG
+ --- The CMS EXO MET+X Combination WG

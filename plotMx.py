@@ -5,7 +5,6 @@
 ###                                   ###
 ### SI/SD                             ###
 ###                                   ###
-###                                   ###
 ### (c) MET+X Combo                   ###
 ###                                   ###
 #########################################
@@ -424,7 +423,6 @@ C.Update()
 C.cd(1)
 leg.Draw("same")
 C.Update()
-
 
 if DDresult == "SI":
     leg3=TLatex(100,1e-34,"#bf{CMS} #it{Preliminary}")

@@ -14,8 +14,9 @@ from ROOT import *
 ### Settings ###
 ################
 
-Mediator  = "Axial"
-METXonly  = True
+Mediator  = "Vector"
+METXonly  = False
+DijetOnly = True
 
 #################
 ### Analyses ####
@@ -27,8 +28,9 @@ else                  : metx = ["monojet","monophoton","monoZ"]
 
 if Mediator=="Vector" and METXonly : metx+=["monotop"]
 
-if METXonly: analyses = ["relic"]+metx
-else       : analyses = ["relic","dijet","trijet"]+metx
+if   METXonly  : analyses = ["relic"]+metx
+elif DijetOnly : analyses = ["relic","dijet_2016","dijet_2016_exp"]
+else           : analyses = ["relic","dijet","trijet"]+metx
 
 tgraph    = {}
 color     = {}
@@ -41,22 +43,26 @@ linestyle = {}
 #############
 
 if Mediator == "Vector":
-    filepath["relic"]      = "Relic/relicContour_V_g25.root"
-    filepath["dijet"]      = "Dijet/ScanMM/MMedMDM_dijet_v.root"
-    filepath["trijet"]     = "Trijet/ScanMM/MMedMDM_v.root"
-    filepath["monojet"]    = "Monojet/ScanMM/Monojet_V_MM_ICHEP2016_obs.root"
-    filepath["monophoton"] = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
+    filepath["relic"]          = "Relic/relicContour_V_g25.root"
+    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_Phil500.root"
+    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v.root"
+    filepath["monojet"]        = "Monojet/ScanMM/Monojet_V_MM_ICHEP2016_obs.root"
+    filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
     #2015: filepath["monoZ"]      = "MonoZll/ScanMM/monoz_vector_gq0p25_cl95_2015.txt"
-    filepath["monoZ"]      = "MonoZll/ScanMM/monoz_vector_gq0p25_cl95_2016.txt"
-    filepath["monotop"]    = "Monotop/ScanMM/vector_rebinned.root"
+    filepath["monoZ"]          = "MonoZll/ScanMM/monoz_vector_gq0p25_cl95_2016.txt"
+    filepath["monotop"]        = "Monotop/ScanMM/vector_rebinned.root"
 elif Mediator == "Axial":
-    filepath["relic"]      = "Relic/relicContour_A_g25.root"
-    filepath["dijet"]      = "Dijet/ScanMM/MMedMDM_dijet_av.root"
-    filepath["trijet"]     = "Trijet/ScanMM/MMedMDM_av.root"
-    filepath["monojet"]    = "Monojet/ScanMM/Monojet_AV_MM_ICHEP2016_obs.root"
-    filepath["monophoton"] = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
+    filepath["relic"]          = "Relic/relicContour_A_g25.root"
+    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_Phil500.root"
+    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av.root"
+    filepath["monojet"]        = "Monojet/ScanMM/Monojet_AV_MM_ICHEP2016_obs.root"
+    filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
     #2015: filepath["monoZ"]      = "MonoZll/ScanMM/monoz_axial_gq0p25_cl95_2015.txt"
-    filepath["monoZ"]      = "MonoZll/ScanMM/monoz_axial_gq0p25_cl95_2016.txt"
+    filepath["monoZ"]          = "MonoZll/ScanMM/monoz_axial_gq0p25_cl95_2016.txt"
 
 ###################
 ### Plot colors ###
@@ -66,6 +72,8 @@ elif Mediator == "Axial":
 linestyle["relic"]      = kDotted
 ### Met-less
 linestyle["dijet"]      = kSolid
+linestyle["dijet_2016"] = kSolid
+linestyle["dijet_2016_exp"]  = kDashed
 linestyle["trijet"]     = kSolid
 ### MET+X
 linestyle["monophoton"] = kSolid
@@ -78,6 +86,8 @@ linestyle["monojet"]    = kSolid
 color["relic"]      = kGray
 ### Met-less
 color["dijet"]      = kAzure
+color["dijet_2016"] = kAzure
+color["dijet_2016_exp"]  = kAzure+1
 color["trijet"]     = kAzure+1
 color["chi"]        = kBlue
 ### MET+X
@@ -91,14 +101,16 @@ color["monotop"]    = kViolet+1
 ##################
 
 if not METXonly:
-    text["relic"]      = "\Omega_{c} h^{2} \geq 0.12"
-    text["dijet"]      = "#splitline{Dijet #it{[EXO-16-032]}}{+ #it{[arXiv:1604.08907]}}"
-    text["trijet"]     = "#splitline{Boosted dijet}{#it{[EXO-16-030]}}"
-    text["chi"]        = "chi obs. (exp.excl.)"
-    text["monojet"]    = "#splitline{DM + j/V_{qq}}{#it{[EXO-16-037]}}"
-    text["monoZ"]      = "#splitline{DM + Z_{ll}}{#it{[EXO-16-038]}}"
-    text["monophoton"] = "#splitline{DM + #gamma}{#it{[EXO-16-039]}}"
-    text["monotop"]    = "#splitline{DM + t (100% FC)}{#it{[EXO-16-040]}}"
+    text["relic"]          = "\Omega_{c} h^{2} \geq 0.12"
+    text["dijet"]          = "#splitline{Dijet #it{[EXO-16-032]}}{+ #it{[arXiv:1604.08907]}}"
+    text["dijet_2016"]     = "Observed"
+    text["dijet_2016_exp"] = "Expected"
+    text["trijet"]         = "#splitline{Boosted dijet}{#it{[EXO-16-030]}}"
+    text["chi"]            = "chi obs. (exp.excl.)"
+    text["monojet"]        = "#splitline{DM + j/V_{qq}}{#it{[EXO-16-037]}}"
+    text["monoZ"]          = "#splitline{DM + Z_{ll}}{#it{[EXO-16-038]}}"
+    text["monophoton"]     = "#splitline{DM + #gamma}{#it{[EXO-16-039]}}"
+    text["monotop"]        = "#splitline{DM + t (100% FC)}{#it{[EXO-16-040]}}"
 else:
     text["relic"]      = "\Omega_{c} h^{2} \geq 0.12"
     text["dijet"]      = "Dijet #it{[EXO-16-032]}+ #it{[arXiv:1604.08907]}"
@@ -119,13 +131,15 @@ for analysis in analyses:
         mylist = TFile(filepath["relic"]).Get("mytlist")
         print "==> Relic list length = ",mylist.GetSize()
         tgraph["relic"] = mylist.At(0)
-    elif analysis == "dijet"      : tgraph["dijet"]      = TFile(filepath[analysis]).Get("obs_025")  
-    elif analysis == "trijet"     : tgraph["trijet"]     = TFile(filepath[analysis]).Get("obs_025")  
-    elif analysis == "monojet"    : tgraph["monojet"]    = TFile(filepath[analysis]).Get("monojet_obs")
-    elif analysis == "monophoton" : tgraph["monophoton"] = TFile(filepath[analysis]).Get("monophoton_obs")
+    elif analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("obs_025")  
+    elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")  
+    elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")  
+    elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")  
+    elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("monojet_obs")
+    elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
     #2015: elif analysis == "monoZ"      : tgraph["monoZ"]      = TFile(filepath[analysis]).Get("monoz_obs")
-    elif analysis == "monotop"    : tgraph["monotop"]    = TFile(filepath[analysis]).Get("observed")
-    else                          : tgraph[analysis]     = TGraph(filepath[analysis])
+    elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
+    else                              : tgraph[analysis]         = TGraph(filepath[analysis])
 
 ###################
 ### Make Canvas ###
@@ -148,7 +162,7 @@ if METXonly:
     tgraph["relic"].GetYaxis().SetRangeUser(0, 780)
 else:        
     tgraph["relic"].GetXaxis().SetRangeUser(0,4500)
-    tgraph["relic"].GetYaxis().SetRangeUser(0,1300)
+    tgraph["relic"].GetYaxis().SetRangeUser(0,1450)#was 1300
 tgraph["relic"].Draw()
 
 ##############
@@ -169,7 +183,6 @@ if  not METXonly:
     legd.SetTextColor(kGray)
     legd.Draw("same")
 
-
 if METXonly: leg=C.BuildLegend(0.15,0.55,0.45,0.88)
 else:        leg=C.BuildLegend(0.67,0.12,0.89,0.57)
 
@@ -177,7 +190,8 @@ leg.SetBorderSize(0)
 leg.SetTextFont(42)
 leg.SetFillColor(0)
 leg.Clear()
-leg.SetHeader("#bf{Observed exclusion 95% CL}")
+if DijetOnly: leg.SetHeader("#bf{EXO-16-032} 95% CL")
+else        : leg.SetHeader("#bf{Observed exclusion 95% CL}")
 
 ##################
 ### Relic text ###
@@ -231,14 +245,16 @@ leg2.SetBorderSize(0)
 leg2.SetTextFont(42)
 leg2.SetFillColor(0)
 leg2.Clear()
-leg2.SetHeader("#bf{CMS} #it{Preliminary}")
+if DijetOnly : leg2.SetHeader("#bf{CMS}")
+else         : leg2.SetHeader("#bf{CMS} #it{Preliminary}")
 
 leg3=C.BuildLegend(0.52,0.905,1.32,0.955)
 leg3.SetBorderSize(0)
 leg3.SetTextFont(42)
 leg3.SetFillColor(0)
 leg3.Clear()
-leg3.SetHeader("#bf{Dark Matter Summary} #it{ICHEP 2016}")
+if DijetOnly : leg3.SetHeader("                          12.9 fb^{-1} (13 TeV)")
+else         : leg3.SetHeader("#bf{Dark Matter Summary} #it{ICHEP 2016}")
 
 ############
 ### Draw ###
@@ -280,8 +296,9 @@ C.Update()
 ### Save ###
 ############
 
-if METXonly: C.SaveAs(Mediator+"_METX_Summary_ICHEP.pdf")
-else       : C.SaveAs(Mediator+"_EXO_Summary_ICHEP.pdf")
+if METXonly    : C.SaveAs(Mediator+"_METX_Summary_ICHEP.pdf")
+elif DijetOnly : C.SaveAs(Mediator+"_Dijet_DM.pdf")
+else           : C.SaveAs(Mediator+"_EXO_Summary_ICHEP.pdf")
 
 ###########
 ### FIN ###

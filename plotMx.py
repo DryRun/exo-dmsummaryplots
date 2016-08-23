@@ -57,24 +57,24 @@ linestyle = {}
 #############
 
 if DDresult == "SI":
-    filepath["LUX"]        = "DD/lux2015.txt"#2016 unpub: LUX_SI_DMTools_Jul2016.dat"
-    filepath["PandaX"]     = "DD/pandax.txt"                 
-    filepath["CDMSlite"]   = "DD/cdmslite2015.txt"
-    filepath["Cresst"]     = "DD/cresstii.txt"
+    filepath["LUX"]            = "DD/lux2015.txt"#2016 unpub: LUX_SI_DMTools_Jul2016.dat"
+    filepath["PandaX"]         = "DD/pandax.txt"                 
+    filepath["CDMSlite"]       = "DD/cdmslite2015.txt"
+    filepath["Cresst"]         = "DD/cresstii.txt"
     ###
-    filepath["dijet"]      = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil500.root"
-    filepath["dijet_2016"]      = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil600.root"
-    filepath["dijet_2016_exp"]  = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil600.root"
-    filepath["trijet"]     = "Trijet/ScanMM/MMedMDM_v_90.root"
-    filepath["monojet"]    = "Monojet/ScanMM/vector_g025_DD.root"
-    filepath["monophoton"] = "Monophoton/ScanMM/Monophoton_SI_MM_ICHEP2016_obs.root"
-    #2015: filepath["monoZ"]      = "MonoZll/ScanMM/monoz_vector_gq0p25_cl90_2015.txt"
-    filepath["monoZ"]      = "MonoZll/ScanMM/monoz_exo16038_si.txt"
+    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil500.root"
+    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil600.root"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil600.root"
+    filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v_90.root"
+    filepath["monojet"]        = "Monojet/ScanMM/vector_g025_DD.root"
+    filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SI_MM_ICHEP2016_obs.root"
+    #2015: filepath["monoZ"]   = "MonoZll/ScanMM/monoz_vector_gq0p25_cl90_2015.txt"
+    filepath["monoZ"]          = "MonoZll/ScanMM/monoz_exo16038_si.txt"
 elif DDresult == "SD" :
-    filepath["Pico2L"]     = "DD/Pico2L.txt"
-    filepath["Pico60"]     = "DD/Pico60.txt"
-    filepath["SuperK"]     = "DD/SuperKtautau.txt"
-    filepath["IceCube"]    = "DD/IceCubetautau.txt"
+    filepath["Pico2L"]         = "DD/Pico2L.txt"
+    filepath["Pico60"]         = "DD/Pico60.txt"
+    filepath["SuperK"]         = "DD/SuperKtautau.txt"
+    filepath["IceCube"]        = "DD/IceCubetautau.txt"
     ###
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil500.root"
     filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil600.root"
@@ -82,8 +82,8 @@ elif DDresult == "SD" :
     filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av_90.root"
     filepath["monojet"]        = "Monojet/ScanMM/axial_g025_DD.root"
     filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root"
-    #2015: filepath["monoZ"]      = "MonoZll/ScanMM/monoz_axial_gq0p25_cl90_2015.txt"
-    filepath["monoZ"]      = "MonoZll/ScanMM/monoz_exo16038_sd.txt"
+    #2015: filepath["monoZ"]   = "MonoZll/ScanMM/monoz_axial_gq0p25_cl90_2015.txt"
+    filepath["monoZ"]          = "MonoZll/ScanMM/monoz_exo16038_sd.txt"
 
 #######################
 ### Plot linestyles ###
@@ -165,14 +165,14 @@ text["monotop"]    = "DM+t (FC) #it{[EXO-16-040]}"
 ####################
 
 for analysis in analyses: 
-    if   analysis == "dijet"          : tgraph["dijet"]      = TFile(filepath[analysis]).Get("obs_025")  
-    elif analysis == "dijet_2016"     : tgraph["dijet_2016"] = TFile(filepath[analysis]).Get("obs_025")  
+    if   analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("obs_025")  
+    elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")  
     elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")  
-    elif analysis == "trijet"         : tgraph["trijet"]     = TFile(filepath[analysis]).Get("obs_025")  
-    elif analysis == "monojet"        : tgraph["monojet"]    = TFile(filepath[analysis]).Get("observed")
-    elif analysis == "monophoton"     : tgraph["monophoton"] = TFile(filepath[analysis]).Get("monophoton_obs")
-    elif analysis == "monotop"        : tgraph["monotop"]    = TFile(filepath[analysis]).Get("observed")
-    else                              : tgraph[analysis]     = TGraph(filepath[analysis])
+    elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")  
+    elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed")
+    elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
+    elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
+    else                              : tgraph[analysis]         = TGraph(filepath[analysis])
 
 #######################
 ### Transform 90%CL ###
@@ -359,18 +359,6 @@ if DDresult=="SI" and DijetOnly:
     legy4.SetTextColor(color["PandaX"])
     legy4.SetTextSize(0.025)
     legy4.Draw("same")
-    #Leg
-    #legX=C.BuildLegend(0.10,0.50,0.30,0.90)
-    #legX.SetBorderSize(0)
-    #legX.SetFillStyle(0)
-    #legX.SetTextFont(42)
-    #legX.Clear()
-    #legX.AddEntry(tgraph["dijet_2016"],"Dijet observed exclusion")
-    #legX.AddEntry(tgraph["Cresst"]    ,text["Cresst"]+" #it{arXiv:1509.01515}")
-    #legX.AddEntry(tgraph["CDMSlite"]  ,text["CDMSlite"]+" #it{arXiv:1509.02448}")
-    #legX.AddEntry(tgraph["LUX"]       ,text["LUX"]+" #it{arXiv:1512.03506}")
-    #legX.AddEntry(tgraph["PandaX"]    ,text["PandaX"]+" #it{arXiv:1607.07400}")
-    #legX.Draw("same")
     #Leg
     legX=C.BuildLegend(0.18,0.15,0.40,0.45)
     legX.SetBorderSize(0)
@@ -584,8 +572,6 @@ for analysis in analyses:
         tgraph[analysis].Draw("same")
     elif analysis == "monojet" or analysis=="monophoton" or analysis=="monoZ" or analysis=="dijet" or analysis=="trijet" or analysis=="dijet_2016":
         tgraph[analysis].Draw("same")
-
-#for analysis in analyses: tgraph[analysis].Draw("same")
 
 C.Update()
 

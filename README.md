@@ -16,5 +16,11 @@ Parameters to be adjusted
 - Mediator type (V/A/S/P)
 - With or w.o. dijet analyses
 
+PLEASE provide your results for Summary plots
+- Either as a text file (example: mono-Z)
+- Or as a TGraph in a root file (example: trijet)
+- But please don't provide it as a script, as this is not practical & error prone
+
 Happy Combining!
+
  --- The CMS EXO MET+X Combination WG

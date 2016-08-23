@@ -16,9 +16,9 @@ from ROOT import *
 ### Settings ###
 ################
 
-DDresult  = "SI"
+DDresult  = "SD"
 METless   = False
-DijetOnly = False
+DijetOnly = True
 
 #################
 ### Analyses ####
@@ -240,10 +240,13 @@ else :
 C.cd(1).SetLogx()
 C.cd(1).SetLogy()
 
-if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(0.3,1e-44,1000,1e-37)
-elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(0.3,1e-45,1000,1e-35) 
-elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(0.3,1e-46,1000,1e-38)
-elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(0.3,1e-47,1000,1e-33) 
+if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(0.3,1e-44,1450,1e-37)
+elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(0.3,1e-45,1450,1e-35) 
+elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(0.3,1e-46,1450,1e-38)
+elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(0.3,1e-47,1450,1e-33) 
+
+C.cd(1).SetTickx()
+C.cd(1).SetTicky()
 
 frame.SetXTitle("m_{DM} [GeV]")
 frame.SetYTitle("#sigma_{"+DDresult+"} [cm^{2}]")
@@ -374,7 +377,8 @@ if DDresult=="SI" and DijetOnly:
     legX.SetFillStyle(0)
     legX.SetTextFont(42)
     legX.Clear()
-    legX.AddEntry(tgraph["dijet_2016"],"#splitline{Dijet}{observed exclusion}")
+    legX.SetHeader("Obs.excl. 90% CL")
+    legX.AddEntry(tgraph["dijet_2016"],"Dijet")
     legX.AddEntry(tgraph["Cresst"]    ,"#splitline{"+text["Cresst"]+"}{#it{arXiv:1509.01515}}")
     legX.AddEntry(tgraph["CDMSlite"]  ,"#splitline{"+text["CDMSlite"]+"}{#it{arXiv:1509.02448}}")
     legX.AddEntry(tgraph["LUX"]       ,"#splitline{"+text["LUX"]+"}{#it{arXiv:1512.03506}}")
@@ -468,16 +472,17 @@ if DDresult=="SD" and DijetOnly:
     legy4.SetTextSize(0.020)
     legy4.Draw("same")
     #Leg Dijet
-    legX=C.BuildLegend(0.18,0.50,0.45,0.90)
+    legX=C.BuildLegend(0.18,0.50,0.40,0.85)
     legX.SetBorderSize(0)
     legX.SetFillStyle(0)
     legX.SetTextFont(42)
     legX.Clear()
+    legX.SetHeader("Obs.excl. 90% CL")
     legX.AddEntry(tgraph["Pico2L"]    ,"#splitline{"+text["Pico2L"]+"}{#it{arXiv:1601.03729}}")
     legX.AddEntry(tgraph["Pico60"]    ,"#splitline{"+text["Pico60"]+"}{#it{arXiv:1510.07754}}")
     legX.AddEntry(tgraph["SuperK"]    ,"#splitline{"+text["SuperK"]+"}{#it{arXiv:1503.04858}}")
     legX.AddEntry(tgraph["IceCube"]   ,"#splitline{"+text["IceCube"]+"}{#it{arXiv:1601.00653}}")
-    legX.AddEntry(tgraph["dijet_2016"],"Dijet observed exclusion")
+    legX.AddEntry(tgraph["dijet_2016"],"Dijet")
     legX.Draw("same")
 
 elif DDresult=="SD":
@@ -536,14 +541,14 @@ elif DDresult == "SD" and not DijetOnly:
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.025)
 elif DDresult == "SI" and DijetOnly:
-    leg3=TLatex(30,1.2e-38,"13 TeV (12.9 fb^{-1}) 90%CL")
+    leg3=TLatex(30,1.2e-38,"13 TeV (12.9 fb^{-1})")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
     leg4=TLatex(30,2e-39,"#splitline{#bf{Vector mediator, Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.025)
 elif DDresult == "SD" and DijetOnly:
-    leg3=TLatex(30,1.2e-37,"13 TeV (12.9 fb^{-1}) 90%CL")
+    leg3=TLatex(30,1.2e-37,"13 TeV (12.9 fb^{-1})")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
     leg4=TLatex(30,2e-38,"#splitline{#bf{Axial-vector mediator, Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")

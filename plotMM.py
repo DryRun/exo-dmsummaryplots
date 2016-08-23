@@ -10,18 +10,17 @@
 
 from ROOT import *
 
-################
-### Settings ###
-################
+#################################
+### Parameters to be modified ###
+#################################
 
-Mediator  = "Vector"
+Mediator  = "Axial"
 METXonly  = False
 DijetOnly = True
 
 #################
 ### Analyses ####
 #################
-
 
 if Mediator == "Axial": metx = ["monojet","monophoton","monoZ"]
 else                  : metx = ["monojet","monophoton","monoZ"]
@@ -69,32 +68,32 @@ elif Mediator == "Axial":
 ###################
 
 ### Planck
-linestyle["relic"]      = kDotted
+linestyle["relic"]          = kDotted
 ### Met-less
-linestyle["dijet"]      = kSolid
-linestyle["dijet_2016"] = kSolid
-linestyle["dijet_2016_exp"]  = kDashed
-linestyle["trijet"]     = kSolid
+linestyle["dijet"]          = kSolid
+linestyle["dijet_2016"]     = kSolid
+linestyle["dijet_2016_exp"] = kDashed
+linestyle["trijet"]         = kSolid
 ### MET+X
-linestyle["monophoton"] = kSolid
-linestyle["monoZ"]      = kSolid
-linestyle["monotop"]    = kDashed
+linestyle["monophoton"]     = kSolid
+linestyle["monoZ"]          = kSolid
+linestyle["monotop"]        = kDashed
 ### dummies dashed
-linestyle["monojet"]    = kSolid
+linestyle["monojet"]        = kSolid
 
 ### Planck
-color["relic"]      = kGray
+color["relic"]          = kGray
 ### Met-less
-color["dijet"]      = kAzure
-color["dijet_2016"] = kAzure
-color["dijet_2016_exp"]  = kAzure+1
-color["trijet"]     = kAzure+1
-color["chi"]        = kBlue
+color["dijet"]          = kAzure
+color["dijet_2016"]     = kAzure
+color["dijet_2016_exp"] = kAzure+1
+color["trijet"]         = kAzure+1
+color["chi"]            = kBlue
 ### MET+X
-color["monojet"]    = kRed+1#kRed+1
-color["monophoton"] = kOrange+10#kRed+2
-color["monoZ"]      = kOrange-3#kRed+3
-color["monotop"]    = kViolet+1
+color["monojet"]        = kRed+1#kRed+1
+color["monophoton"]     = kOrange+10#kRed+2
+color["monoZ"]          = kOrange-3#kRed+3
+color["monotop"]        = kViolet+1
 
 ##################
 ### Plot texts ###
@@ -122,7 +121,6 @@ else:
     text["monotop"]    = "DM + t (100% FC) #it{[EXO-16-040]}"
 
 ####################
-### Get datfiles ###
 ### Get graphs   ###
 ####################
 
@@ -137,44 +135,67 @@ for analysis in analyses:
     elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")  
     elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("monojet_obs")
     elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
-    #2015: elif analysis == "monoZ"      : tgraph["monoZ"]      = TFile(filepath[analysis]).Get("monoz_obs")
+    #2015: elif analysis == "monoZ"   : tgraph["monoZ"]          = TFile(filepath[analysis]).Get("monoz_obs")
     elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
     else                              : tgraph[analysis]         = TGraph(filepath[analysis])
 
 ###################
 ### Make Canvas ###
 ### Set ranges  ###
-### Add legend  ###
 ###################
 
 C=TCanvas("C","C",1000,600)
 C.cd(1)
 
-tgraph["relic"].SetTitle("")
-tgraph["relic"].GetXaxis().SetTitle("M_{Med} [GeV]")
-tgraph["relic"].GetYaxis().SetTitle("m_{DM} [GeV]")
-tgraph["relic"].GetXaxis().SetTitleOffset(1.0)
-tgraph["relic"].GetYaxis().SetTitleOffset(1.0)
-tgraph["relic"].GetXaxis().SetTitleSize(0.045)
-tgraph["relic"].GetYaxis().SetTitleSize(0.045)
-if METXonly: 
-    tgraph["relic"].GetXaxis().SetRangeUser(0,2000)
-    tgraph["relic"].GetYaxis().SetRangeUser(0, 780)
-else:        
-    tgraph["relic"].GetXaxis().SetRangeUser(0,4500)
-    tgraph["relic"].GetYaxis().SetRangeUser(0,1450)#was 1300
-tgraph["relic"].Draw()
+C.cd(1).SetTickx()
+C.cd(1).SetTicky()
+
+if   METXonly : frame = C.cd(1).DrawFrame(0,0,2000, 780)
+else          : frame = C.cd(1).DrawFrame(0,0,3700,1450) 
+
+frame.SetXTitle("M_{Med} [GeV]")
+frame.SetYTitle("m_{DM} [GeV]")
+#frame.GetXaxis().SetLabelSize(0.05)
+#frame.GetYaxis().SetLabelSize(0.05)
+frame.GetXaxis().SetTitleSize(0.045)
+frame.GetYaxis().SetTitleSize(0.045)
+frame.GetXaxis().SetTitleOffset(1.0)
+frame.GetYaxis().SetTitleOffset(1.0)
 
 ##############
-### Legend ###
+### LEGEND ###
 ##############
+
+if METXonly:    leg=C.BuildLegend(0.15,0.55,0.45,0.88)
+elif DijetOnly: leg=C.BuildLegend(0.69,0.15,0.86,0.36)
+else:           leg=C.BuildLegend(0.67,0.12,0.89,0.57)
+
+leg.SetBorderSize(0)
+leg.SetTextFont(42)
+leg.SetFillColor(0)
+leg.SetFillStyle(0)
+leg.Clear()
+if DijetOnly: leg.SetHeader("Dijet 95% CL")
+else        : leg.SetHeader("#bf{Observed exclusion 95% CL}")
+
+####################
+### Add diagonal ###
+####################
 
 f1 = TF1("f1","x/2.",0,4000)
 g1 = TGraph(f1)
 g1.SetLineColor(kGray)
 g1.SetLineStyle(kDashed)
 
-if  not METXonly:
+if DijetOnly:
+    g1.Draw("same")
+    legd=TLatex(1300,680,"M_{Med} = 2 x m_{DM}")
+    legd.SetTextAngle(38)
+    legd.SetTextFont(42)
+    legd.SetTextSize(0.025)
+    legd.SetTextColor(kGray)
+    legd.Draw("same")
+elif not METXonly:
     g1.Draw("same")
     legd=TLatex(1600,740,"M_{Med} = 2 x m_{DM}")
     legd.SetTextAngle(45)
@@ -183,23 +204,25 @@ if  not METXonly:
     legd.SetTextColor(kGray)
     legd.Draw("same")
 
-if METXonly: leg=C.BuildLegend(0.15,0.55,0.45,0.88)
-else:        leg=C.BuildLegend(0.67,0.12,0.89,0.57)
-
-leg.SetBorderSize(0)
-leg.SetTextFont(42)
-leg.SetFillColor(0)
-leg.Clear()
-if DijetOnly: leg.SetHeader("#bf{EXO-16-032} 95% CL")
-else        : leg.SetHeader("#bf{Observed exclusion 95% CL}")
-
 ##################
 ### Relic text ###
 ##################
 
-if Mediator=="Vector" and not METXonly:
+if Mediator=="Vector" and DijetOnly:
+    legw=TLatex(3200,600,"#Omega_{c} h^{2} #geq 0.12")
+    legw.SetTextAngle(32)
+elif Mediator=="Vector" and not METXonly:
     legw=TLatex(3950,900,"#Omega_{c} h^{2} #geq 0.12")
     legw.SetTextAngle(40)
+elif Mediator=="Axial" and DijetOnly:
+    legw  = TLatex(1720,1150,"#Omega_{c} h^{2} #geq 0.12")
+    legw.SetTextAngle(34)
+    legw2 = TLatex(3020,1150,"#Omega_{c} h^{2} #geq 0.12")
+    legw2.SetTextFont(42)
+    legw2.SetTextColor(color["relic"])
+    legw2.SetTextAngle(34)
+    legw2.SetTextSize(0.02)
+    legw2.Draw("same")
 elif Mediator=="Axial" and not METXonly:
     legw  = TLatex(1720,1150,"#Omega_{c} h^{2} #geq 0.12")
     legw.SetTextAngle(40)
@@ -219,13 +242,23 @@ legw.SetTextFont(42)
 legw.SetTextSize(0.02)
 legw.SetTextColor(color["relic"])
 
-legw.Draw("same")
-
 ##################
 ### Model text ###
 ##################
 
-if Mediator=="Vector" and not METXonly:
+if Mediator=="Vector" and DijetOnly:
+    leg1=TLatex(2800,1000,"#splitline{#bf{"+Mediator+" mediator}}{#bf{Dirac DM}}")
+    leg4=TLatex(2800, 900,"#it{g_{q} = 0.25, g_{DM} = 1}")
+    leg4.SetTextFont(42)
+    leg4.SetTextSize(0.030)
+    leg4.Draw("same")
+elif Mediator=="Axial" and DijetOnly:
+    leg1=TLatex(2800,1000,"#splitline{#bf{"+Mediator+"-vector mediator}}{#bf{Dirac DM}}")
+    leg4=TLatex(2800, 900,"#it{g_{q} = 0.25, g_{DM} = 1}")
+    leg4.SetTextFont(42)
+    leg4.SetTextSize(0.030)
+    leg4.Draw("same")
+elif Mediator=="Vector" and not METXonly:
     leg1=TLatex(2770,1100,"#splitline{#bf{"+Mediator+" mediator, Dirac DM}}{        #it{g_{q} = 0.25, g_{DM} = 1}}")
 elif Mediator=="Axial" and not METXonly:
     leg1=TLatex(3000,1000,"#splitline{#bf{"+Mediator+"-vector mediator, Dirac DM}}{          #it{g_{q} = 0.25, g_{DM} = 1}}")
@@ -236,25 +269,28 @@ elif Mediator=="Axial" and METXonly:
 leg1.SetTextFont(42)
 leg1.SetTextSize(0.030)
 
-##############
-### Legend ###
-##############
+################################
+### CMS / lumi / energy text ###
+################################
 
-leg2=C.BuildLegend(0.10,0.905,0.90,0.955)
-leg2.SetBorderSize(0)
-leg2.SetTextFont(42)
-leg2.SetFillColor(0)
-leg2.Clear()
-if DijetOnly : leg2.SetHeader("#bf{CMS}")
-else         : leg2.SetHeader("#bf{CMS} #it{Preliminary}")
-
-leg3=C.BuildLegend(0.52,0.905,1.32,0.955)
-leg3.SetBorderSize(0)
-leg3.SetTextFont(42)
-leg3.SetFillColor(0)
-leg3.Clear()
-if DijetOnly : leg3.SetHeader("                          12.9 fb^{-1} (13 TeV)")
-else         : leg3.SetHeader("#bf{Dark Matter Summary} #it{ICHEP 2016}")
+if DijetOnly : 
+    # CMS
+    leg2=TLatex(100,1470,"#bf{CMS}")
+    leg2.SetTextFont(42)
+    leg2.SetTextSize(0.045)
+    # lumi
+    leg3=TLatex(2800,1470,"12.9 fb^{-1} (13 TeV)")
+    leg3.SetTextFont(42)
+    leg3.SetTextSize(0.033)
+else         : 
+    # CMS
+    leg2=TLatex(100,1470,"#bf{CMS} #it{Preliminary}")
+    leg2.SetTextFont(42)
+    leg2.SetTextSize(0.045)
+    # lumi
+    leg3=TLatex(2800,1470,"#bf{Dark Matter Summary} #it{ICHEP 2016}")
+    leg3.SetTextFont(42)
+    leg3.SetTextSize(0.033)
 
 ############
 ### Draw ###
@@ -263,8 +299,6 @@ else         : leg3.SetHeader("#bf{Dark Matter Summary} #it{ICHEP 2016}")
 for analysis in analyses:
     if not  analysis=="relic":
         leg.AddEntry(tgraph[analysis],text[analysis])
-
-leg.Draw("same")
 
 for analysis in analyses:
     tgraph[analysis].SetLineColor(color[analysis])
@@ -287,9 +321,16 @@ for analysis in analyses:
         tgraph[analysis].SetLineWidth(-404)
     tgraph[analysis].Draw("same")
 
+########################
+### Write some texts ###
+########################
+
+leg.Draw("same")
 leg1.Draw("same")
 leg2.Draw("same")
 leg3.Draw("same")
+legw.Draw("same")
+
 C.Update()
 
 ############

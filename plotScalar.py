@@ -9,14 +9,14 @@
 #########################################
 
 from ROOT import *
+import ast
 
 ################
 ### Settings ###
 ################
 
-Mediator  = "Scalar"
-
-ObsOnly = False
+Mediator = raw_input('Choose Mediator [Scalar or Pseudo]: ')
+ObsOnly  = ast.literal_eval(raw_input('Obs only? [True or False]: '))
 
 #################
 ### Analyses ####
@@ -25,7 +25,7 @@ ObsOnly = False
 analyses = ["BSM",
             "monojet_obs",
             "DMtt_obs",
-            "METbb_DMtt_obs",
+            #"METbb_DMtt_obs",
             "METbb_DMbb_obs"
             #,"METbb_DMhf_obs"
             ]

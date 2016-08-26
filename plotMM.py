@@ -9,14 +9,15 @@
 #########################################
 
 from ROOT import *
+import ast
 
 #################################
 ### Parameters to be modified ###
 #################################
 
-Mediator  = "Axial"
-METXonly  = False
-DijetOnly = True
+Mediator  = raw_input('Choose mediator [Vector or Axial]: ')
+METXonly  = ast.literal_eval(raw_input('MET+X only? [True or False]: '))
+DijetOnly = ast.literal_eval(raw_input('Dijet only? [True or False]: '))
 
 #################
 ### Analyses ####
@@ -44,8 +45,12 @@ linestyle = {}
 if Mediator == "Vector":
     filepath["relic"]          = "Relic/relicContour_V_g25.root"
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_Phil500.root"
-    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
-    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    #ICHEP
+    #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    #paper
+    filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.txt"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.txt"
     filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v.root"
     filepath["monojet"]        = "Monojet/ScanMM/Monojet_V_MM_ICHEP2016_obs.root"
     filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
@@ -55,8 +60,12 @@ if Mediator == "Vector":
 elif Mediator == "Axial":
     filepath["relic"]          = "Relic/relicContour_A_g25.root"
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_Phil500.root"
-    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
-    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    #ICHEP
+    #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    #paper
+    filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.txt"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.txt"
     filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av.root"
     filepath["monojet"]        = "Monojet/ScanMM/Monojet_AV_MM_ICHEP2016_obs.root"
     filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
@@ -130,8 +139,9 @@ for analysis in analyses:
         print "==> Relic list length = ",mylist.GetSize()
         tgraph["relic"] = mylist.At(0)
     elif analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("obs_025")  
-    elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")  
-    elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")  
+    #ichep
+    #elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")  
+    #elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")  
     elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")  
     elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("monojet_obs")
     elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
@@ -167,7 +177,7 @@ frame.GetYaxis().SetTitleOffset(1.0)
 ##############
 
 if METXonly:    leg=C.BuildLegend(0.15,0.55,0.45,0.88)
-elif DijetOnly: leg=C.BuildLegend(0.69,0.15,0.86,0.36)
+elif DijetOnly: leg=C.BuildLegend(0.70,0.15,0.87,0.36)
 else:           leg=C.BuildLegend(0.67,0.12,0.89,0.57)
 
 leg.SetBorderSize(0)
@@ -306,7 +316,7 @@ for analysis in analyses:
     tgraph[analysis].SetMarkerColor(color[analysis])
     tgraph[analysis].SetFillColor(color[analysis])
     tgraph[analysis].SetFillStyle(3005)
-    tgraph[analysis].SetLineWidth( 203)
+    tgraph[analysis].SetLineWidth( 202)
     tgraph[analysis].SetLineStyle(linestyle[analysis])
     if analysis == "relic":
         for i in range(0,mylist.GetSize()):

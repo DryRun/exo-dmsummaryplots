@@ -11,14 +11,17 @@
 #########################################
 
 from ROOT import *
+import ast
 
 ################
 ### Settings ###
 ################
 
-DDresult  = "SD"
-METless   = False
-DijetOnly = True
+DijetOnly = False
+
+DDresult = raw_input('Choose DD [SI or SD]: ')
+METless  = ast.literal_eval(raw_input('MET-less? [True or False]: '))
+if METless: DijetOnly = ast.literal_eval(raw_input('Dijet only? [True or False]: '))
 
 #################
 ### Analyses ####
@@ -529,14 +532,14 @@ elif DDresult == "SD" and not DijetOnly:
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.025)
 elif DDresult == "SI" and DijetOnly:
-    leg3=TLatex(30,1.2e-38,"13 TeV (12.9 fb^{-1})")
+    leg3=TLatex(30,1.2e-38,"12.9 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
     leg4=TLatex(30,2e-39,"#splitline{#bf{Vector mediator, Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.025)
 elif DDresult == "SD" and DijetOnly:
-    leg3=TLatex(30,1.2e-37,"13 TeV (12.9 fb^{-1})")
+    leg3=TLatex(30,1.2e-37,"12.9 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
     leg4=TLatex(30,2e-38,"#splitline{#bf{Axial-vector mediator, Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")

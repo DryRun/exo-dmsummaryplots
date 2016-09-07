@@ -38,9 +38,9 @@ cmsanalyses = metx
 if METless  : cmsanalyses = metx+metless
 if DijetOnly: cmsanalyses = ["dijet_2016"]
 
-if   DDresult == "SI" and DijetOnly : analyses = cmsanalyses+["Cresst","CDMSlite","LUX","PandaX"]
+if   DDresult == "SI" and DijetOnly : analyses = cmsanalyses+["Cresst","CDMSlite","PandaX","LUX"]
 elif DDresult == "SD" and DijetOnly : analyses = cmsanalyses+["Pico2L","Pico60","SuperK","IceCube"]
-elif DDresult == "SI"               : analyses = ["Cresst","CDMSlite","LUX","PandaX"]+cmsanalyses
+elif DDresult == "SI"               : analyses = ["Cresst","CDMSlite","PandaX","LUX"]+cmsanalyses
 elif DDresult == "SD"               : analyses = ["Pico2L","Pico60","SuperK","IceCube"]+cmsanalyses
 
 print "***********************"
@@ -60,7 +60,7 @@ linestyle = {}
 #############
 
 if DDresult == "SI":
-    filepath["LUX"]            = "DD/lux2015.txt"#2016 unpub: LUX_SI_DMTools_Jul2016.dat"
+    filepath["LUX"]            = "DD/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
     filepath["PandaX"]         = "DD/pandax.txt"                 
     filepath["CDMSlite"]       = "DD/cdmslite2015.txt"
     filepath["Cresst"]         = "DD/cresstii.txt"
@@ -100,8 +100,8 @@ linestyle["Cresst"]     = kSolid
 ### SD
 linestyle["Pico2L"]     = kSolid
 linestyle["Pico60"]     = kSolid
-linestyle["SuperK"]     = kSolid
-linestyle["IceCube"]    = kSolid
+linestyle["SuperK"]     = kDashed
+linestyle["IceCube"]    = kDashed
 ### CMS Met-less
 linestyle["dijet"]      = kSolid
 linestyle["dijet_2016"] = kSolid
@@ -119,8 +119,8 @@ linestyle["monojet"]    = kSolid
 ### SI
 color["Cresst"]     = kGreen+1
 color["CDMSlite"]   = kGreen+3
-color["LUX"]        = kGreen+2
-color["PandaX"]     = kGreen+4
+color["PandaX"]     = kGreen+2
+color["LUX"]        = kGreen+4
 ### SD
 color["Pico2L"]     = kGreen+1
 color["Pico60"]     = kGreen+3
@@ -252,7 +252,8 @@ C.cd(1).SetTickx()
 C.cd(1).SetTicky()
 
 frame.SetXTitle("m_{DM} [GeV]")
-frame.SetYTitle("#sigma_{"+DDresult+"} [cm^{2}]")
+if   DDresult=="SD": frame.SetYTitle("#sigma^{SD}_{DM-p} [cm^{2}]")
+elif DDresult=="SI": frame.SetYTitle("#sigma^{SI}_{DM-N} [cm^{2}]")
 #frame.GetXaxis().SetLabelSize(0.05)
 #frame.GetYaxis().SetLabelSize(0.05)
 frame.GetXaxis().SetTitleSize(0.045)
@@ -293,8 +294,8 @@ if not DijetOnly:
 
     for analysis in analyses:
         if analysis=="dijet" or analysis == "dijet_2016": leg1.AddEntry(tgraph[analysis],"Dijet #it{EXO-16-032}")
+        elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}") #[arXiv:1512.03506]}}")
         elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1607.07400]}}")
-        elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1512.03506]}}")
         elif analysis == "CDMSlite"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.02448]}}")
         elif analysis == "Cresst"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.01515]}}")
         elif analysis == "Pico2L"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1601.03729]}}")
@@ -348,32 +349,32 @@ if DDresult=="SI" and DijetOnly:
     legy2.SetTextColor(color["CDMSlite"])
     legy2.SetTextSize(0.025)
     legy2.Draw("same")
-    #LUX Dijet
-    legy3 = TLatex(150,4e-45,text["LUX"]+" 2015")
-    legy3.SetTextAngle(0)
-    legy3.SetTextFont(42)
-    legy3.SetTextColor(color["LUX"])
-    legy3.SetTextSize(0.025)
-    legy3.Draw("same")
     #PandaX Dijet
-    legy4 = TLatex(200,4e-46,text["PandaX"]+" 2016")
+    legy4 = TLatex(100,1.5e-45,text["PandaX"]+" 2016")
     legy4.SetTextAngle(0)
     legy4.SetTextFont(42)
     legy4.SetTextColor(color["PandaX"])
     legy4.SetTextSize(0.025)
     legy4.Draw("same")
+    #LUX Dijet
+    legy3 = TLatex(300,3e-46,text["LUX"]+" 2016")
+    legy3.SetTextAngle(0)
+    legy3.SetTextFont(42)
+    legy3.SetTextColor(color["LUX"])
+    legy3.SetTextSize(0.025)
+    legy3.Draw("same")
     #Leg
     legX=C.BuildLegend(0.18,0.15,0.40,0.45)
     legX.SetBorderSize(0)
     legX.SetFillStyle(0)
     legX.SetTextFont(42)
     legX.Clear()
-    legX.SetHeader("Obs.excl. 90% CL")
+    legX.SetHeader("#bf{Obs.excl. 90% CL}")
     legX.AddEntry(tgraph["dijet_2016"],"Dijet")
     legX.AddEntry(tgraph["Cresst"]    ,"#splitline{"+text["Cresst"]+"}{#it{arXiv:1509.01515}}")
     legX.AddEntry(tgraph["CDMSlite"]  ,"#splitline{"+text["CDMSlite"]+"}{#it{arXiv:1509.02448}}")
-    legX.AddEntry(tgraph["LUX"]       ,"#splitline{"+text["LUX"]+"}{#it{arXiv:1512.03506}}")
     legX.AddEntry(tgraph["PandaX"]    ,"#splitline{"+text["PandaX"]+"}{#it{arXiv:1607.07400}}")
+    legX.AddEntry(tgraph["LUX"]       ,"#splitline{"+text["LUX"]+"}{#it{arXiv:1608.07648}}")##it{arXiv:1512.03506}}")
     legX.Draw("same")
 
 elif DDresult=="SI":
@@ -391,13 +392,6 @@ elif DDresult=="SI":
     legy2.SetTextColor(color["Cresst"])
     legy2.SetTextSize(0.025)
     legy2.Draw("same")
-    #LUX MET+X
-    legy3 = TLatex(85,1.2e-45,text["LUX"])
-    legy3.SetTextAngle(13)
-    legy3.SetTextFont(42)
-    legy3.SetTextColor(color["LUX"])
-    legy3.SetTextSize(0.025)
-    legy3.Draw("same")
     #PandaX MET+X
     legy4 = TLatex(80,1.0e-46,text["PandaX"])
     legy4.SetTextAngle(13)
@@ -405,6 +399,13 @@ elif DDresult=="SI":
     legy4.SetTextColor(color["PandaX"])
     legy4.SetTextSize(0.025)
     legy4.Draw("same")
+    #LUX MET+X
+    legy3 = TLatex(85,1.2e-45,text["LUX"])
+    legy3.SetTextAngle(13)
+    legy3.SetTextFont(42)
+    legy3.SetTextColor(color["LUX"])
+    legy3.SetTextSize(0.025)
+    legy3.Draw("same")
 
 ###############
 ### Plot SD ###
@@ -463,12 +464,12 @@ if DDresult=="SD" and DijetOnly:
     legy4.SetTextSize(0.020)
     legy4.Draw("same")
     #Leg Dijet
-    legX=C.BuildLegend(0.18,0.50,0.40,0.85)
+    legX=C.BuildLegend(0.18,0.515,0.40,0.815)
     legX.SetBorderSize(0)
     legX.SetFillStyle(0)
     legX.SetTextFont(42)
     legX.Clear()
-    legX.SetHeader("Obs.excl. 90% CL")
+    legX.SetHeader("#bf{Obs.excl. 90% CL}")
     legX.AddEntry(tgraph["Pico2L"]    ,"#splitline{"+text["Pico2L"]+"}{#it{arXiv:1601.03729}}")
     legX.AddEntry(tgraph["Pico60"]    ,"#splitline{"+text["Pico60"]+"}{#it{arXiv:1510.07754}}")
     legX.AddEntry(tgraph["SuperK"]    ,"#splitline{"+text["SuperK"]+"}{#it{arXiv:1503.04858}}")
@@ -582,9 +583,9 @@ C.Update()
 ### Save ###
 ############
 
-if   METless  : C.SaveAs(DDresult+"_CMSDD_Summary_ICHEP.pdf")
-elif DijetOnly: C.SaveAs(DDresult+"_CMSDD_Dijet.pdf")
-else          : C.SaveAs(DDresult+"_CMSDD_Summary_ICHEP_nodijet.pdf")
+if DijetOnly : C.SaveAs(DDresult+"_CMSDD_Dijet.pdf")
+elif METless : C.SaveAs(DDresult+"_CMSDD_Summary_ICHEP.pdf")
+else         : C.SaveAs(DDresult+"_CMSDD_Summary_ICHEP_nodijet.pdf")
 
 ###########
 ### FIN ###

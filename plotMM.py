@@ -44,13 +44,14 @@ linestyle = {}
 
 if Mediator == "Vector":
     filepath["relic"]          = "Relic/relicContour_V_g25.root"
-    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_Phil500.root"
     #ICHEP
-    #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
-    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
-    #paper
-    filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.txt"
-    filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.txt"
+    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_Phil500.root"
+    #Dijet paper
+    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    #
+    #filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.txt"
+    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.txt"
     filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v.root"
     filepath["monojet"]        = "Monojet/ScanMM/Monojet_V_MM_ICHEP2016_obs.root"
     filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
@@ -59,13 +60,14 @@ if Mediator == "Vector":
     filepath["monotop"]        = "Monotop/ScanMM/vector_rebinned.root"
 elif Mediator == "Axial":
     filepath["relic"]          = "Relic/relicContour_A_g25.root"
-    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_Phil500.root"
     #ICHEP
-    #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
-    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
-    #paper
-    filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.txt"
-    filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.txt"
+    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_Phil500.root"
+    #Dijet paper
+    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    #Dijet paper?
+    #filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.txt"
+    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.txt"
     filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av.root"
     filepath["monojet"]        = "Monojet/ScanMM/Monojet_AV_MM_ICHEP2016_obs.root"
     filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
@@ -138,10 +140,11 @@ for analysis in analyses:
         mylist = TFile(filepath["relic"]).Get("mytlist")
         print "==> Relic list length = ",mylist.GetSize()
         tgraph["relic"] = mylist.At(0)
-    elif analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("obs_025")  
     #ichep
-    #elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")  
-    #elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")  
+    elif analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("obs_025")  
+    #dijet paper
+    elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")  
+    elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")  
     elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")  
     elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("monojet_obs")
     elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")

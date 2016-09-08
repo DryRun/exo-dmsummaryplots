@@ -64,8 +64,9 @@ if DDresult == "SI":
     filepath["PandaX"]         = "DD/pandax.txt"                 
     filepath["CDMSlite"]       = "DD/cdmslite2015.txt"
     filepath["Cresst"]         = "DD/cresstii.txt"
-    ###
+    ### ICHEP
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil500.root"
+    ### Dijet paper
     filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil600.root"
     filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil600.root"
     filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v_90.root"
@@ -78,8 +79,9 @@ elif DDresult == "SD" :
     filepath["Pico60"]         = "DD/Pico60.txt"
     filepath["SuperK"]         = "DD/SuperKtautau.txt"
     filepath["IceCube"]        = "DD/IceCubetautau.txt"
-    ###
+    ### ICHEP
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil500.root"
+    ### Dijet paper
     filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil600.root"
     filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil600.root"
     filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av_90.root"

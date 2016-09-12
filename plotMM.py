@@ -47,8 +47,10 @@ if Mediator == "Vector":
     #ICHEP
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_Phil500.root"
     #Dijet paper
-    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
-    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
+    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_top56.root"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_top56.root"
     #
     #filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.txt"
     #filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.txt"
@@ -63,8 +65,10 @@ elif Mediator == "Axial":
     #ICHEP
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_Phil500.root"
     #Dijet paper
-    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
-    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
+    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_top56.root"
+    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_top56.root"
     #Dijet paper?
     #filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.txt"
     #filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.txt"

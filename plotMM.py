@@ -19,6 +19,8 @@ Mediator  = raw_input('Choose mediator [Vector or Axial]: ')
 METXonly  = ast.literal_eval(raw_input('MET+X only? [True or False]: '))
 DijetOnly = ast.literal_eval(raw_input('Dijet only? [True or False]: '))
 
+CL = "95"
+
 #################
 ### Analyses ####
 #################
@@ -49,8 +51,13 @@ if Mediator == "Vector":
     #Dijet paper
     #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
     #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_Phil600.root"
-    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_top56.root"
-    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_top56.root"
+    #95
+    if CL=="95":
+        filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_top56.root"
+        filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_top56.root"
+    elif CL=="90":
+        filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_90_top56.root"
+        filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_90_top56.root"
     #
     #filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.txt"
     #filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.txt"
@@ -67,8 +74,13 @@ elif Mediator == "Axial":
     #Dijet paper
     #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
     #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_Phil600.root"
-    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_top56.root"
-    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_top56.root"
+    #95
+    if CL=="95":
+        filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_top56.root"
+        filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_top56.root"
+    elif CL=="90":
+        filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_90_top56.root"
+        filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_90_top56.root"
     #Dijet paper?
     #filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.txt"
     #filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.txt"
@@ -97,7 +109,7 @@ linestyle["monotop"]        = kDashed
 linestyle["monojet"]        = kSolid
 
 ### Planck
-color["relic"]          = kGray
+color["relic"]          = kGray+1
 ### Met-less
 color["dijet"]          = kAzure
 color["dijet_2016"]     = kAzure
@@ -192,7 +204,7 @@ leg.SetTextFont(42)
 leg.SetFillColor(0)
 leg.SetFillStyle(0)
 leg.Clear()
-if DijetOnly: leg.SetHeader("Dijet 95% CL")
+if DijetOnly: leg.SetHeader("Dijet "+CL+"% CL")
 else        : leg.SetHeader("#bf{Observed exclusion 95% CL}")
 
 ####################
@@ -201,7 +213,7 @@ else        : leg.SetHeader("#bf{Observed exclusion 95% CL}")
 
 f1 = TF1("f1","x/2.",0,4000)
 g1 = TGraph(f1)
-g1.SetLineColor(kGray)
+g1.SetLineColor(color["relic"]-1)
 g1.SetLineStyle(kDashed)
 
 if DijetOnly:
@@ -209,8 +221,8 @@ if DijetOnly:
     legd=TLatex(1300,680,"M_{Med} = 2 x m_{DM}")
     legd.SetTextAngle(38)
     legd.SetTextFont(42)
-    legd.SetTextSize(0.025)
-    legd.SetTextColor(kGray)
+    legd.SetTextSize(0.03)
+    legd.SetTextColor(color["relic"])
     legd.Draw("same")
 elif not METXonly:
     g1.Draw("same")
@@ -218,7 +230,7 @@ elif not METXonly:
     legd.SetTextAngle(45)
     legd.SetTextFont(42)
     legd.SetTextSize(0.025)
-    legd.SetTextColor(kGray)
+    legd.SetTextColor(color["relic"])
     legd.Draw("same")
 
 ##################
@@ -226,8 +238,8 @@ elif not METXonly:
 ##################
 
 if Mediator=="Vector" and DijetOnly:
-    legw=TLatex(3200,600,"#Omega_{c} h^{2} #geq 0.12")
-    legw.SetTextAngle(32)
+    legw=TLatex(3200,580,"#Omega_{c} h^{2} #geq 0.12")
+    legw.SetTextAngle(30)
 elif Mediator=="Vector" and not METXonly:
     legw=TLatex(3950,900,"#Omega_{c} h^{2} #geq 0.12")
     legw.SetTextAngle(40)
@@ -238,7 +250,7 @@ elif Mediator=="Axial" and DijetOnly:
     legw2.SetTextFont(42)
     legw2.SetTextColor(color["relic"])
     legw2.SetTextAngle(34)
-    legw2.SetTextSize(0.02)
+    legw2.SetTextSize(0.03)
     legw2.Draw("same")
 elif Mediator=="Axial" and not METXonly:
     legw  = TLatex(1720,1150,"#Omega_{c} h^{2} #geq 0.12")
@@ -256,7 +268,7 @@ elif Mediator=="Axial" and METXonly:
     legw=TLatex(1750,600,"#Omega_{c} h^{2} #geq 0.12")
     legw.SetTextAngle(35)
 legw.SetTextFont(42)
-legw.SetTextSize(0.02)
+legw.SetTextSize(0.03)
 legw.SetTextColor(color["relic"])
 
 ##################
@@ -328,8 +340,8 @@ for analysis in analyses:
     if analysis == "relic":
         for i in range(0,mylist.GetSize()):
             tgraph["relic"] = mylist.At(i)
-            tgraph["relic"].SetLineColor(color[analysis])
-            tgraph["relic"].SetFillColor(color[analysis])
+            tgraph["relic"].SetLineColor(color[analysis]-1)
+            tgraph["relic"].SetFillColor(color[analysis]-1)
             tgraph["relic"].SetLineStyle(linestyle[analysis])
             tgraph["relic"].SetLineWidth(-404)
             tgraph["relic"].SetFillStyle(3005)

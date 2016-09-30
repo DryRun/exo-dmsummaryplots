@@ -22,6 +22,7 @@ DijetOnly = False
 DDresult = raw_input('Choose DD [SI or SD]: ')
 METless  = ast.literal_eval(raw_input('MET-less? [True or False]: '))
 if METless: DijetOnly = ast.literal_eval(raw_input('Dijet only? [True or False]: '))
+vFloor  = ast.literal_eval(raw_input('Neutrino floor? [True or False]: '))
 
 #################
 ### Analyses ####
@@ -42,6 +43,8 @@ if   DDresult == "SI" and DijetOnly : analyses = cmsanalyses+["Cresst","CDMSlite
 elif DDresult == "SD" and DijetOnly : analyses = cmsanalyses+["Pico2L","Pico60","SuperK","IceCube"]
 elif DDresult == "SI"               : analyses = ["Cresst","CDMSlite","PandaX","LUX"]+cmsanalyses
 elif DDresult == "SD"               : analyses = ["Pico2L","Pico60","SuperK","IceCube"]+cmsanalyses
+
+if vFloor: analyses += ["vFloor"]
 
 print "***********************"
 print "DD result = ", DDresult
@@ -64,6 +67,7 @@ if DDresult == "SI":
     filepath["PandaX"]         = "DD/pandax.txt"                 
     filepath["CDMSlite"]       = "DD/cdmslite2015.txt"
     filepath["Cresst"]         = "DD/cresstii.txt"
+    filepath["vFloor"]         = "DD/Neutrino_SI.txt"
     ### ICHEP
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil500.root"
     ### Dijet paper
@@ -81,6 +85,7 @@ elif DDresult == "SD" :
     filepath["Pico60"]         = "DD/Pico60.txt"
     filepath["SuperK"]         = "DD/SuperKtautau.txt"
     filepath["IceCube"]        = "DD/IceCubetautau.txt"
+    filepath["vFloor"]         = "DD/Neutrino_SD.txt"
     ### ICHEP
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil500.root"
     ### Dijet paper
@@ -98,6 +103,7 @@ elif DDresult == "SD" :
 ### Plot linestyles ###
 #######################
 
+linestyle["vFloor"]     = kDashed
 ### SI
 linestyle["LUX"]        = kSolid
 linestyle["PandaX"]     = kSolid
@@ -122,6 +128,7 @@ linestyle["monojet"]    = kSolid
 ### Plot colors ###
 ###################
 
+color["vFloor"]     = kOrange+3
 ### SI
 color["Cresst"]     = kGreen+1
 color["CDMSlite"]   = kGreen+3
@@ -147,16 +154,17 @@ color["monotop"]    = kViolet+1
 ### Plot texts ###
 ##################
 
+text["vFloor"]     = "v floor (permeable)"
 ### SI
 text["LUX"]        = "LUX"
-text["PandaX"]     = "PandaX"
-text["CDMSlite"]   = "CDMSLite"
+text["PandaX"]     = "PandaX-II"
+text["CDMSlite"]   = "CDMSlite"
 text["Cresst"]     = "CRESST-II"
 ### SD
-text["Pico2L"]     = "Pico 2L"
-text["Pico60"]     = "Pico 60"
-text["SuperK"]     = "Super-K #tau^{+}#tau^{-}"
-text["IceCube"]    = "IceCube #tau^{+}#tau^{-}"
+text["Pico2L"]     = "PICO-2L"
+text["Pico60"]     = "PICO-60"
+text["SuperK"]     = "Super-K (#tau^{+}#tau^{-})"
+text["IceCube"]    = "IceCube (#tau^{+}#tau^{-})"
 ### CMS MET-less
 text["dijet"]      = "Dijet #it{[arxiv:1604.08907] + [EXO-16-032]}"
 text["dijet_2016"] = "Dijet #it{[EXO-16-032]}"
@@ -249,17 +257,17 @@ else :
 C.cd(1).SetLogx()
 C.cd(1).SetLogy()
 
-if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(0.3,1e-44,1450,1e-37)
-elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(0.3,1e-45,1450,1e-35) 
-elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(0.3,1e-46,1450,1e-38)
-elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(0.3,1e-47,1450,1e-33) 
+if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(0.1,1e-44,1450,1e-37)
+elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(0.9,1e-45,1450,1e-35) 
+elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(0.1,1e-46,1450,1e-38)
+elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(0.9,1e-50,1450,1e-33) 
 
 C.cd(1).SetTickx()
 C.cd(1).SetTicky()
 
 frame.SetXTitle("m_{DM} [GeV]")
-if   DDresult=="SD": frame.SetYTitle("#sigma^{SD}_{DM-p} [cm^{2}]")
-elif DDresult=="SI": frame.SetYTitle("#sigma^{SI}_{DM-N} [cm^{2}]")
+if   DDresult=="SD": frame.SetYTitle("#sigma^{SD}_{DM-proton} [cm^{2}]")
+elif DDresult=="SI": frame.SetYTitle("#sigma^{SI}_{DM-nucleon} [cm^{2}]")
 #frame.GetXaxis().SetLabelSize(0.05)
 #frame.GetYaxis().SetLabelSize(0.05)
 frame.GetXaxis().SetTitleSize(0.045)
@@ -268,14 +276,14 @@ frame.GetXaxis().SetTitleOffset(1.0)
 frame.GetYaxis().SetTitleOffset(1.5)
 
 if not DijetOnly:
-    if DDresult == "SI" : leg  = TLatex(2,2.5e-33,"#it{ICHEP 2016}")
-    if DDresult == "SD" : leg  = TLatex(2,1.8e-35,"#it{ICHEP 2016}")
+    if DDresult == "SI" : leg  = TLatex(1,2.5e-33,"#it{Moriond 2017}")
+    if DDresult == "SD" : leg  = TLatex(1,1.8e-35,"#it{Moriond 2017}")
     leg.SetTextFont(42)
     leg.SetTextSize(0.04)
     leg.Draw("same")
 if DijetOnly:
-    if DDresult == "SI" : leg  = TLatex(0.4,1.2e-38,"#bf{CMS}")
-    if DDresult == "SD" : leg  = TLatex(0.4,1.2e-37,"#bf{CMS}")
+    if DDresult == "SI" : leg  = TLatex(0.1,1.2e-38,"#bf{CMS}")
+    if DDresult == "SD" : leg  = TLatex(0.1,1.2e-37,"#bf{CMS}")
     leg.SetTextFont(42)
     leg.SetTextSize(0.04)
     leg.Draw("same")
@@ -289,7 +297,10 @@ if not DijetOnly:
     leg1.SetBorderSize(0)
     leg1.SetTextFont(42)
     leg1.Clear()
-    leg1.SetHeader("#bf{CMS} observed exclusion 90% CL")
+    if DDresult=="SI":
+        leg1.SetHeader("#splitline{#bf{CMS} observed exclusion 90% CL}{Vector med., Dirac DM; g_{q} = 0.25, g_{DM} = 1.0}")
+    elif DDresult=="SD":
+        leg1.SetHeader("#splitline{#bf{CMS} observed exclusion 90% CL}{Axial-vector med., Dirac DM; g_{q} = 0.25, g_{DM} = 1.0}")
     
     leg2=C.BuildLegend(0.60,0.13,0.85,0.53)
     leg2.SetBorderSize(0)
@@ -299,7 +310,8 @@ if not DijetOnly:
     elif DDresult == "SD": leg2.SetHeader("#bf{DD/ID} observed exclusion 90% CL")
 
     for analysis in analyses:
-        if analysis=="dijet" or analysis == "dijet_2016": leg1.AddEntry(tgraph[analysis],"Dijet #it{EXO-16-032}")
+        if analysis=="dijet" or analysis == "dijet_2016": leg1.AddEntry(tgraph[analysis],"#splitline{CMS dijet}{#it{[EXO-16-032]}}")
+        elif analysis == "trijet"     : leg1.AddEntry(tgraph[analysis],"#splitline{CMS boosted dijet}{#it{[EXO-16-030]}}")
         elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}") #[arXiv:1512.03506]}}")
         elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1607.07400]}}")
         elif analysis == "CDMSlite"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.02448]}}")
@@ -311,7 +323,7 @@ if not DijetOnly:
         elif analysis == "monojet"    : leg1.AddEntry(tgraph[analysis],"#splitline{CMS DM+j/V_{qq}}{#it{[EXO-16-037]}}")
         elif analysis == "monoZ"      : leg1.AddEntry(tgraph[analysis],"#splitline{CMS DM+Z_{ll}}{#it{[EXO-16-038]}}")
         elif analysis == "monophoton" : leg1.AddEntry(tgraph[analysis],"#splitline{CMS DM+#gamma}{#it{[EXO-16-039]}}")
-        else                          : leg1.AddEntry(tgraph[analysis],text[analysis])
+        #else                          : leg1.AddEntry(tgraph[analysis],text[analysis])
 
 ######################
 ### Plot SI LEGEND ###
@@ -370,13 +382,13 @@ if DDresult=="SI" and DijetOnly:
     legy3.SetTextSize(0.025)
     legy3.Draw("same")
     #Leg
-    legX=C.BuildLegend(0.18,0.15,0.40,0.45)
+    legX=C.BuildLegend(0.18,0.15,0.48,0.50)
     legX.SetBorderSize(0)
     legX.SetFillStyle(0)
     legX.SetTextFont(42)
     legX.Clear()
     legX.SetHeader("#bf{Obs.excl. 90% CL}")
-    legX.AddEntry(tgraph["dijet_2016"],"Dijet")
+    legX.AddEntry(tgraph["dijet_2016"],"#splitline{Vector med., Dirac DM}{#it{g_{q} = 0.25, g_{DM} = 1.0}}")
     legX.AddEntry(tgraph["Cresst"]    ,"#splitline{"+text["Cresst"]+"}{#it{arXiv:1509.01515}}")
     legX.AddEntry(tgraph["CDMSlite"]  ,"#splitline{"+text["CDMSlite"]+"}{#it{arXiv:1509.02448}}")
     legX.AddEntry(tgraph["PandaX"]    ,"#splitline{"+text["PandaX"]+"}{#it{arXiv:1607.07400}}")
@@ -384,6 +396,13 @@ if DDresult=="SI" and DijetOnly:
     legX.Draw("same")
 
 elif DDresult=="SI":
+    # v Floor
+    legy0  = TLatex(1.5,3.0e-46,"#splitline{#nu Floor (perm.)}{arXiv/1506.08309}")
+    legy0.SetTextAngle(0)
+    legy0.SetTextFont(42)
+    legy0.SetTextColor(color["vFloor"])
+    legy0.SetTextSize(0.025)
+    legy0.Draw("same")
     #CDMS MET+X
     legy1 = TLatex(2.2,2.2e-40,text["CDMSlite"])
     legy1.SetTextAngle(3)
@@ -399,14 +418,14 @@ elif DDresult=="SI":
     legy2.SetTextSize(0.025)
     legy2.Draw("same")
     #PandaX MET+X
-    legy4 = TLatex(80,1.0e-46,text["PandaX"])
+    legy4 = TLatex(85,8e-46,text["PandaX"])
     legy4.SetTextAngle(13)
     legy4.SetTextFont(42)
     legy4.SetTextColor(color["PandaX"])
     legy4.SetTextSize(0.025)
     legy4.Draw("same")
     #LUX MET+X
-    legy3 = TLatex(85,1.2e-45,text["LUX"])
+    legy3 = TLatex(100,8e-47,text["LUX"])
     legy3.SetTextAngle(13)
     legy3.SetTextFont(42)
     legy3.SetTextColor(color["LUX"])
@@ -470,7 +489,7 @@ if DDresult=="SD" and DijetOnly:
     legy4.SetTextSize(0.020)
     legy4.Draw("same")
     #Leg Dijet
-    legX=C.BuildLegend(0.18,0.515,0.40,0.815)
+    legX=C.BuildLegend(0.18,0.48,0.53,0.865)#50 was 45
     legX.SetBorderSize(0)
     legX.SetFillStyle(0)
     legX.SetTextFont(42)
@@ -480,10 +499,17 @@ if DDresult=="SD" and DijetOnly:
     legX.AddEntry(tgraph["Pico60"]    ,"#splitline{"+text["Pico60"]+"}{#it{arXiv:1510.07754}}")
     legX.AddEntry(tgraph["SuperK"]    ,"#splitline{"+text["SuperK"]+"}{#it{arXiv:1503.04858}}")
     legX.AddEntry(tgraph["IceCube"]   ,"#splitline{"+text["IceCube"]+"}{#it{arXiv:1601.00653}}")
-    legX.AddEntry(tgraph["dijet_2016"],"Dijet")
+    legX.AddEntry(tgraph["dijet_2016"],"#splitline{Axial-vector med., Dirac DM}{#it{g_{q} = 0.25, g_{DM} = 1.0}}")
     legX.Draw("same")
 
 elif DDresult=="SD":
+    # v Floor
+    legy0  = TLatex(30,5.0e-45,"#nu Floor (permeable) arXiv/1506.08309")
+    legy0.SetTextAngle(10)
+    legy0.SetTextFont(42)
+    legy0.SetTextColor(color["vFloor"])
+    legy0.SetTextSize(0.025)
+    legy0.Draw("same")
     # Pico2L MET+X
     legy1  = TLatex(300,3.0e-39,text["Pico2L"])
     legy1.SetTextAngle(15)
@@ -539,14 +565,14 @@ elif DDresult == "SD" and not DijetOnly:
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.025)
 elif DDresult == "SI" and DijetOnly:
-    leg3=TLatex(30,1.2e-38,"12.9 fb^{-1} (13 TeV)")
+    leg3=TLatex(100,1.2e-38,"12.9 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
     leg4=TLatex(30,2e-39,"#splitline{#bf{Vector mediator, Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.025)
 elif DDresult == "SD" and DijetOnly:
-    leg3=TLatex(30,1.2e-37,"12.9 fb^{-1} (13 TeV)")
+    leg3=TLatex(100,1.2e-37,"12.9 fb^{-1} (13 TeV)")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
     leg4=TLatex(30,2e-38,"#splitline{#bf{Axial-vector mediator, Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")
@@ -554,7 +580,7 @@ elif DDresult == "SD" and DijetOnly:
     leg4.SetTextSize(0.025)
 
 leg3.Draw("same")
-leg4.Draw("same")
+#leg4.Draw("same")
 
 C.Update()
 
@@ -581,6 +607,9 @@ for analysis in analyses:
         tgraph[analysis].SetFillColor(kWhite)
         tgraph[analysis].Draw("same")
     elif analysis == "monojet" or analysis=="monophoton" or analysis=="monoZ" or analysis=="dijet" or analysis=="trijet" or analysis=="dijet_2016":
+        tgraph[analysis].Draw("same")
+    elif analysis == "vFloor" :
+        tgraph[analysis].SetLineWidth(-102)
         tgraph[analysis].Draw("same")
 
 C.Update()

@@ -63,11 +63,11 @@ linestyle = {}
 #############
 
 if DDresult == "SI":
-    filepath["LUX"]            = "DD/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
-    filepath["PandaX"]         = "DD/pandax.txt"                 
-    filepath["CDMSlite"]       = "DD/cdmslite2015.txt"
-    filepath["Cresst"]         = "DD/cresstii.txt"
-    filepath["vFloor"]         = "DD/Neutrino_SI.txt"
+    filepath["LUX"]            = "DD/SI/LUX_SI_Combination_Oct2016.txt"#"DD/SI/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
+    filepath["PandaX"]         = "DD/SI/pandax.txt"                 
+    filepath["CDMSlite"]       = "DD/SI/cdmslite2015.txt"
+    filepath["Cresst"]         = "DD/SI/cresstii.txt"
+    filepath["vFloor"]         = "DD/SI/Neutrino_SI.txt"
     ### ICHEP
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil500.root"
     ### Dijet paper
@@ -81,11 +81,11 @@ if DDresult == "SI":
     #2015: filepath["monoZ"]   = "MonoZll/ScanMM/monoz_vector_gq0p25_cl90_2015.txt"
     filepath["monoZ"]          = "MonoZll/ScanMM/monoz_exo16038_si.txt"
 elif DDresult == "SD" :
-    filepath["Pico2L"]         = "DD/Pico2L.txt"
-    filepath["Pico60"]         = "DD/Pico60.txt"
-    filepath["SuperK"]         = "DD/SuperKtautau.txt"
-    filepath["IceCube"]        = "DD/IceCubetautau.txt"
-    filepath["vFloor"]         = "DD/Neutrino_SD.txt"
+    filepath["Pico2L"]         = "DD/SD/Pico2L.txt"
+    filepath["Pico60"]         = "DD/SD/Pico60.txt"
+    filepath["SuperK"]         = "DD/SD/SuperKtautau.txt"
+    filepath["IceCube"]        = "DD/SD/IceCubetautau.txt"
+    filepath["vFloor"]         = "DD/SD/Neutrino_SD.txt"
     ### ICHEP
     filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil500.root"
     ### Dijet paper
@@ -154,7 +154,7 @@ color["monotop"]    = kViolet+1
 ### Plot texts ###
 ##################
 
-text["vFloor"]     = "v floor (permeable)"
+text["vFloor"]     = "#nu floor (permeable)"
 ### SI
 text["LUX"]        = "LUX"
 text["PandaX"]     = "PandaX-II"
@@ -313,7 +313,7 @@ if not DijetOnly:
     for analysis in analyses:
         if analysis=="dijet" or analysis == "dijet_2016": leg1.AddEntry(tgraph[analysis],"#splitline{CMS dijet}{#it{[EXO-16-032]}}")
         elif analysis == "trijet"     : leg1.AddEntry(tgraph[analysis],"#splitline{CMS boosted dijet}{#it{[EXO-16-030]}}")
-        elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}") #[arXiv:1512.03506]}}")
+        elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}")#1608.07648]}}") #[arXiv:1512.03506]}}")
         elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1607.07400]}}")
         elif analysis == "CDMSlite"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.02448]}}")
         elif analysis == "Cresst"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.01515]}}")
@@ -376,7 +376,7 @@ if DDresult=="SI" and DijetOnly:
     legy4.SetTextSize(0.025)
     legy4.Draw("same")
     #LUX Dijet
-    legy3 = TLatex(300,3.3e-46,text["LUX"]+" 2016")
+    legy3 = TLatex(350,3.0e-46,text["LUX"]+" 2016")
     legy3.SetTextAngle(0)
     legy3.SetTextFont(42)
     legy3.SetTextColor(color["LUX"])

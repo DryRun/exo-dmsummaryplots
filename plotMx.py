@@ -258,9 +258,10 @@ C.cd(1).SetLogx()
 C.cd(1).SetLogy()
 
 if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(0.1,1e-44,1450,1e-37)
-elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(0.9,1e-45,1450,1e-35) 
+#elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(0.9,1e-45,1450,1e-35) 
+elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(0.9,1e-45,1450,1e-37) 
 elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(0.1,1e-46,1450,1e-38)
-elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(0.9,1e-50,1450,1e-33) 
+elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(0.9,1e-50,1450,1e-35) 
 
 C.cd(1).SetTickx()
 C.cd(1).SetTicky()
@@ -368,14 +369,14 @@ if DDresult=="SI" and DijetOnly:
     legy2.SetTextSize(0.025)
     legy2.Draw("same")
     #PandaX Dijet
-    legy4 = TLatex(100,1.5e-45,text["PandaX"]+" 2016")
+    legy4 = TLatex(70,1.5e-45,text["PandaX"]+" 2016")
     legy4.SetTextAngle(0)
     legy4.SetTextFont(42)
     legy4.SetTextColor(color["PandaX"])
     legy4.SetTextSize(0.025)
     legy4.Draw("same")
     #LUX Dijet
-    legy3 = TLatex(300,3e-46,text["LUX"]+" 2016")
+    legy3 = TLatex(300,3.3e-46,text["LUX"]+" 2016")
     legy3.SetTextAngle(0)
     legy3.SetTextFont(42)
     legy3.SetTextColor(color["LUX"])
@@ -387,7 +388,7 @@ if DDresult=="SI" and DijetOnly:
     legX.SetFillStyle(0)
     legX.SetTextFont(42)
     legX.Clear()
-    legX.SetHeader("#bf{Obs.excl. 90% CL}")
+    legX.SetHeader("#bf{Excluded 90% CL}")
     legX.AddEntry(tgraph["dijet_2016"],"#splitline{Vector med., Dirac DM}{#it{g_{q} = 0.25, g_{DM} = 1.0}}")
     legX.AddEntry(tgraph["Cresst"]    ,"#splitline{"+text["Cresst"]+"}{#it{arXiv:1509.01515}}")
     legX.AddEntry(tgraph["CDMSlite"]  ,"#splitline{"+text["CDMSlite"]+"}{#it{arXiv:1509.02448}}")
@@ -461,14 +462,14 @@ if not DijetOnly and not METless and DDresult=="SD":
 
 if DDresult=="SD" and DijetOnly:
     # Pico2L Dijet
-    legy1  = TLatex(180,2.7e-39,text["Pico2L"])
+    legy1  = TLatex(150,2.7e-39,text["Pico2L"])
     legy1.SetTextAngle(0)
     legy1.SetTextFont(42)
     legy1.SetTextColor(color["Pico2L"])
     legy1.SetTextSize(0.020)
     legy1.Draw("same")
     # Pico60 Dijet
-    legy2  = TLatex(200,6.0e-40,text["Pico60"])
+    legy2  = TLatex(210,6.0e-40,text["Pico60"])
     legy2.SetTextAngle(0)
     legy2.SetTextFont(42)
     legy2.SetTextColor(color["Pico60"])
@@ -482,7 +483,7 @@ if DDresult=="SD" and DijetOnly:
     legy3.SetTextSize(0.020)
     legy3.Draw("same")
     # IceCube Dijet
-    legy4  = TLatex(280,4.6e-41,text["IceCube"])
+    legy4  = TLatex(230,4.7e-41,text["IceCube"])
     legy4.SetTextAngle(0)
     legy4.SetTextFont(42)
     legy4.SetTextColor(color["IceCube"])
@@ -494,7 +495,7 @@ if DDresult=="SD" and DijetOnly:
     legX.SetFillStyle(0)
     legX.SetTextFont(42)
     legX.Clear()
-    legX.SetHeader("#bf{Obs.excl. 90% CL}")
+    legX.SetHeader("#bf{Excluded 90% CL}")
     legX.AddEntry(tgraph["Pico2L"]    ,"#splitline{"+text["Pico2L"]+"}{#it{arXiv:1601.03729}}")
     legX.AddEntry(tgraph["Pico60"]    ,"#splitline{"+text["Pico60"]+"}{#it{arXiv:1510.07754}}")
     legX.AddEntry(tgraph["SuperK"]    ,"#splitline{"+text["SuperK"]+"}{#it{arXiv:1503.04858}}")
@@ -551,14 +552,14 @@ if not DijetOnly:
     C.Update()
 
 if DDresult == "SI" and not DijetOnly:
-    leg3=TLatex(100,1e-34,"#bf{CMS} #it{Preliminary}")
+    leg3=TLatex(100,1.2e-36,"#bf{CMS} #it{Preliminary}")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
     leg4=TLatex(100,1e-35,"#splitline{#bf{Vector med., Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.025)
 elif DDresult == "SD" and not DijetOnly:
-    leg3=TLatex(70,1.4e-36,"#bf{CMS} #it{Preliminary}")
+    leg3=TLatex(100,3e-38,"#bf{CMS} #it{Preliminary}")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
     leg4=TLatex(70,3e-37,"#splitline{#bf{Axial-vector med., Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")
@@ -596,7 +597,7 @@ for analysis in analyses:
     tgraph[analysis].SetLineStyle(linestyle[analysis])
     tgraph[analysis].SetMarkerSize(0.1)
     tgraph[analysis].SetMarkerColor(color[analysis])
-    if analysis=="dijet" or analysis == "dijet_2016":
+    if analysis=="dijet" or analysis == "dijet_2016" or analysis=="trijet":
         tgraph[analysis].SetLineWidth(2)
         tgraph[analysis].Draw("F,same")
         tgraph[analysis].Draw("same")
@@ -606,7 +607,7 @@ for analysis in analyses:
     elif analysis == "Pico2L" or analysis=="Pico60" or analysis=="IceCube" or analysis=="SuperK":
         tgraph[analysis].SetFillColor(kWhite)
         tgraph[analysis].Draw("same")
-    elif analysis == "monojet" or analysis=="monophoton" or analysis=="monoZ" or analysis=="dijet" or analysis=="trijet" or analysis=="dijet_2016":
+    elif analysis == "monojet" or analysis=="monophoton" or analysis=="monoZ" or analysis=="dijet" or analysis=="dijet_2016":
         tgraph[analysis].Draw("same")
     elif analysis == "vFloor" :
         tgraph[analysis].SetLineWidth(-102)

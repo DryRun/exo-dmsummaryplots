@@ -1,4 +1,4 @@
-Welcome to the CMS EXO MET+X Combination repository!
+Welcome to the CMS EXO MET+X Combination repository
 
 This project contains the scripts for the 2016 MET+X combination/summary plots, and corresponding files.
 
@@ -21,6 +21,6 @@ PLEASE provide your results for Summary plots
 - Or as a TGraph in a root file (example: trijet)
 - But please don't provide it as a script, as this is not practical & error prone
 
-Happy Combining!
+Happy Combining
 
  --- The CMS EXO MET+X Combination WG

@@ -135,11 +135,11 @@ elif DDresult == "SD" :
     # filepath["IceCubebb"]     = "Pico60/Neutrino.root"
     # filepath["IceCubett"]     = "Pico60/Neutrino.root"
 
-    filepath["PICASSO"]         = "Pico60/PicassoFinal.root"
-    filepath["Pico60"]         = "Pico60/Pico602017.root"
-    filepath["SuperKbb"]      = "Pico60/SuperKbb.root"
-    filepath["IceCubebb"]     = "Pico60/IceCubebb.root"
-    filepath["IceCubett"]     = "Pico60/IceCubett.root"
+    filepath["PICASSO"]         = "DirectDetection/PicassoFinal.root"
+    filepath["Pico60"]         = "DirectDetection/Pico602017.root"
+    filepath["SuperKbb"]      = "DirectDetection/SuperKbb.root"
+    filepath["IceCubebb"]     = "DirectDetection/IceCubebb.root"
+    filepath["IceCubett"]     = "DirectDetection/IceCubett.root"
     filepath["vFloor"]         = "DD/SD/Neutrino_SD.txt"
     ### ICHEP
 #    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil500.root"

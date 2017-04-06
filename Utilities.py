@@ -1,10 +1,7 @@
 from ROOT import *
 import ast
 
-#ADD METX
-
-#def extrapolation( tgraph, DijetOnly, cmsanalyses, metless, mDM_lb ):
-def extrapolation( tgraph, DijetOnly, metless, metx, mDM_lb ):
+def extrapolation( tgraph, DijetOnly, Resonances, metless, metx, mDM_lb ):
 
     DDgraph_extr = {}
     num_extr = 100
@@ -37,6 +34,9 @@ def extrapolation( tgraph, DijetOnly, metless, metx, mDM_lb ):
 ####################
 
 
+    if not Resonances :
+        return 
+
 ####################
 ## Dijet,Trijet:
 #[N.B: Step 1, 2a, 3 applies to Trijet] 
@@ -50,26 +50,18 @@ def extrapolation( tgraph, DijetOnly, metless, metx, mDM_lb ):
 ####################
 
 
-    #print "Dijet"
-
-
-
     index = 0 #keeps track of the index for filling graph
-#    for analysis in cmsanalyses :
     for analysis in metless :
         index = 0 
         print "Analysis ", analysis
         DDgraph_extr[analysis]=TGraph()
 
 
-        #print "Step 1: Extrapolate from first non -100 point downto mDM_lb"
-
         #Step 1
 
         mDM_ref  = Double(0)  
         xsec_ref = Double(0)    
-        tgraph[analysis].GetPoint(1,mDM_ref,xsec_ref); #0 => MDM = 100
-#        print "mDM_ref ", mDM_ref, " xsec_ref ", xsec_ref
+        tgraph[analysis].GetPoint(1,mDM_ref,xsec_ref); 
         mR_ref = 0.939*mDM_ref/(0.939+mDM_ref);
         for i_extr in range(0, num_extr) :
             mDM_i_extr = mDM_lb + i_extr*(mDM_ref-mDM_lb)/num_extr
@@ -100,9 +92,6 @@ def extrapolation( tgraph, DijetOnly, metless, metx, mDM_lb ):
             else :
                 mDM_ip1 = -999 
                 xsec_ip1 = -999 
-
-#            print "i ", i, "mDM_i,  mDM_i, mDM_ip1 ", mDM_i, mDM_i, mDM_ip1
-
 
             #copy input graphs
             if mDM_i != -100 :
@@ -141,15 +130,12 @@ def extrapolation( tgraph, DijetOnly, metless, metx, mDM_lb ):
                         index = index + 1
                         DDgraph_extr[analysis].SetPoint(index,mDM_i_extr,xsec_i_extr)           
                         
-
-
             
         tgraph[analysis] = DDgraph_extr[analysis]    
 
 
     #Step 3
 
-#    for analysis in cmsanalyses :
     for analysis in metless :
         DDgraph_extr[analysis]=TGraph()
         #copy the graph up to N-3 included (lower xsec band)

@@ -17,7 +17,7 @@ from Utilities import extrapolation
 ################
 ### Settings ###
 ################
-TextonPlot = True
+TextonPlot = False
 
 
 DijetOnly = False
@@ -27,7 +27,7 @@ Resonances  = ast.literal_eval(raw_input('Resonances? [True or False]: '))
 if Resonances: DijetOnly = ast.literal_eval(raw_input('Dijet only? [True or False]: '))
 
 
-Extend    = True
+Extend    = False 
 vFloor    = False
 mDM_lb = 1
 
@@ -36,11 +36,12 @@ mDM_lb = 1
 #################
 
 if   DDresult == "SI": 
-    metx    = ["monojet","monophoton","monoZ"]
+    metx    = ["monojet","monophoton","monoZ","monoHgg"]
     resonances = ["dijet","trijet"]
 elif DDresult == "SD": 
     metx    = ["monojet","monophoton","monoZ"]
     resonances = ["dijet","trijet"]
+
 
 cmsanalyses = metx
 if Resonances  : cmsanalyses = metx+resonances
@@ -85,26 +86,19 @@ if DDresult == "SI":
     filepath["CDMSlite"]       = "DD/SI/cdmslite2015.txt"
     filepath["Cresst"]         = "DD/SI/cresstii.txt"
     filepath["vFloor"]         = "DD/SI/Neutrino_SI.txt"
-    ### ICHEP
-#    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil500.root"
-#from Tyler EXO-16-056
-    filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
-    ### Dijet paper
-    #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil600.root"
-    #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_90_Phil600.root"
 
-#    filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_v_90_top56.root"
-#    filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_90_top56.root"    
+    filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.root"
     filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
     filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
 
 
 
-    filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v_90.root"
-    filepath["monojet"]        = "Monojet/ScanMM/vector_g025_DD.root"
-    filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SI_MM_ICHEP2016_obs.root"
-    #2015: filepath["monoZ"]   = "MonoZll/ScanMM/monoz_vector_gq0p25_cl90_2015.txt"
-    filepath["monoZ"]          = "MonoZll/ScanMM/monoz_exo16038_si.txt"
+    filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v_90.root" 
+    filepath["monojet"]        = "Monojet/ScanMM/monojet_DD_limits.root" 
+    filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SI_MM_ICHEP2016_obs.root" #outdated
+    filepath["monoZ"]          = "MonoZll/ScanMM/monoz_contour_observed_limit_vector_cl90.root"
+    filepath["monoHgg"]          = "MonoHgg/ScanMM/input_combo_MonoHgg_25April_90CL.root"
+
 elif DDresult == "SD" :
     # filepath["Pico2L"]         = "DD/SD/Pico2L.txt"
     # filepath["Pico60"]         = "DD/SD/Pico60.txt"
@@ -135,11 +129,10 @@ elif DDresult == "SD" :
     #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_90_top56.root"
     filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
     filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
-    filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av_90.root"
-    filepath["monojet"]        = "Monojet/ScanMM/axial_g025_DD.root"
-    filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root"
-    #2015: filepath["monoZ"]   = "MonoZll/ScanMM/monoz_axial_gq0p25_cl90_2015.txt"
-    filepath["monoZ"]          = "MonoZll/ScanMM/monoz_exo16038_sd.txt"
+    filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av_90.root" 
+    filepath["monojet"]        = "Monojet/ScanMM/monojet_DD_limits.root"
+    filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root" #outdated
+    filepath["monoZ"]          = "MonoZll/ScanMM/monoz_contour_observed_limit_axial_cl90.root"
 
 #######################
 ### Plot linestyles ###
@@ -164,8 +157,10 @@ linestyle["trijet"]     = kSolid
 ### CMS MET+X
 linestyle["monophoton"] = kSolid
 linestyle["monoZ"]      = kSolid
+linestyle["monoHgg"]      = kSolid
 linestyle["monotop"]    = kSolid
 linestyle["monojet"]    = kSolid
+
 
 ###################
 ### Plot colors ###
@@ -192,6 +187,7 @@ color["chi"]        = kBlue
 color["monojet"]    = kRed+1#kRed+1
 color["monophoton"] = kOrange+10#kRed+2
 color["monoZ"]      = kOrange-3#kRed+3
+color["monoHgg"]          = kMagenta-7
 color["monotop"]    = kViolet+1
 
 ##################
@@ -216,13 +212,14 @@ if DDresult=="SD" :
 else :
     text["dijet"]      = "#splitline{CMS Dijet}{[EXO-16-056]}"
 text["dijet_2016"] = "CMS Dijet #it{[EXO-16-056]}"
-text["trijet"]     = "CMS Boosted dijet #it{[EXO-16-030]}"
+text["trijet"]     = "CMS Boosted dijet #it{[EXO-17-001]}"
 text["chi"]        = "chi obs. (exp.excl.)"
 ### CMS MET+X
-text["monojet"]    = "CMS DM+j/V_{qq} #it{[EXO-16-037]}"
-text["monoZ"]      = "CMS DM+Z_{ll} #it{[EXO-16-038]}"
+text["monojet"]    = "CMS DM+j/V_{qq} #it{[EXO-16-056]}"
+text["monoZ"]      = "CMS DM+Z_{ll} #it{[EXO-16-052]}"
+text["monoHgg"]    = "CMS H_{#gamma #gamma} #it{[EXO-16-054]}"
 text["monophoton"] = "CMS DM+#gamma #it{[EXO-16-039]}"
-text["monotop"]    = "CMS DM+t (FC) #it{[EXO-16-040]}"
+#text["monotop"]    = "CMS DM+t (FC) #it{[EXO-16-040]}"
 
 ####################
 ### Get datfiles ###
@@ -239,11 +236,19 @@ for analysis in analyses:
     #elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")  
     elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("Obs_90")  
     elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("Obs_90")  
-
+#    elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed")
     elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")  
-    elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed")
+    elif analysis == "monojet"        :
+        if DDresult == "SI" :        
+            tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed_dd_vector")
+        elif DDresult == "SD" :       
+            tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed_dd_axial")
     elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
-    elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
+    elif analysis == "monoZ"   : tgraph["monoZ"]          = TFile(filepath[analysis]).Get("contour_obs")
+    elif analysis == "monoHgg"        : tgraph["monoHgg"]     = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")
+
+
+#    elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
     elif analysis == "PICASSO"        : tgraph["PICASSO"]        = TFile(filepath[analysis]).Get("Obs_90")
     elif analysis == "Pico60"         : tgraph["Pico60"]         = TFile(filepath[analysis]).Get("Obs_90")
     elif analysis == "SuperKbb"       : tgraph["SuperKbb"]       = TFile(filepath[analysis]).Get("Obs_90")
@@ -260,21 +265,29 @@ if DDresult=="SI":
     #c_SI = 0.3984e-27*(9./3.14159) #gq=1
     c_SI = 6.9e-41*1e12
     for analysis in cmsanalyses:
+
         DDgraph[analysis]=TGraph()
         for i in range(0,tgraph[analysis].GetN()) :
             mMed = Double(0)
             mDM  = Double(0)
             tgraph[analysis].GetPoint(i,mMed,mDM)
-#            print "SI - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
-            if analysis == "monophoton":
-                DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))        
-            elif analysis == "monojet" or analysis == "monoZ":
+            print "SI - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
+            if analysis == "monojet" :
                 DDgraph[analysis]=tgraph[analysis]
+
+      
+            elif analysis == "monophoton":
+                 DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))        
+            # elif analysis == "monojet" or analysis == "monoZ":
+            #     DDgraph[analysis]=tgraph[analysis]
             else: 
                 mR = Double(0.939*mDM)/(0.939+mDM)
                 xsec = Double(c_SI*(mR*mR)/(mMed*mMed*mMed*mMed))
 #                print "x-sec = ", xsec
                 DDgraph[analysis].SetPoint(i,mDM,xsec)        
+                if analysis == "monoHgg" :
+                    print "SD - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
+                    print "xsec ", xsec, " mR ", mR
         tgraph[analysis] = DDgraph[analysis]
 elif DDresult=="SD":
     #c_SD = 4.6*1e-29  #gq=1
@@ -288,8 +301,10 @@ elif DDresult=="SD":
 #            print "SD - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
             if analysis == "monophoton":
                 DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))        
-            elif analysis == "monojet" or analysis == "monoZ":
-                DDgraph[analysis]=tgraph[analysis]
+            # elif analysis == "monojet" or analysis == "monoZ":
+            #     DDgraph[analysis]=tgraph[analysis]
+            elif analysis == "monojet" :
+                 DDgraph[analysis]=tgraph[analysis]
             else: 
                 mR = Double(0.939*mDM)/(0.939+mDM)
                 xsec = Double(c_SD*(mR*mR)/(mMed*mMed*mMed*mMed))
@@ -333,9 +348,9 @@ C.cd(1).SetLogx()
 C.cd(1).SetLogy()
 
 if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-44,1450,1e-37)
-elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,1450,1e-37) 
+elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,1450,1e-36) 
 elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,1450,1e-37) 
-elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,1450,1e-35) 
+elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,1450,1e-34) 
 
 
 C.cd(1).SetTickx()
@@ -350,7 +365,7 @@ frame.GetXaxis().SetTitleOffset(1.0)
 frame.GetYaxis().SetTitleOffset(1.5)
 
 if not DijetOnly:
-    if DDresult == "SI" : leg  = TLatex(1,2.5e-33,"#it{Moriond 2017}")
+    if DDresult == "SI" : leg  = TLatex(1,2.5e-32,"#it{Moriond 2017}")
     if DDresult == "SD" : leg  = TLatex(1,1.8e-35,"#it{Moriond 2017}")
     leg.SetTextFont(42)
     leg.SetTextSize(0.04)
@@ -398,6 +413,7 @@ if not DijetOnly:
         elif analysis == "monojet"    : leg1.AddEntry(tgraph[analysis],"#splitline{CMS DM+j/V_{qq}}{#it{[EXO-16-037]}}")
         elif analysis == "monoZ"      : leg1.AddEntry(tgraph[analysis],"#splitline{CMS DM+Z_{ll}}{#it{[EXO-16-038]}}")
         elif analysis == "monophoton" : leg1.AddEntry(tgraph[analysis],"#splitline{CMS DM+#gamma}{#it{[EXO-16-039]}}")
+        elif analysis == "monoHgg" : leg1.AddEntry(tgraph[analysis],"#splitline{CMS DM+H_{#gamma #gamma}}{#it{[EXO-16-054]}}")
         #else                          : leg1.AddEntry(tgraph[analysis],text[analysis])
 
 ######################
@@ -697,17 +713,19 @@ if not DijetOnly:
     C.Update()
 
 if DDresult == "SI" and not DijetOnly:
-    leg3=TLatex(mDM_lb,2e-35,"#bf{CMS} #it{Preliminary}")
+    leg3=TLatex(mDM_lb,2e-34,"#bf{CMS} #it{Preliminary}")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
-    leg4=TLatex(20,2e-35,"13 fb^{-1} & 27 fb^{-1} & 36 fb^{-1} (13 TeV)")
+#    leg4=TLatex(20,2e-35,"13 fb^{-1} & 27 fb^{-1} & 36 fb^{-1} (13 TeV)")
+    leg4=TLatex(30,2e-34,"12.9 fb^{-1} & 35.9 fb^{-1} (13 TeV)")
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.033)
 elif DDresult == "SD" and not DijetOnly:
-    leg3=TLatex(mDM_lb,2e-37,"#bf{CMS} #it{Preliminary}")
+    leg3=TLatex(mDM_lb,2e-36,"#bf{CMS} #it{Preliminary}")
     leg3.SetTextFont(42)
     leg3.SetTextSize(0.033)
-    leg4=TLatex(20,2e-37,"13 fb^{-1} & 27 fb^{-1} & 36 fb^{-1} (13 TeV)")
+#    leg4=TLatex(20,2e-37,"13 fb^{-1} & 27 fb^{-1} & 36 fb^{-1} (13 TeV)")
+    leg4=TLatex(30,2e-36,"12.9 fb^{-1} & 35.9 fb^{-1} (13 TeV)")
     leg4.SetTextFont(42)
     leg4.SetTextSize(0.033)
 elif DDresult == "SI" and DijetOnly:
@@ -762,7 +780,7 @@ for analysis in analyses:
     elif analysis == "PICASSO" or analysis=="Pico60" or analysis=="SuperKbb" or analysis=="IceCubebb" or analysis=="IceCubett":
         tgraph[analysis].SetFillColor(kWhite)
         tgraph[analysis].Draw("same")
-    elif analysis == "monojet" or analysis=="monophoton" or analysis=="monoZ" or analysis=="dijet" or analysis=="dijet_2016":
+    elif analysis == "monojet" or analysis=="monophoton" or analysis=="monoZ" or analysis=="monoHgg" or analysis=="dijet" or analysis=="dijet_2016":
         tgraph[analysis].Draw("same")
     elif analysis == "vFloor" :
         tgraph[analysis].SetLineWidth(-102)

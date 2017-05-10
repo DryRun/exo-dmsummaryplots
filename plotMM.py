@@ -153,7 +153,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
             filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
             filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v.root"
-        filepath["monojet"]        = "Monojet/ScanMM/scan2D_monojet.root"
+        filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/scan2D_vector.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
         filepath["monoZ"]          = "MonoZll/ScanMM/monoz_contour_observed_limit_vector.root"
         filepath["monoHgg"]          = "MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
@@ -175,7 +175,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
             filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
             filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av.root"
-        filepath["monojet"]        = "Monojet/ScanMM/scan2D_monojet.root"
+        filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/scan2D_axial.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
         filepath["monoZ"]          = "MonoZll/ScanMM/monoz_contour_observed_limit_axial.root"
 
@@ -223,7 +223,6 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 
     #if not METXonly:
     text["relic"]          = "\Omega_{c} h^{2} \geq 0.12"
-    #    text["dijet"]          = "#splitline{Z' #rightarrow jj #it{[EXO-16-032]}}{+ #it{[arXiv:1604.08907]}}"
     text["dijet"]      = "CMS Dijet [EXO-16-056]"
     text["dijetchi"]      = "CMS Dijet [EXO-16-046]"
     text["dilepton"]       = "Z' #rightarrow ll"
@@ -269,10 +268,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         elif analysis == "dilepton" :
             tgraph["dilepton"]       = TFile(filepath[analysis]).Get("obs")
         elif analysis == "monojet"        :
-            if Mediator == "Vector" :
-                tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed_vector")
-            elif Mediator == "Axial" :
-                tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed_axial")
+                tgraph["monojet"]        = TFile(filepath[analysis]).Get("contour_observed")
         elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
         elif analysis == "monoZ"   : tgraph["monoZ"]          = TFile(filepath[analysis]).Get("contour_obs")
         elif analysis == "monoHgg"        : tgraph["monoHgg"]     = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")

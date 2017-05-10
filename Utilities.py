@@ -345,7 +345,7 @@ def get_color():
 def get_text():
     text = {}
     text["relic"]          = "\Omega_{c} h^{2} \geq 0.12"
-    text["dijet"]          = "#splitline{Dijet (27 + 36 fb^{-1})}{[EXO-16-056]}"
+    text["dijet"]          = "#splitline{Dijet (35.9 fb^{-1})}{[EXO-16-056]}"
     text["dijetchi"]       = "Dijet #chi  (36.5 fb^{-1})[EXO-16-046]"
     text["dilepton"]       = "Dilepton: ee (12.4 fb^{-1}) + #mu#mu (13.0 fb^{-1})"
     text["dijet_2016"]     = "Observed"

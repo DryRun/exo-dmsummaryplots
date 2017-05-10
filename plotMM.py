@@ -155,7 +155,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v.root"
         filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/scan2D_vector.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
-        filepath["monoZ"]          = "MonoZll/ScanMM/monoz_contour_observed_limit_vector.root"
+        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt"
         filepath["monoHgg"]          = "MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
     #    filepath["monotop"]        = "Monotop/ScanMM/vector_rebinned.root"
         filepath["monotop"]        = "Monotop/ScanMM/fcnc2d_obs_vector.root"
@@ -177,7 +177,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av.root"
         filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/scan2D_axial.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
-        filepath["monoZ"]          = "MonoZll/ScanMM/monoz_contour_observed_limit_axial.root"
+        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt"
 
     ###################
     ### Plot colors ###
@@ -270,7 +270,6 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         elif analysis == "monojet"        :
                 tgraph["monojet"]        = TFile(filepath[analysis]).Get("contour_observed")
         elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
-        elif analysis == "monoZ"   : tgraph["monoZ"]          = TFile(filepath[analysis]).Get("contour_obs")
         elif analysis == "monoHgg"        : tgraph["monoHgg"]     = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")
         elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
         else                              : tgraph[analysis]         = TGraph(filepath[analysis])

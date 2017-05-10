@@ -211,7 +211,7 @@ def read_graphs():
 
     ### Initialize
     graphs = {}
-    scenarios = ["A1", "A2", "A3","V1", "V2", "V3","V4"]
+    scenarios = ["A1", "A2", "A3","A4","V1", "V2", "V3","V4"]
     quantiles = ["obs", "exp"]
     analyses = ["monojet","monophoton","monoz","dilepton","dijet","monoHgg","monotop","dijet","trijet","dijetchi","relic"]
     for a in analyses:
@@ -245,18 +245,23 @@ def read_graphs():
     graphs["monotop"]["V4"]["obs"] = TFile("Monotop/ScanMM/fcnc2d_obs_vector.root").Get("observed")
 
     graphs["dijet"]["A1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root").Get("Obs_90")
-    graphs["dijet"]["V1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root").Get("Obs_90")
+    graphs["dijet"]["A1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.root").Get("Obs_90")
+    graphs["dijet"]["V1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.root").Get("Obs_90")
+    graphs["dijet"]["V1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root").Get("Obs_90")
 
     graphs["dijetchi"]["A3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root").Get("obs_MvsM")
     graphs["dijetchi"]["V3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root").Get("obs_MvsM")
 
-    graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("obs_025")
+    graphs["trijet"]["A1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("obs_025")
+    graphs["trijet"]["A1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("exp_025")
     graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("obs_025")
+    graphs["trijet"]["V1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("exp_025")
 
     graphs["relic"]["A1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist").At(0)
     graphs["relic"]["A2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist").At(0)
     graphs["relic"]["V1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
     graphs["relic"]["V2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist").At(0)
+    graphs["relic"]["V4"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
 
 
     return graphs
@@ -268,6 +273,7 @@ def read_relic_lists():
     lists["A2"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist")
     lists["V1"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
     lists["V2"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist")
+    lists["V4"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
     return lists
 
 def get_line_style():
@@ -286,11 +292,32 @@ def get_line_style():
     linestyle["monophoton"]     = r.kSolid
     linestyle["monoz"]          = r.kSolid
     linestyle["monoHgg"]        = r.kSolid
-    linestyle["monotop"]        = r.kDashed
+    linestyle["monotop"]        = r.kSolid
     ### dummies dashed
     linestyle["monojet"]        = r.kSolid
 
     return linestyle
+
+def get_line_width():
+    linewidth = {}
+    ### Planck
+    linewidth["relic"]          = 202
+    ### Met-less
+    linewidth["dijet"]          = 202
+    linewidth["dijetchi"]       = -202
+    linewidth["dijet_2016"]     = 202
+    linewidth["dijet_2016_exp"] = 202
+    linewidth["dilepton"]       = 202
+    linewidth["trijet"]         = 202
+    ### MET+X
+    linewidth["monophoton"]     = 202
+    linewidth["monoz"]          = -202
+    linewidth["monoHgg"]        = 202
+    linewidth["monotop"]        = 202
+    ### dummies dashed
+    linewidth["monojet"]        = 202
+
+    return linewidth
 
 def get_color():
     import ROOT as r
@@ -334,7 +361,7 @@ def get_text():
 
 def get_scenario_label_coordinates():
     coords = {}
-    coords["A1"] = (0.1,0.3,0.6,0.85)
+    coords["A1"] = (0.22,0.42,0.6,0.85)
     coords["A2"] = (0.1,0.3,0.6,0.85)
     coords["A3"] = (0.1,0.3,0.6,0.85)
     coords["A4"] = (0.1,0.3,0.6,0.85)
@@ -394,8 +421,12 @@ def get_scenario_labels():
     label = {}
     label["A1"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.25}","#it{g_{l} = 0}" ]
     label["A2"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.1}","#it{g_{l} = 0.1}" ]
+    label["A3"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 1.0}","#it{g_{l} = 0}" ]
+    label["A4"] = label["A1"]
     label["V1"] = [ "#bf{Vector mediator}", "Dirac DM",          "#it{g_{DM} = 1.0}","#it{g_{q} = 0.25}","#it{g_{l} = 0}" ]
     label["V2"] = [ "#bf{Vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.1}","#it{g_{l} = 0.01}" ]
+    label["V3"] = [ "#bf{Vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 1.0}","#it{g_{l} = 0}" ]
+    label["V4"] = label["V1"]
 
     return label
 
@@ -428,14 +459,14 @@ def make_dummy_entries(legend):
 def make_legend(scenario_name):
     import ROOT as r
     coords = {}
-    coords["A1"] = (0.68,0.15,0.87,0.85)
+    coords["A1"] = (0.68,0.15,0.87,0.65)
     coords["A2"] = (0.6,0.12,0.87,0.25)
     coords["A3"] = (0.68,0.12,0.87,0.25)
-    coords["A4"] = (0.68,0.12,0.87,0.25)
-    coords["V1"] = (0.68,0.15,0.87,0.85)
+    coords["A4"] = (0.68,0.15,0.87,0.65)
+    coords["V1"] = (0.68,0.15,0.87,0.65)
     coords["V2"] = (0.6,0.12,0.87,0.25)
     coords["V3"] = (0.68,0.12,0.87,0.25)
-    coords["V4"] = (0.6,0.12,0.87,0.25)
+    coords["V4"] = (0.68,0.15,0.87,0.65)
 
     leg = r.TLegend(*coords[scenario_name])
     leg.SetBorderSize(1)
@@ -445,3 +476,38 @@ def make_legend(scenario_name):
     leg.SetHeader("#bf{Exclusion at 95% CL}")
 
     return leg
+
+def make_auxiliary_legend(scenario_name):
+    import ROOT as r
+    coords = {}
+    coords["A1"] = (0.68,0.7,0.87,0.85)
+    coords["A2"] = (0.6,0.12,0.87,0.25)
+    coords["A3"] = (0.68,0.12,0.87,0.25)
+    coords["A4"] = (0.68,0.7,0.87,0.85)
+    coords["V1"] = (0.68,0.7,0.87,0.85)
+    coords["V2"] = (0.6,0.12,0.87,0.25)
+    coords["V3"] = (0.68,0.12,0.87,0.25)
+    coords["V4"] = (0.68,0.7,0.87,0.85)
+
+    leg = r.TLegend(*coords[scenario_name])
+    leg.SetBorderSize(1)
+    leg.SetTextFont(42)
+    leg.SetFillColor(r.kWhite)
+    leg.SetFillStyle(1001)
+    leg.SetTextSize(0.035)
+    #~ leg.SetHeader("#bf{Exclusion at 95% CL}")
+
+    return leg
+
+def check_graph_orientation(graph):
+    import ROOT as r
+    n = graph.GetN()
+    xfirst = r.Double()
+    yfirst = r.Double()
+    xlast = r.Double()
+    ylast = r.Double()
+    graph.GetPoint(0,xfirst,yfirst)
+    graph.GetPoint(n-1,xlast,ylast)
+    print xfirst, xlast
+    return xfirst < xlast
+

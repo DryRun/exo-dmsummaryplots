@@ -98,6 +98,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     if(  Mediator == "Axial"  and Scenario == "1"): scenario_name = "A1"
     elif(Mediator == "Axial"  and Scenario == "2"): scenario_name = "A2"
     elif(Mediator == "Axial"  and Scenario == "3"): scenario_name = "A3"
+    elif(Mediator == "Axial"  and Scenario == "4"): scenario_name = "A3"
     elif(Mediator == "Vector" and Scenario == "1"): scenario_name = "V1"
     elif(Mediator == "Vector" and Scenario == "2"): scenario_name = "V2"
     elif(Mediator == "Vector" and Scenario == "3"): scenario_name = "V3"
@@ -130,44 +131,34 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
     ### Get plotting parameters
     linestyle = get_line_style()
+    linewidth = get_line_width()
     color = get_color()
     text = get_text()
 
 
 
-    ###################
-    ### Recast ###
-    ###################
-
-
-
-
-    ###################
-    ### Make Canvas ###
-    ### Set ranges  ###
-    ###################
-
+    ### Make Canvas
     C=TCanvas("C","C",1000,600)
     C.cd(1)
 
     C.cd(1).SetTickx()
     C.cd(1).SetTicky()
 
-    if logx       : frame = C.cd(1).DrawFrame(90,0,3700, 1450)
-    #elif METXonly : frame = C.cd(1).DrawFrame(0,0,2000, 780)
-    #elif Dilepton : frame = C.cd(1).DrawFrame(0,0,5000,2000)
-    #else          : frame = C.cd(1).DrawFrame(0,0,3700,1450)
+    if logx:
+        frame = C.cd(1).DrawFrame(90,0,3700, 1450)
+        C.cd(1).SetLogx()
     else :
-        if Dilepton :
-            frame = C.cd(1).DrawFrame(0,0,4500,2000)
-        elif Scenario=="dijetchi":
+        if scenario_name in ["A3","V3"]:
             frame = C.cd(1).DrawFrame(0,0,5500,2000)
+        if scenario_name in ["A4","V4"]:
+            frame = C.cd(1).DrawFrame(0,0,2900,800)
+        elif Dilepton :
+            frame = C.cd(1).DrawFrame(0,0,4500,2000)
+
         elif Scenario=="1" and Resonances==0 and Dijet==0 and Dilepton==0 :
             frame = C.cd(1).DrawFrame(0,0,2800,1000)
         else :
             frame = C.cd(1).DrawFrame(0,0,5200,2000)
-
-    if logx : C.cd(1).SetLogx()
 
     frame.SetXTitle("Mediator mass [GeV]")
     frame.SetYTitle("m_{DM} [GeV]")
@@ -176,8 +167,19 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     frame.GetXaxis().SetTitleOffset(0.85)
     frame.GetYaxis().SetTitleOffset(0.85)
 
+
+    ### Diagonal
+    f1 = TF1("f1","x/2.",0,4000)
+    g1 = TGraph(f1)
+    g1.SetLineColor(color["relic"]-2)
+    g1.SetMarkerColor(color["relic"]-2)
+    g1.SetLineStyle(2)
+    g1.Draw("L")
+
     #### Legend
     leg = make_legend(scenario_name)
+    auxleg = make_auxiliary_legend(scenario_name)
+    auxleg.AddEntry(g1,"M_{Med} = 2 x m_{DM}","L")
     # Dummy entries are non-colored lines
     # Do not need to do anything with them
     # just keep them around
@@ -185,25 +187,19 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         dummies = make_dummy_entries(leg)
 
 
-    ### Diagonal
-    f1 = TF1("f1","x/2.",0,4000)
-    g1 = TGraph(f1)
-    g1.SetLineColor(color["relic"]-1)
-    g1.SetLineStyle(kDashed)
-    g1.Draw()
 
     ### Labeling
 
-    # Relic
-    relic_coords = get_relic_coordinates()
-    relic_angles = get_relic_angles()
-    for coord in relic_coords[scenario_name]:
-        texts.append(add_text(*coord,TEXT="#Omega_{c} h^{2} #geq 0.12",color=color["relic"],angle=relic_angles[scenario_name]))
+    #~ # Relic
+    #~ relic_coords = get_relic_coordinates()
+    #~ relic_angles = get_relic_angles()
+    #~ for coord in relic_coords[scenario_name]:
+        #~ texts.append(add_text(*coord,TEXT="#Omega_{c} h^{2} #geq 0.12",color=color["relic"],angle=relic_angles[scenario_name]))
 
-    # Diagonal
-    diagonal_coords = get_diagonal_coordinates()
-    diagonal_angles = get_diagonal_angles()
-    texts.append(add_text(*diagonal_coords[scenario_name],TEXT="M_{Med} = 2 x m_{DM}",color=color["relic"],angle=diagonal_angles[scenario_name]))
+    #~ # Diagonal
+    #~ diagonal_coords = get_diagonal_coordinates()
+    #~ diagonal_angles = get_diagonal_angles()
+    #~ texts.append(add_text(*diagonal_coords[scenario_name],TEXT="M_{Med} = 2 x m_{DM}",color=color["relic"],angle=diagonal_angles[scenario_name]))
 
     # Scenario
     scenario_coords = get_scenario_label_coordinates()
@@ -238,7 +234,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         obs.SetMarkerColor(color[analysis])
         obs.SetFillColor(color[analysis])
         obs.SetFillStyle(3005)
-        obs.SetLineWidth( 202)
+        obs.SetLineWidth(linewidth[analysis])
         obs.SetLineStyle(linestyle[analysis])
 
         if not  analysis=="relic":
@@ -253,6 +249,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
                 obs.SetLineWidth(202)
                 obs.SetFillStyle(3005)
                 obs.Draw("same")
+            auxleg.AddEntry(obs,"#Omega_{c} h^{2} #geq 0.12","LF")
+
         elif analysis == "dijetchi":
             obs.SetLineWidth(-404)
         obs.Draw("same")
@@ -265,7 +263,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         exp.SetMarkerColor(color[analysis])
         exp.SetFillColor(color[analysis])
         exp.SetFillStyle(3005)
-        exp.SetLineWidth(202)
+        exp.SetLineWidth(2)
         exp.SetLineStyle(kDashed)
         exp.Draw("same")
 
@@ -275,6 +273,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
 
     leg.Draw("same")
+    auxleg.Draw("same")
     for t in texts: t.Draw("same")
 
     C.Update()
@@ -293,7 +292,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     C.Close()
 
 for Mediator in ["Axial", "Vector"]:
-    for Scenario in ["1", "2","3"]:
+    for Scenario in ["1", "2","3","4"]:
         for Resonances in [0,1]:
             make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
 

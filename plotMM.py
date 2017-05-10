@@ -89,7 +89,7 @@ CL = "95"
 
 #if Mediator == "Axial": metx = ["monojet","monophoton","monoz"]
 #else                  : metx = ["monojet","monophoton","monoz","monoHgg"]
-def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
+def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do_expected=False):
     output = "./output"
     if(not os.path.exists(output)): os.makedirs(output)
     texts = []
@@ -159,11 +159,11 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
     #else          : frame = C.cd(1).DrawFrame(0,0,3700,1450)
     else :
         if Dilepton :
-            frame = C.cd(1).DrawFrame(0,0,4200,2000)
+            frame = C.cd(1).DrawFrame(0,0,4500,2000)
         elif Scenario=="dijetchi":
             frame = C.cd(1).DrawFrame(0,0,5500,2000)
         elif Scenario=="1" and Resonances==0 and Dijet==0 and Dilepton==0 :
-            frame = C.cd(1).DrawFrame(0,0,2000,1000)
+            frame = C.cd(1).DrawFrame(0,0,2800,1000)
         else :
             frame = C.cd(1).DrawFrame(0,0,5200,2000)
 
@@ -171,26 +171,21 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 
     frame.SetXTitle("Mediator mass [GeV]")
     frame.SetYTitle("m_{DM} [GeV]")
-    #frame.GetXaxis().SetLabelSize(0.05)
-    #frame.GetYaxis().SetLabelSize(0.05)
-    frame.GetXaxis().SetTitleSize(0.052)#was 45
-    frame.GetYaxis().SetTitleSize(0.052)#was 45
+    frame.GetXaxis().SetTitleSize(0.052)
+    frame.GetYaxis().SetTitleSize(0.052)
     frame.GetXaxis().SetTitleOffset(0.85)
     frame.GetYaxis().SetTitleOffset(0.85)
 
-    ##############
-    ### LEGEND ###
-    ##############
-
+    #### Legend
     leg = make_legend(scenario_name)
+    # Dummy entries are non-colored lines
+    # Do not need to do anything with them
+    # just keep them around
+    if(do_expected):
+        dummies = make_dummy_entries(leg)
 
 
-
-    dummies = make_dummy_entries(leg)
-    ####################
-    ### Add diagonal ###
-    ####################
-
+    ### Diagonal
     f1 = TF1("f1","x/2.",0,4000)
     g1 = TGraph(f1)
     g1.SetLineColor(color["relic"]-1)
@@ -207,7 +202,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 
     # Diagonal
     diagonal_coords = get_diagonal_coordinates()
-    texts.append(add_text(*diagonal_coords[scenario_name],TEXT="M_{Med} = 2 x m_{DM}",color=color["relic"],angle=30))
+    diagonal_angles = get_diagonal_angles()
+    texts.append(add_text(*diagonal_coords[scenario_name],TEXT="M_{Med} = 2 x m_{DM}",color=color["relic"],angle=diagonal_angles[scenario_name]))
 
     # Scenario
     scenario_coords = get_scenario_label_coordinates()
@@ -229,12 +225,6 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 
     ### Read graphs:
     all_graphs = read_graphs()
-
-    tgraph = {}
-    for a in analyses:
-        print a
-        tgraph[a] = all_graphs[a][scenario_name]["obs"]
-
 
     reliclist = read_relic_lists()
     for analysis in analyses:
@@ -269,7 +259,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 
         ### Expected limit
         exp = all_graphs[analysis][scenario_name]["exp"]
-        if( not exp ): continue
+        if( not do_expected or not exp ): continue
         exp.SetLineColor(color[analysis])
         exp.SetMarkerSize(0.1)
         exp.SetMarkerColor(color[analysis])
@@ -305,7 +295,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 for Mediator in ["Axial", "Vector"]:
     for Scenario in ["1", "2","3"]:
         for Resonances in [0,1]:
-            make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95")
+            make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
 
 
 ###########

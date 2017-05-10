@@ -175,78 +175,264 @@ def extrapolation( tgraph, DijetOnly, Resonances, metless, metx, mDM_lb ):
 
 
 def rescale_graph_axis(graph,rescale_x=1,rescale_y=1):
-	import ROOT as r
-	g = r.TGraph()
-	for i in range(graph.GetN()):
-		x = r.Double()
-		y = r.Double()
-		graph.GetPoint(i,x,y)
-		g.SetPoint(i,rescale_x * x, rescale_y * y)
-	return g
+    import ROOT as r
+    g = r.TGraph()
+    for i in range(graph.GetN()):
+        x = r.Double()
+        y = r.Double()
+        graph.GetPoint(i,x,y)
+        g.SetPoint(i,rescale_x * x, rescale_y * y)
+    return g
 
+def add_text(x1, x2, y1, y2, TEXT, color=1, alignment=22, angle = 0, argument="NDC"):
+   import ROOT as r
+   T = r.TPaveText(x1,y1,x2,y2, argument);
+   T.SetFillColor(0);
+   T.SetFillStyle(0);
+   T.SetLineColor(0);
+   T.SetTextAlign(alignment);
+   T.SetTextColor(color);
 
+   if (not isinstance(TEXT, str)):
+      for this_text in TEXT:
+         text = T.AddText(this_text);
+         text.SetTextAngle(angle);
+         text.SetTextAlign(alignment);
+   else:
+      text = T.AddText(TEXT);
+      text.SetTextAngle(angle);
+      text.SetTextAlign(alignment);
+   T.SetTextFont(42);
+   T.Draw("same");
+   T.SetBorderSize(0);
+   return T
 def read_graphs():
-	import ROOT as r
+    import ROOT as r
 
-	### Initialize
-	graphs = {}
-	scenarios = ["A1", "A2", "V1", "V2"]
-	quantiles = ["obs", "exp"]
-	analyses = ["monojet","monophoton","monoz","dilepton","dijet","monoHgg","monotop","dijet","trijet","dijetchi","relic"]
-	for a in analyses:
-		graphs[a] = {}
-		for s in scenarios:
-			graphs[a][s] = {}
-			for q in quantiles:
-				graphs[a][s][q] = None
-
-
-	graphs["monojet"]["A1"]["obs"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_observed")
-	graphs["monojet"]["A1"]["exp"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_expected")
-	graphs["monojet"]["V1"]["obs"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_observed")
-	graphs["monojet"]["V1"]["exp"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_expected")
-
-	graphs["dilepton"]["A2"]["obs"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root").Get("obs"),1e-3,1e-3)
-	graphs["dilepton"]["A2"]["exp"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root").Get("exp"),1e-3,1e-3)
-	graphs["dilepton"]["V2"]["obs"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root").Get("obs"),1e-3,1e-3)
-	graphs["dilepton"]["V2"]["exp"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root").Get("exp"),1e-3,1e-3)
+    ### Initialize
+    graphs = {}
+    scenarios = ["A1", "A2", "A3","V1", "V2", "V3","V4"]
+    quantiles = ["obs", "exp"]
+    analyses = ["monojet","monophoton","monoz","dilepton","dijet","monoHgg","monotop","dijet","trijet","dijetchi","relic"]
+    for a in analyses:
+        graphs[a] = {}
+        for s in scenarios:
+            graphs[a][s] = {}
+            for q in quantiles:
+                graphs[a][s][q] = None
 
 
-	graphs["monoz"]["A1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
-	graphs["monoz"]["A1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
-	graphs["monoz"]["V1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
-	graphs["monoz"]["V1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
+    graphs["monojet"]["A1"]["obs"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_observed")
+    graphs["monojet"]["A1"]["exp"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_expected")
+    graphs["monojet"]["V1"]["obs"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_observed")
+    graphs["monojet"]["V1"]["exp"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_expected")
 
-	graphs["monophoton"]["A1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root").Get("monophoton_obs")
-	graphs["monophoton"]["V1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root").Get("monophoton_obs")
-
-
-	graphs["monoHgg"]["V1"]["obs"] = TFile("MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("observed_baryonic_MonoHgg")
-
-	graphs["monotop"]["V1"]["obs"] = TFile("Monotop/ScanMM/fcnc2d_obs_vector.root").Get("observed")
-
-	graphs["dijet"]["A1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root").Get("Obs_90")
-	graphs["dijet"]["V1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root").Get("Obs_90")
-
-	graphs["dijetchi"]["A1"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root").Get("obs_MvsM")
-	graphs["dijetchi"]["V1"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root").Get("obs_MvsM")
-
-	graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("obs_025")
-	graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("obs_025")
-
-	graphs["relic"]["A1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist").At(0)
-	graphs["relic"]["A2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist").At(0)
-	graphs["relic"]["V1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
-	graphs["relic"]["V2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist").At(0)
+    graphs["dilepton"]["A2"]["obs"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root").Get("obs"),1e3,1e3)
+    graphs["dilepton"]["A2"]["exp"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root").Get("exp"),1e3,1e3)
+    graphs["dilepton"]["V2"]["obs"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root").Get("obs"),1e3,1e3)
+    graphs["dilepton"]["V2"]["exp"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root").Get("exp"),1e3,1e3)
 
 
-	return graphs
+    graphs["monoz"]["A1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
+    graphs["monoz"]["A1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
+    graphs["monoz"]["V1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
+    graphs["monoz"]["V1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
+
+    graphs["monophoton"]["A1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root").Get("monophoton_obs")
+    graphs["monophoton"]["V1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root").Get("monophoton_obs")
+
+
+    graphs["monoHgg"]["V1"]["obs"] = TFile("MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("observed_baryonic_MonoHgg")
+
+    graphs["monotop"]["V4"]["obs"] = TFile("Monotop/ScanMM/fcnc2d_obs_vector.root").Get("observed")
+
+    graphs["dijet"]["A1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root").Get("Obs_90")
+    graphs["dijet"]["V1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root").Get("Obs_90")
+
+    graphs["dijetchi"]["A3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root").Get("obs_MvsM")
+    graphs["dijetchi"]["V3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root").Get("obs_MvsM")
+
+    graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("obs_025")
+    graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("obs_025")
+
+    graphs["relic"]["A1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist").At(0)
+    graphs["relic"]["A2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist").At(0)
+    graphs["relic"]["V1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
+    graphs["relic"]["V2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist").At(0)
+
+
+    return graphs
 
 def read_relic_lists():
-	import ROOT as r
-	lists = {}
-	lists["A1"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist")
-	lists["A2"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist")
-	lists["V1"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
-	lists["V2"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist")
-	return lists
+    import ROOT as r
+    lists = {}
+    lists["A1"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist")
+    lists["A2"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist")
+    lists["V1"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
+    lists["V2"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist")
+    return lists
+
+def get_line_style():
+    import ROOT as r
+    linestyle = {}
+    ### Planck
+    linestyle["relic"]          = r.kDotted
+    ### Met-less
+    linestyle["dijet"]          = r.kSolid
+    linestyle["dijetchi"]       = r.kSolid
+    linestyle["dijet_2016"]     = r.kSolid
+    linestyle["dijet_2016_exp"] = r.kDashed
+    linestyle["dilepton"]       = r.kSolid
+    linestyle["trijet"]         = r.kSolid
+    ### MET+X
+    linestyle["monophoton"]     = r.kSolid
+    linestyle["monoz"]          = r.kSolid
+    linestyle["monoHgg"]        = r.kSolid
+    linestyle["monotop"]        = r.kDashed
+    ### dummies dashed
+    linestyle["monojet"]        = r.kSolid
+
+    return linestyle
+
+def get_color():
+    import ROOT as r
+    color = {}
+
+    ### Planck
+    color["relic"]          = r.kGray+2
+    ### Met-less
+    color["dijet"]          = r.kAzure
+    color["dijetchi"]       = r.kAzure
+    color["dilepton"]       = r.kGreen+3
+    color["dijet_2016"]     = r.kAzure
+    color["dijet_2016_exp"] = r.kAzure+1
+    color["trijet"]         = r.kAzure+1
+    color["chi"]            = r.kBlue
+    ### MET+X
+    color["monojet"]        = r.kRed+1#kRed+1
+    color["monophoton"]     = r.kOrange+10#kRed+2
+    color["monoz"]          = r.kOrange-3#kRed+3
+    color["monoHgg"]        = r.kMagenta-7#kRed+3
+    color["monotop"]        = r.kViolet+1
+
+    return color
+
+def get_text():
+    text = {}
+    text["relic"]          = "\Omega_{c} h^{2} \geq 0.12"
+    text["dijet"]          = "#splitline{Dijet (27 + 36 fb^{-1})}{[EXO-16-056]}"
+    text["dijetchi"]       = "Dijet #chi  (36.5 fb^{-1})[EXO-16-046]"
+    text["dilepton"]       = "Dilepton: ee (12.4 fb^{-1}) + #mu#mu (13.0 fb^{-1})"
+    text["dijet_2016"]     = "Observed"
+    text["dijet_2016_exp"] = "Expected"
+    text["trijet"]         = "#splitline{Boosted dijet (35.9 fb^{-1})}{#it{[EXO-17-001]}}"
+    text["chi"]            = "chi obs. (exp.excl.)"
+    text["monojet"]        = "#splitline{DM + j/V_{qq} (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
+    text["monoz"]          = "#splitline{DM + Z_{ll} (35.9 fb^{-1})}{#it{[EXO-16-052]}}"
+    text["monoHgg"]        = "#splitline{DM + H_{#gamma #gamma} (35.9 fb^{-1})}{#it{[EXO-16-054]}}"
+    text["monophoton"]     = "#splitline{DM + #gamma (12.9 fb^{-1})}{#it{[EXO-16-039]}}"
+    text["monotop"]        = "#splitline{DM + t (100% FC, 35.8 fb^{-1}) }{#it{[EXO-16-051]}}"
+    return text
+
+def get_scenario_label_coordinates():
+    coords = {}
+    coords["A1"] = (0.1,0.3,0.6,0.85)
+    coords["A2"] = (0.1,0.3,0.6,0.85)
+    coords["A3"] = (0.1,0.3,0.6,0.85)
+    coords["A4"] = (0.1,0.3,0.6,0.85)
+    coords["V1"] = (0.1,0.3,0.6,0.85)
+    coords["V2"] = (0.65,0.85,0.6,0.85)
+    coords["V3"] = (0.1,0.3,0.6,0.85)
+    coords["V4"] = (0.1,0.3,0.6,0.85)
+
+    return coords
+
+def get_relic_coordinates():
+    coords = {}
+    coords["A1"] = [(0.1,0.3,0.6,0.85)  ]
+    coords["A2"] = [(0.1,0.3,0.6,0.85)  ]
+    coords["A3"] = [(0.1,0.3,0.6,0.85)  ]
+    coords["A4"] = [(0.1,0.3,0.6,0.85)  ]
+    coords["V1"] = [(0.1,0.3,0.6,0.85)  ]
+    coords["V2"] = [(0.7,0.85,0.5,0.6) ]
+    coords["V3"] = [(0.1,0.3,0.6,0.85)  ]
+    coords["V4"] = [(0.1,0.3,0.6,0.85)  ]
+    return coords
+def get_relic_angles():
+    coords = {}
+    coords["A1"] = 30
+    coords["A2"] = 30
+    coords["A3"] = 30
+    coords["A4"] = 30
+    coords["V1"] = 30
+    coords["V2"] = 30
+    coords["V3"] = 30
+    coords["V4"] = 30
+    return coords
+
+def get_diagonal_coordinates():
+    coords = {}
+    coords["A1"] = (0.1,0.3,0.6,0.85)
+    coords["A2"] = (0.1,0.3,0.6,0.85)
+    coords["A3"] = (0.1,0.3,0.6,0.85)
+    coords["A4"] = (0.1,0.3,0.6,0.85)
+    coords["V1"] = (0.1,0.3,0.6,0.85)
+    coords["V2"] = (0.7,0.85,0.5,0.6)
+    coords["V3"] = (0.1,0.3,0.6,0.85)
+    coords["V4"] = (0.1,0.3,0.6,0.85)
+    return coords
+def get_scenario_labels():
+    label = {}
+    label["A1"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.25}","#it{g_{l} = 0}" ]
+    label["A2"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.1}","#it{g_{l} = 0.1}" ]
+    label["V1"] = [ "#bf{Vector mediator}", "Dirac DM",          "#it{g_{DM} = 1.0}","#it{g_{q} = 0.25}","#it{g_{l} = 0}" ]
+    label["V2"] = [ "#bf{Vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.1}","#it{g_{l} = 0.01}" ]
+
+    return label
+
+def make_dummy_entries(legend):
+
+    dummy_obs = TGraph()
+    dummy_obs.SetLineWidth(202)
+
+    dummy_obs.SetLineColor(kBlack)
+    dummy_obs.SetMarkerSize(0)
+    dummy_obs.SetFillColor(kBlack)
+    dummy_obs.SetFillStyle(3005)
+
+    legend.AddEntry(dummy_obs,"Observed","FL")
+
+    dummy_exp = TGraph()
+
+    dummy_exp.SetLineStyle(kDashed)
+
+    dummy_exp.SetLineColor(kBlack)
+    dummy_exp.SetMarkerSize(0)
+    dummy_exp.SetFillColor(kBlack)
+    dummy_exp.SetFillStyle(0)
+    dummy_exp.SetLineWidth(2)
+
+    legend.AddEntry(dummy_exp,"Expected","L")
+
+    return [dummy_obs,dummy_exp]
+
+def make_legend(scenario_name):
+    import ROOT as r
+    coords = {}
+    coords["A1"] = (0.68,0.12,0.87,0.25)
+    coords["A2"] = (0.68,0.12,0.87,0.25)
+    coords["A3"] = (0.68,0.12,0.87,0.25)
+    coords["A4"] = (0.68,0.12,0.87,0.25)
+    coords["V1"] = (0.68,0.12,0.87,0.25)
+    coords["V2"] = (0.68,0.12,0.87,0.25)
+    coords["V3"] = (0.68,0.12,0.87,0.25)
+    coords["V4"] = (0.68,0.12,0.87,0.25)
+
+    leg = r.TLegend(*coords[scenario_name])
+    leg.SetBorderSize(0)
+    leg.SetTextFont(42)
+    leg.SetFillColor(0)
+    leg.SetFillStyle(0)
+    leg.SetHeader("#bf{Exclusion at 95% CL}")
+
+    return leg

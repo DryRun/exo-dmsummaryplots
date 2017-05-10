@@ -234,9 +234,7 @@ def read_graphs():
 
 
     graphs["monoz"]["A1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
-    graphs["monoz"]["A1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
     graphs["monoz"]["V1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
-    graphs["monoz"]["V1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
 
     graphs["monophoton"]["A1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root").Get("monophoton_obs")
     graphs["monophoton"]["V1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root").Get("monophoton_obs")
@@ -349,11 +347,11 @@ def get_scenario_label_coordinates():
 
 def get_relic_coordinates():
     coords = {}
-    coords["A1"] = [(0.1,0.3,0.6,0.85)  ]
+    coords["A1"] = [(0.48,0.58,0.67,0.7),(0.46,0.56,0.42,0.45)  ]
     coords["A2"] = [(0.1,0.3,0.6,0.85)  ]
     coords["A3"] = [(0.1,0.3,0.6,0.85)  ]
     coords["A4"] = [(0.1,0.3,0.6,0.85)  ]
-    coords["V1"] = [(0.1,0.3,0.6,0.85)  ]
+    coords["V1"] = [(0.57,0.67,0.28,0.36)  ]
     coords["V2"] = [(0.7,0.85,0.5,0.6) ]
     coords["V3"] = [(0.1,0.3,0.6,0.85)  ]
     coords["V4"] = [(0.1,0.3,0.6,0.85)  ]
@@ -364,7 +362,18 @@ def get_relic_angles():
     coords["A2"] = 30
     coords["A3"] = 30
     coords["A4"] = 30
-    coords["V1"] = 30
+    coords["V1"] = 28
+    coords["V2"] = 30
+    coords["V3"] = 30
+    coords["V4"] = 30
+    return coords
+def get_diagonal_angles():
+    coords = {}
+    coords["A1"] = 32
+    coords["A2"] = 30
+    coords["A3"] = 30
+    coords["A4"] = 30
+    coords["V1"] = 32
     coords["V2"] = 30
     coords["V3"] = 30
     coords["V4"] = 30
@@ -372,11 +381,11 @@ def get_relic_angles():
 
 def get_diagonal_coordinates():
     coords = {}
-    coords["A1"] = (0.1,0.3,0.6,0.85)
+    coords["A1"] = (0.4,0.51,0.5,0.55)
     coords["A2"] = (0.1,0.3,0.6,0.85)
     coords["A3"] = (0.1,0.3,0.6,0.85)
     coords["A4"] = (0.1,0.3,0.6,0.85)
-    coords["V1"] = (0.1,0.3,0.6,0.85)
+    coords["V1"] = (0.4,0.51,0.52,0.58)
     coords["V2"] = (0.7,0.85,0.5,0.6)
     coords["V3"] = (0.1,0.3,0.6,0.85)
     coords["V4"] = (0.1,0.3,0.6,0.85)
@@ -419,20 +428,20 @@ def make_dummy_entries(legend):
 def make_legend(scenario_name):
     import ROOT as r
     coords = {}
-    coords["A1"] = (0.68,0.12,0.87,0.25)
-    coords["A2"] = (0.68,0.12,0.87,0.25)
+    coords["A1"] = (0.68,0.15,0.87,0.85)
+    coords["A2"] = (0.6,0.12,0.87,0.25)
     coords["A3"] = (0.68,0.12,0.87,0.25)
     coords["A4"] = (0.68,0.12,0.87,0.25)
-    coords["V1"] = (0.68,0.12,0.87,0.25)
-    coords["V2"] = (0.68,0.12,0.87,0.25)
+    coords["V1"] = (0.68,0.15,0.87,0.85)
+    coords["V2"] = (0.6,0.12,0.87,0.25)
     coords["V3"] = (0.68,0.12,0.87,0.25)
-    coords["V4"] = (0.68,0.12,0.87,0.25)
+    coords["V4"] = (0.6,0.12,0.87,0.25)
 
     leg = r.TLegend(*coords[scenario_name])
-    leg.SetBorderSize(0)
+    leg.SetBorderSize(1)
     leg.SetTextFont(42)
-    leg.SetFillColor(0)
-    leg.SetFillStyle(0)
+    leg.SetFillColor(r.kWhite)
+    leg.SetFillStyle(1001)
     leg.SetHeader("#bf{Exclusion at 95% CL}")
 
     return leg

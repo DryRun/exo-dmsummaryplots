@@ -11,6 +11,7 @@
 from ROOT import *
 import ast
 import os
+from Utilities import *
 #################################
 ### Parameters to be modified ###
 #################################
@@ -89,6 +90,11 @@ CL = "95"
 #if Mediator == "Axial": metx = ["monojet","monophoton","monoZ"]
 #else                  : metx = ["monojet","monophoton","monoZ","monoHgg"]
 def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
+
+    if(Scenario == "1" and Dilepton):
+        print "Error: No dilepton curves for scenario 1. Run with Dilepton = False"
+        print "Exiting."
+        return 1
     output = "./output"
     if(not os.path.exists(output)): os.makedirs(output)
     texts = []
@@ -127,8 +133,6 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 
 
 
-
-
     tgraph    = {}
     color     = {}
     text      = {}
@@ -144,7 +148,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.root"
         filepath["dijetchi"]          = "DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root"
         if Dilepton:
-            filepath["dilepton"] = "Dilepton/ScanMM/contours_dilepton_V2_smooth_MT.root"
+            filepath["dilepton"] = "Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root"
         #95
         if CL=="95":
             filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root"
@@ -157,14 +161,13 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
         filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt"
         filepath["monoHgg"]          = "MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
-    #    filepath["monotop"]        = "Monotop/ScanMM/vector_rebinned.root"
         filepath["monotop"]        = "Monotop/ScanMM/fcnc2d_obs_vector.root"
     elif Mediator == "Axial":
         filepath["relic"]          = "Relic/madDMv2_0_6/relicContour_A_g25.root"
         filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root"
         filepath["dijetchi"]          = "DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root"
     #    filepath["dilepton"] = "Dilepton/ScanMM/exclusion_dilepton_A2_constant_width_MT.root"
-        filepath["dilepton"] = "Dilepton/ScanMM/contours_dilepton_A2_smooth_MT.root"
+        filepath["dilepton"] = "Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root"
 
 
         #95
@@ -274,6 +277,10 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
         else                              : tgraph[analysis]         = TGraph(filepath[analysis])
 
+    try:
+        tgraph["dilepton"] = rescale_graph_axis(tgraph["dilepton"],1e3,1e3)
+    except KeyError:
+        pass
 
     ###################
     ### Recast ###
@@ -657,6 +664,7 @@ for Mediator in ["Axial", "Vector"]:
     for Scenario in ["1", "2"]:
         for Resonances in [0,1]:
             make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=False, logx=False, CL="95")
+            make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=True, logx=False, CL="95")
 
 
 ###########

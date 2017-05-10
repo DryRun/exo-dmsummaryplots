@@ -145,30 +145,11 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 
     if Mediator == "Vector":
         filepath["relic"]          = "Relic/madDMv2_0_6/relicContour_V_g25.root"
-        filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.root"
-        filepath["dijetchi"]          = "DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root"
-        if Dilepton:
-            filepath["dilepton"] = "Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root"
         #95
-        if CL=="95":
-            filepath["dijet_2016"]     = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root"
-            filepath["dijet_2016_exp"] = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root"
-        elif CL=="90":
-            filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
-            filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v.root"
-        filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/scan2D_vector.root"
-        filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
-        filepath["monoz"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt"
-        filepath["monoHgg"]          = "MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
         filepath["monotop"]        = "Monotop/ScanMM/fcnc2d_obs_vector.root"
     elif Mediator == "Axial":
         filepath["relic"]          = "Relic/madDMv2_0_6/relicContour_A_g25.root"
-        filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root"
-        filepath["dijetchi"]          = "DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root"
-    #    filepath["dilepton"] = "Dilepton/ScanMM/exclusion_dilepton_A2_constant_width_MT.root"
-        filepath["dilepton"] = "Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root"
-
 
         #95
         if CL=="95":
@@ -178,9 +159,6 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
             filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
             filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av.root"
-        filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/scan2D_axial.root"
-        filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
-        filepath["monoz"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt"
 
     ###################
     ### Plot colors ###
@@ -255,33 +233,45 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
     ### Get graphs   ###
     ####################
 
-    for analysis in analyses:
-        if analysis == "relic":
-            mylist = TFile(filepath["relic"]).Get("mytlist")
-            print "==> Relic list length = ",mylist.GetSize()
-            tgraph["relic"] = mylist.At(0)
-        elif analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("Obs_90")
-        elif analysis == "dijetchi"          : tgraph["dijetchi"]          = TFile(filepath[analysis]).Get("obs_MvsM")
-        #dijet paper
-        elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")
-        elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")
-        elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")
-        #
-    #    elif analysis == "dilepton"       : tgraph["dilepton"]       = TFile(filepath[analysis]).Get("obs_025")
-        elif analysis == "dilepton" :
-            tgraph["dilepton"]       = TFile(filepath[analysis]).Get("obs")
-        elif analysis == "monojet"        :
-                tgraph["monojet"]        = TFile(filepath[analysis]).Get("contour_observed")
-        elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
-        elif analysis == "monoHgg"        : tgraph["monoHgg"]     = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")
-        elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
-        else                              : tgraph[analysis]         = TGraph(filepath[analysis])
+    #~ for analysis in analyses:
+        #~ if analysis == "relic":
+            #~ mylist = TFile(filepath["relic"]).Get("mytlist")
+            #~ print "==> Relic list length = ",mylist.GetSize()
+            #~ tgraph["relic"] = mylist.At(0)
+        #~ elif analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("Obs_90")
+        #~ elif analysis == "dijetchi"          : tgraph["dijetchi"]          = TFile(filepath[analysis]).Get("obs_MvsM")
+        #~ #dijet paper
+        #~ elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")
+        #~ elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")
+        #~ elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")
+        #~ #
+    #~ #    elif analysis == "dilepton"       : tgraph["dilepton"]       = TFile(filepath[analysis]).Get("obs_025")
+        #~ elif analysis == "dilepton" :
+            #~ tgraph["dilepton"]       = TFile(filepath[analysis]).Get("obs")
+        #~ elif analysis == "monojet"        :
+                #~ tgraph["monojet"]        = TFile(filepath[analysis]).Get("contour_observed")
+        #~ elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
+        #~ elif analysis == "monoHgg"        : tgraph["monoHgg"]     = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")
+        #~ elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
+        #~ else                              : tgraph[analysis]         = TGraph(filepath[analysis])
 
-    try:
-        tgraph["dilepton"] = rescale_graph_axis(tgraph["dilepton"],1e3,1e3)
-    except KeyError:
-        pass
+    #~ try:
+        #~ tgraph["dilepton"] = rescale_graph_axis(tgraph["dilepton"],1e3,1e3)
+    #~ except KeyError:
+        #~ pass
 
+    all_graphs = read_graphs()
+    if(  Mediator == "Axial"  and Scenario == "1"): scenario_tag = "A1"
+    elif(Mediator == "Axial"  and Scenario == "2"): scenario_tag = "A2"
+    elif(Mediator == "Vector" and Scenario == "1"): scenario_tag = "V1"
+    elif(Mediator == "Vector" and Scenario == "2"): scenario_tag = "V2"
+
+    #~ tgraphs = {}
+    for a in analyses:
+        print a
+        tgraph[a] = all_graphs[a][scenario_tag]["obs"]
+
+    
     ###################
     ### Recast ###
     ###################
@@ -608,7 +598,9 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         if not  analysis=="relic":
             leg.AddEntry(tgraph[analysis],text[analysis])
 
+    reliclist = read_relic_lists()
     for analysis in analyses:
+        if( not tgraph[analysis]): continue
         print "analysis "+analysis
         tgraph[analysis].SetLineColor(color[analysis])
         tgraph[analysis].SetMarkerSize(0.1)
@@ -618,8 +610,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         tgraph[analysis].SetLineWidth( 202)
         tgraph[analysis].SetLineStyle(linestyle[analysis])
         if analysis == "relic":
-            for i in range(0,mylist.GetSize()):
-                tgraph["relic"] = mylist.At(i)
+            for i in range(0,reliclist[scenario_tag].GetSize()):
+                tgraph["relic"] = reliclist[scenario_tag].At(i)
                 tgraph["relic"].SetLineColor(color[analysis]-1)
                 tgraph["relic"].SetFillColor(color[analysis]-1)
                 tgraph["relic"].SetLineStyle(linestyle[analysis])

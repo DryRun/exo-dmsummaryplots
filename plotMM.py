@@ -87,8 +87,8 @@ CL = "95"
 
 #####DECIDE WHERE TO PUT MONOTOP and DIJETCHI DIJET_EXP
 
-#if Mediator == "Axial": metx = ["monojet","monophoton","monoZ"]
-#else                  : metx = ["monojet","monophoton","monoZ","monoHgg"]
+#if Mediator == "Axial": metx = ["monojet","monophoton","monoz"]
+#else                  : metx = ["monojet","monophoton","monoz","monoHgg"]
 def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
 
     if(Scenario == "1" and Dilepton):
@@ -100,9 +100,9 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
     texts = []
 
     if   Scenario == "1" :
-        if Mediator == "Axial": metx = ["monojet","monophoton","monoZ"]
-        else                  : metx = ["monojet","monophoton","monoZ"]
-    #    else                  : metx = ["monojet","monophoton","monoZ","monoHgg"]
+        if Mediator == "Axial": metx = ["monojet","monophoton","monoz"]
+        else                  : metx = ["monojet","monophoton","monoz"]
+    #    else                  : metx = ["monojet","monophoton","monoz","monoHgg"]
     elif Scenario == "2" :
         #empty for now
         if Mediator == "Axial": metx = []
@@ -159,7 +159,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v.root"
         filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/scan2D_vector.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
-        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt"
+        filepath["monoz"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt"
         filepath["monoHgg"]          = "MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
         filepath["monotop"]        = "Monotop/ScanMM/fcnc2d_obs_vector.root"
     elif Mediator == "Axial":
@@ -180,7 +180,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av.root"
         filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/scan2D_axial.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
-        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt"
+        filepath["monoz"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt"
 
     ###################
     ### Plot colors ###
@@ -197,7 +197,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
     linestyle["trijet"]         = kSolid
     ### MET+X
     linestyle["monophoton"]     = kSolid
-    linestyle["monoZ"]          = kSolid
+    linestyle["monoz"]          = kSolid
     linestyle["monoHgg"]          = kSolid
     linestyle["monotop"]        = kDashed
     ### dummies dashed
@@ -216,7 +216,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
     ### MET+X
     color["monojet"]        = kRed+1#kRed+1
     color["monophoton"]     = kOrange+10#kRed+2
-    color["monoZ"]          = kOrange-3#kRed+3
+    color["monoz"]          = kOrange-3#kRed+3
     color["monoHgg"]          = kMagenta-7#kRed+3
     color["monotop"]        = kViolet+1
 
@@ -234,7 +234,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
     text["trijet"]         = "#splitline{Boosted dijet}{#it{[EXO-17-001]}}"
     text["chi"]            = "chi obs. (exp.excl.)"
     text["monojet"]        = "#splitline{DM + j/V_{qq}}{#it{[EXO-16-048]}}"
-    text["monoZ"]          = "#splitline{DM + Z_{ll}}{#it{[EXO-16-052]}}"
+    text["monoz"]          = "#splitline{DM + Z_{ll}}{#it{[EXO-16-052]}}"
     text["monoHgg"]          = "#splitline{DM + H_{#gamma #gamma}}{#it{[EXO-16-054]}}"
     text["monophoton"]     = "#splitline{DM + #gamma}{#it{[EXO-16-039]}}"
     text["monotop"]        = "#splitline{DM + t (100% FC)}{#it{[EXO-16-051]}}"
@@ -246,7 +246,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL):
     #     text["trijet"]     = "Boosted dijet #it{[EXO-17-001]}}"
     #     text["chi"]        = "chi obs. (exp.excl.)"
     #     text["monojet"]    = "DM + j/V_{qq} #it{[EXO-16-048]}"
-    #     text["monoZ"]      = "DM + Z_{ll} #it{[EXO-16-038]}"
+    #     text["monoz"]      = "DM + Z_{ll} #it{[EXO-16-038]}"
     #     text["monoHgg"]          = "#splitline{DM + H_{#gamma #gamma}}{#it{[EXO-16-054]}}"
     #     text["monophoton"] = "DM + #gamma #it{[EXO-16-039]}"
     #     text["monotop"]    = "DM + t (100% FC) #it{[EXO-16-051]}"

@@ -119,12 +119,12 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
 
     analyses = ["relic"]
-    if METX: analyses += metx
+
     if Dilepton  : analyses += ["dilepton"]
     if Dijet :
         if scenario_name in ["A3","V3"] : analyses += ["dijetchi"]
         else : analyses += ["dijet","trijet"]
-
+    if METX: analyses += metx
 
     if(len(analyses)<2):return None
 
@@ -236,6 +236,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         obs.SetMarkerColor(color[analysis])
         obs.SetFillColor(color[analysis])
         obs.SetFillStyle(3005)
+
         obs.SetLineWidth(linewidth[analysis])
         obs.SetLineStyle(linestyle[analysis])
 

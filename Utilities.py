@@ -318,21 +318,19 @@ def get_line_style():
 def get_line_width():
     linewidth = {}
     ### Planck
-    linewidth["relic"]          = 202
+    linewidth["relic"]          = 102
     ### Met-less
     linewidth["dijet"]          = 102
-    linewidth["dijetchi"]       = 202
-    linewidth["dijet_2016"]     = 202
-    linewidth["dijet_2016_exp"] = 202
-    linewidth["dilepton"]       = 202
-    linewidth["trijet"]         = 202
+    linewidth["dijetchi"]       = 102
+    linewidth["dilepton"]       = 102
+    linewidth["trijet"]         = 102
     ### MET+X
-    linewidth["monophoton"]     = 202
-    linewidth["monoz"]          = -202
-    linewidth["monoHgg"]        = 202
-    linewidth["monotop"]        = 202
+    linewidth["monophoton"]     = 102
+    linewidth["monoz"]          = -102
+    linewidth["monoHgg"]        = 102
+    linewidth["monotop"]        = 102
     ### dummies dashed
-    linewidth["monojet"]        = 202
+    linewidth["monojet"]        = 102
 
     return linewidth
 

@@ -234,10 +234,14 @@ def read_graphs():
 
 
     graphs["monoz"]["A1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
+    graphs["monoz"]["A1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_axial_cl95.txt")
     graphs["monoz"]["V1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
+    graphs["monoz"]["V1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_vector_cl95.txt")
 
     graphs["monophoton"]["A1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root").Get("monophoton_obs")
+    graphs["monophoton"]["A1"]["exp"] =TFile("Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_exp.root").Get("monophoton_exp")
     graphs["monophoton"]["V1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root").Get("monophoton_obs")
+    graphs["monophoton"]["V1"]["exp"] =TFile("Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_exp.root").Get("monophoton_exp")
 
 
     graphs["monoHgg"]["V1"]["obs"] = TFile("MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("observed_baryonic_MonoHgg")

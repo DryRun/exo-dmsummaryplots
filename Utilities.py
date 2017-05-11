@@ -245,6 +245,7 @@ def read_graphs():
 
 
     graphs["monoHgg"]["V1"]["obs"] = TFile("MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("observed_baryonic_MonoHgg")
+    graphs["monoHgg"]["V1"]["exp"] = TFile("MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("expected_baryonic_MonoHgg")
 
     graphs["monotop"]["V4"]["obs"] = TFile("Monotop/ScanMM/fcnc2d_obs_vector.root").Get("observed")
 
@@ -267,8 +268,16 @@ def read_graphs():
 
     graphs["trijet"]["A1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("obs_025")
     graphs["trijet"]["A1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("exp_025")
+    graphs["trijet"]["A2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root").Get("obs_025")
+    graphs["trijet"]["A2"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root").Get("exp_025")
+
+
     graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("obs_025")
     graphs["trijet"]["V1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("exp_025")
+    graphs["trijet"]["V2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root").Get("obs_025")
+    graphs["trijet"]["V2"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root").Get("exp_025")
+
+
 
     graphs["relic"]["A1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist").At(0)
     graphs["relic"]["A2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist").At(0)
@@ -314,16 +323,35 @@ def get_line_style():
     linestyle["monojet"]        = r.kSolid
 
     return linestyle
+def get_fill_style():
+    import ROOT as r
+    fillstyle = {}
+    ### Planck
+    fillstyle["relic"]          = 9
+    ### Met-less
+    fillstyle["dijet"]          = 1001
+    fillstyle["dijetchi"]       = 1001
+    fillstyle["dilepton"]       = 1001
+    fillstyle["trijet"]         = 1001
+    ### MET+X
+    fillstyle["monophoton"]     = 3005
+    fillstyle["monoz"]          = 3005
+    fillstyle["monoHgg"]        = 3005
+    fillstyle["monotop"]        = 3005
+    ### dummies dashed
+    fillstyle["monojet"]        = 3005
+
+    return fillstyle
 
 def get_line_width():
     linewidth = {}
     ### Planck
-    linewidth["relic"]          = 102
+    linewidth["relic"]          = 1
     ### Met-less
-    linewidth["dijet"]          = 102
-    linewidth["dijetchi"]       = 102
-    linewidth["dilepton"]       = 102
-    linewidth["trijet"]         = 102
+    linewidth["dijet"]          = 2
+    linewidth["dijetchi"]       = 2
+    linewidth["dilepton"]       = 2
+    linewidth["trijet"]         = 2
     ### MET+X
     linewidth["monophoton"]     = 102
     linewidth["monoz"]          = -102
@@ -341,12 +369,35 @@ def get_color():
     ### Planck
     color["relic"]          = r.kGray
     ### Met-less
-    color["dijet"]          = r.kAzure
+    color["dijet"]          = r.kYellow-10
+    color["dijetchi"]       = r.kAzure
+    color["dilepton"]       = r.kGreen-10
+    color["trijet"]         = r.kCyan-10
+    color["chi"]            = r.kBlue
+    ### MET+X
+    color["monojet"]        = r.kRed+1#kRed+1
+    color["monophoton"]     = r.kOrange+10#kRed+2
+    color["monoz"]          = r.kOrange-3#kRed+3
+    color["monoHgg"]        = r.kMagenta-7#kRed+3
+    color["monotop"]        = r.kViolet+1
+
+    return color
+
+def get_line_color():
+    import ROOT as r
+    color = {}
+
+    ### Planck
+    color["relic"]          = r.kBlack
+    ### Met-less
+    color["dijet"]          = r.kAzure+4
+    color["dijet"]          = r.kYellow+3
     color["dijetchi"]       = r.kAzure
     color["dilepton"]       = r.kGreen+3
     color["dijet_2016"]     = r.kAzure
     color["dijet_2016_exp"] = r.kAzure+1
     color["trijet"]         = r.kAzure+1
+    color["trijet"]         = r.kCyan-5
     color["chi"]            = r.kBlue
     ### MET+X
     color["monojet"]        = r.kRed+1#kRed+1

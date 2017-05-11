@@ -118,12 +118,13 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
 
 
-    analyses = ["relic"]
+    analyses = []
 
     if Dilepton  : analyses += ["dilepton"]
     if Dijet :
         if scenario_name in ["A3","V3"] : analyses += ["dijetchi"]
         else : analyses += ["dijet","trijet"]
+    analyses.append("relic")
     if METX: analyses += metx
 
     if(len(analyses)<2):return None
@@ -131,8 +132,10 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
     ### Get plotting parameters
     linestyle = get_line_style()
+    fillstyle = get_fill_style()
     linewidth = get_line_width()
     color = get_color()
+    linecolor = get_line_color()
     text = get_text()
 
 
@@ -175,7 +178,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     g1 = TGraph(f1)
     g1.SetLineColor(color["relic"])
     g1.SetMarkerColor(color["relic"])
-    g1.SetLineStyle(2)
+    g1.SetLineStyle(7)
+    g1.SetLineWidth(1)
     g1.Draw("L")
 
     #### Legend
@@ -191,6 +195,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
 
     ### Labeling
+    texts.append(add_text(0.7,0.85,0.9,1.0,"LHCP 2017"))
 
     #~ # Relic
     #~ relic_coords = get_relic_coordinates()
@@ -231,16 +236,19 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         obs = all_graphs[analysis][scenario_name]["obs"]
         if( not obs ): continue
         print "analysis "+analysis
-        obs.SetLineColor(color[analysis])
+        obs.SetFillColor(color[analysis])
+        obs.SetLineColor(linecolor[analysis])
         obs.SetMarkerSize(0.1)
         obs.SetMarkerColor(color[analysis])
         obs.SetFillColor(color[analysis])
-        obs.SetFillStyle(3005)
+        obs.SetFillStyle(fillstyle[analysis])
 
         obs.SetLineWidth(linewidth[analysis])
         obs.SetLineStyle(linestyle[analysis])
 
-        if not  analysis=="relic":
+        if(analysis in ["dijet","dilepton","trijet"]):
+            leg.AddEntry(obs,text[analysis],"FL")
+        elif not  analysis=="relic":
             leg.AddEntry(obs,text[analysis],"L")
 
         if analysis == "relic":
@@ -249,23 +257,27 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
                 obs.SetLineColor(color[analysis])
                 obs.SetFillColor(color[analysis])
                 obs.SetLineStyle(linestyle[analysis])
-                obs.SetLineWidth(202)
+                obs.SetLineWidth(101)
                 obs.SetFillStyle(3005)
                 obs.Draw("same")
             auxleg.AddEntry(obs,"#Omega_{c} h^{2} #geq 0.12","LF")
-
+            g1.Draw("same")
         #~ elif analysis == "dijetchi":
             #~ obs.SetLineWidth(-404)
-        obs.Draw("same")
+        if(analysis in ["dijet","dilepton","trijet"]):
+            obs.Draw("F,same")
+            obs.Draw("L,same")
+
+        else: obs.Draw("same")
 
         ### Expected limit
         exp = all_graphs[analysis][scenario_name]["exp"]
         if( not do_expected or not exp ): continue
-        exp.SetLineColor(color[analysis])
+        exp.SetLineColor(linecolor[analysis])
         exp.SetMarkerSize(0.1)
         exp.SetMarkerColor(color[analysis])
         exp.SetFillColor(color[analysis])
-        exp.SetFillStyle(3005)
+        exp.SetFillStyle(fillstyle[analysis])
         exp.SetLineWidth(2)
         exp.SetLineStyle(kDashed)
         exp.Draw("same")
@@ -290,12 +302,14 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     if Dilepton  : figname += "_Dilepton"
     if Dijet     : figname += "_Multijet"
     figname += "_Scenario"+Scenario+"_Summary.pdf"
-
+    C.cd(1).RedrawAxis()
+    #~ if(scenario_name in ["A2","V2"]):
+        #~ C.cd(1).SetLogx(1)
     C.SaveAs("{OUTPUT}/{FILE}".format(OUTPUT=output,FILE=figname))
     C.Close()
 
 for Mediator in ["Axial", "Vector"]:
-    for Scenario in ["1", "2","3"]:
+    for Scenario in ["1", "2"]:
         for Resonances in [0,1]:
             make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
 

@@ -268,8 +268,10 @@ def read_graphs():
 
     graphs["relic"]["A1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist").At(0)
     graphs["relic"]["A2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist").At(0)
+    graphs["relic"]["A3"]["obs"] = TFile("Relic/madDMv2_0_6/relic_axial_gq1.root").Get("mytlist").At(0)
     graphs["relic"]["V1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
     graphs["relic"]["V2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist").At(0)
+    graphs["relic"]["V3"]["obs"] = TFile("Relic/madDMv2_0_6/relic_vector_gq1.root").Get("mytlist").At(0)
     graphs["relic"]["V4"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
 
 
@@ -280,8 +282,10 @@ def read_relic_lists():
     lists = {}
     lists["A1"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist")
     lists["A2"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist")
+    lists["A3"] = TFile("Relic/madDMv2_0_6/relic_axial_gq1.root").Get("mytlist")
     lists["V1"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
     lists["V2"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist")
+    lists["V3"] = TFile("Relic/madDMv2_0_6/relic_vector_gq1.root").Get("mytlist")
     lists["V4"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
     return lists
 
@@ -313,7 +317,7 @@ def get_line_width():
     linewidth["relic"]          = 202
     ### Met-less
     linewidth["dijet"]          = 102
-    linewidth["dijetchi"]       = -202
+    linewidth["dijetchi"]       = 202
     linewidth["dijet_2016"]     = 202
     linewidth["dijet_2016_exp"] = 202
     linewidth["dilepton"]       = 202
@@ -355,7 +359,7 @@ def get_text():
     text = {}
     text["relic"]          = "\Omega_{c} h^{2} \geq 0.12"
     text["dijet"]          = "#splitline{#bf{Dijet} (35.9 fb^{-1})}{#it{[EXO-16-056]}}"
-    text["dijetchi"]       = "#bf{Dijet #chi}  (36.5 fb^{-1})#it{[EXO-16-046]}"
+    text["dijetchi"]       = "#bf{Dijet #chi}  (36.5 fb^{-1}) #it{[EXO-16-046]}"
     #~ text["dilepton"]       = "#splitline{Dilepton: ee (12.4 fb^{-1}) + #mu#mu (13.0 fb^{-1})}{#it{[EXO-16-031]}}"
     text["dilepton"]       = "#splitline{#bf{Dilepton} (12.4 fb^{-1} / 13.0 fb^{-1})}{#it{[EXO-16-031]}}"
     text["dijet_2016"]     = "Observed"
@@ -473,17 +477,27 @@ def make_legend(scenario_name):
     coords = {}
     coords["A1"] = (0.68,0.15,0.87,0.65)
     coords["A2"] = (0.65,0.15,0.87,0.45)
-    coords["A3"] = (0.68,0.12,0.87,0.25)
+    coords["A3"] = (0.4,0.12,0.8,0.3)
     coords["A4"] = (0.68,0.15,0.87,0.65)
     coords["V1"] = (0.68,0.15,0.87,0.65)
     coords["V2"] = (0.63,0.15,0.87,0.45)
-    coords["V3"] = (0.68,0.12,0.87,0.25)
+    coords["V3"] = (0.35,0.67,0.75,0.85)
     coords["V4"] = (0.68,0.15,0.87,0.65)
+
+    textsize = {}
+    textsize["A1"] = 0.025
+    textsize["A2"] = 0.025
+    textsize["A3"] = 0.035
+    textsize["A4"] = 0.025
+    textsize["V1"] = 0.025
+    textsize["V2"] = 0.025
+    textsize["V3"] = 0.035
+    textsize["V4"] = 0.025
 
     leg = r.TLegend(*coords[scenario_name])
     leg.SetBorderSize(1)
     leg.SetTextFont(42)
-    leg.SetTextSize(0.025)
+    leg.SetTextSize(textsize[scenario_name])
     leg.SetFillColor(r.kWhite)
     leg.SetFillStyle(1001)
     leg.SetHeader("#bf{Exclusion at 95% CL}")
@@ -495,19 +509,30 @@ def make_auxiliary_legend(scenario_name):
     coords = {}
     coords["A1"] = (0.68,0.7,0.87,0.85)
     coords["A2"] = (0.68,0.48,0.87,0.63)
-    coords["A3"] = (0.68,0.12,0.87,0.25)
+    coords["A3"] = (0.6,0.33,0.8,0.45)
     coords["A4"] = (0.68,0.7,0.87,0.85)
     coords["V1"] = (0.68,0.7,0.87,0.85)
     coords["V2"] = (0.68,0.5,0.87,0.65)
-    coords["V3"] = (0.68,0.12,0.87,0.25)
+    coords["V3"] = (0.55,0.52,0.75,0.64)
     coords["V4"] = (0.68,0.7,0.87,0.85)
+
+    textsize = {}
+    textsize["A1"] = 0.035
+    textsize["A2"] = 0.035
+    textsize["A3"] = 0.035
+    textsize["A4"] = 0.035
+    textsize["V1"] = 0.035
+    textsize["V2"] = 0.035
+    textsize["V3"] = 0.035
+    textsize["V4"] = 0.035
+
 
     leg = r.TLegend(*coords[scenario_name])
     leg.SetBorderSize(1)
     leg.SetTextFont(42)
     leg.SetFillColor(r.kWhite)
     leg.SetFillStyle(1001)
-    leg.SetTextSize(0.035)
+    leg.SetTextSize(textsize[scenario_name])
     #~ leg.SetHeader("#bf{Exclusion at 95% CL}")
 
     return leg

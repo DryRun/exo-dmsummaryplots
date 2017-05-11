@@ -253,8 +253,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
                 obs.Draw("same")
             auxleg.AddEntry(obs,"#Omega_{c} h^{2} #geq 0.12","LF")
 
-        elif analysis == "dijetchi":
-            obs.SetLineWidth(-404)
+        #~ elif analysis == "dijetchi":
+            #~ obs.SetLineWidth(-404)
         obs.Draw("same")
 
         ### Expected limit

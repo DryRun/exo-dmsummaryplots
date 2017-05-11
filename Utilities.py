@@ -602,3 +602,11 @@ def check_graph_orientation(graph):
     print xfirst, xlast
     return xfirst < xlast
 
+def convert_spline_to_graph(spline,xmin,xmax):
+	import ROOT as r
+	import numpy
+	g = r.TGraph()
+
+	for x in numpy.linspace(xmin,xmax,100):
+		g.SetPoint(g.GetN(),x,spline.Eval(x))
+	return g

@@ -95,9 +95,9 @@ def make_plot(DDresult, Resonances, DijetOnly):
         filepath["Cresst"]         = "DD/SI/cresstii.txt"
         filepath["vFloor"]         = "DD/SI/Neutrino_SI.txt"
 
-        filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.root"
-        filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
-        filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
+        #~ filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
+        filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
+        filepath["dijet_exp"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
 
 
 
@@ -135,8 +135,8 @@ def make_plot(DDresult, Resonances, DijetOnly):
 
         #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_90_top56.root"
         #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_90_top56.root"
-        filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
-        filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
+        #~ filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
+        #~ filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av_90.root"
         filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/limits_DD_axial.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root" #outdated
@@ -367,10 +367,10 @@ def make_plot(DDresult, Resonances, DijetOnly):
     C.cd(1).SetLogx()
     C.cd(1).SetLogy()
 
-    if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-44,2e3,1e-37)
-    elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-45,2e3,1e-36)
-    elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2e3,1e-37)
-    elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2e3,1e-34)
+    if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-44,2000,1e-37)
+    elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-45,2000,1e-36)
+    elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2000,1e-37)
+    elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2000,1e-34)
 
 
     C.cd(1).SetTickx()

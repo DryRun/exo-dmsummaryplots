@@ -249,19 +249,19 @@ def read_graphs():
 
     graphs["monotop"]["V4"]["obs"] = TFile("Monotop/ScanMM/fcnc2d_obs_vector.root").Get("observed")
 
-    graphs["dijet"]["A1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root").Get("Obs_90")
-    graphs["dijet"]["A1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.root").Get("Obs_90")
-    graphs["dijet"]["A2"]["obs"] = TFile("Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1.root").Get("obs_025")
-    graphs["dijet"]["A2"]["exp"] = TFile("Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1.root").Get("exp_025")
+    graphs["dijet"]["A1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_MT.root").Get("Obs_90")
+    graphs["dijet"]["A1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp_MT.root").Get("Obs_90")
+    graphs["dijet"]["A2"]["obs"] = TFile("Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1_MT.root").Get("obs_025")
+    graphs["dijet"]["A2"]["exp"] = TFile("Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1_MT.root").Get("exp_025")
 
 
 
 
 
-    graphs["dijet"]["V1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.root").Get("Obs_90")
-    graphs["dijet"]["V1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root").Get("Obs_90")
-    graphs["dijet"]["V2"]["obs"] = TFile("Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1.root").Get("obs_025")
-    graphs["dijet"]["V2"]["exp"] = TFile("Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1.root").Get("exp_025")
+    graphs["dijet"]["V1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_MT.root").Get("Obs_90")
+    graphs["dijet"]["V1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp_MT.root").Get("Obs_90")
+    graphs["dijet"]["V2"]["obs"] = TFile("Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1_MT.root").Get("obs_025")
+    graphs["dijet"]["V2"]["exp"] = TFile("Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1_MT.root").Get("exp_025")
 
     graphs["dijetchi"]["A3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root").Get("obs_MvsM")
     graphs["dijetchi"]["V3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root").Get("obs_MvsM")

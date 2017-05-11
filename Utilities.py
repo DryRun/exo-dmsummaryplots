@@ -246,8 +246,17 @@ def read_graphs():
 
     graphs["dijet"]["A1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs.root").Get("Obs_90")
     graphs["dijet"]["A1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.root").Get("Obs_90")
+    graphs["dijet"]["A2"]["obs"] = TFile("Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1.root").Get("obs_025")
+    graphs["dijet"]["A2"]["exp"] = TFile("Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1.root").Get("exp_025")
+
+
+
+
+
     graphs["dijet"]["V1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs.root").Get("Obs_90")
     graphs["dijet"]["V1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root").Get("Obs_90")
+    graphs["dijet"]["V2"]["obs"] = TFile("Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1.root").Get("obs_025")
+    graphs["dijet"]["V2"]["exp"] = TFile("Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1.root").Get("exp_025")
 
     graphs["dijetchi"]["A3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root").Get("obs_MvsM")
     graphs["dijetchi"]["V3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root").Get("obs_MvsM")
@@ -280,7 +289,7 @@ def get_line_style():
     import ROOT as r
     linestyle = {}
     ### Planck
-    linestyle["relic"]          = r.kDotted
+    linestyle["relic"]          = 9
     ### Met-less
     linestyle["dijet"]          = r.kSolid
     linestyle["dijetchi"]       = r.kSolid
@@ -303,7 +312,7 @@ def get_line_width():
     ### Planck
     linewidth["relic"]          = 202
     ### Met-less
-    linewidth["dijet"]          = 202
+    linewidth["dijet"]          = 102
     linewidth["dijetchi"]       = -202
     linewidth["dijet_2016"]     = 202
     linewidth["dijet_2016_exp"] = 202
@@ -324,7 +333,7 @@ def get_color():
     color = {}
 
     ### Planck
-    color["relic"]          = r.kGray+2
+    color["relic"]          = r.kGray
     ### Met-less
     color["dijet"]          = r.kAzure
     color["dijetchi"]       = r.kAzure
@@ -345,31 +354,34 @@ def get_color():
 def get_text():
     text = {}
     text["relic"]          = "\Omega_{c} h^{2} \geq 0.12"
-    text["dijet"]          = "#splitline{Dijet (35.9 fb^{-1})}{[EXO-16-056]}"
-    text["dijetchi"]       = "Dijet #chi  (36.5 fb^{-1})[EXO-16-046]"
-    text["dilepton"]       = "Dilepton: ee (12.4 fb^{-1}) + #mu#mu (13.0 fb^{-1})"
+    text["dijet"]          = "#splitline{#bf{Dijet} (35.9 fb^{-1})}{#it{[EXO-16-056]}}"
+    text["dijetchi"]       = "#bf{Dijet #chi}  (36.5 fb^{-1})#it{[EXO-16-046]}"
+    #~ text["dilepton"]       = "#splitline{Dilepton: ee (12.4 fb^{-1}) + #mu#mu (13.0 fb^{-1})}{#it{[EXO-16-031]}}"
+    text["dilepton"]       = "#splitline{#bf{Dilepton} (12.4 fb^{-1} / 13.0 fb^{-1})}{#it{[EXO-16-031]}}"
     text["dijet_2016"]     = "Observed"
     text["dijet_2016_exp"] = "Expected"
-    text["trijet"]         = "#splitline{Boosted dijet (35.9 fb^{-1})}{#it{[EXO-17-001]}}"
+    text["trijet"]         = "#splitline{#bf{Boosted dijet} (35.9 fb^{-1})}{#it{[EXO-17-001]}}"
     text["chi"]            = "chi obs. (exp.excl.)"
-    text["monojet"]        = "#splitline{DM + j/V_{qq} (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
-    text["monoz"]          = "#splitline{DM + Z_{ll} (35.9 fb^{-1})}{#it{[EXO-16-052]}}"
-    text["monoHgg"]        = "#splitline{DM + H_{#gamma #gamma} (35.9 fb^{-1})}{#it{[EXO-16-054]}}"
-    text["monophoton"]     = "#splitline{DM + #gamma (12.9 fb^{-1})}{#it{[EXO-16-039]}}"
-    text["monotop"]        = "#splitline{DM + t (100% FC, 35.8 fb^{-1}) }{#it{[EXO-16-051]}}"
+    text["monojet"]        = "#splitline{#bf{DM + j/V_{qq}} (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
+    text["monoz"]          = "#splitline{#bf{DM + Z_{ll}} (35.9 fb^{-1})}{#it{[EXO-16-052]}}"
+    text["monoHgg"]        = "#splitline{#bf{DM + H_{#gamma #gamma}} (35.9 fb^{-1})}{#it{[EXO-16-054]}}"
+    text["monophoton"]     = "#splitline{#bf{DM + #gamma} (12.9 fb^{-1})}{#it{[EXO-16-039]}}"
+    text["monotop"]        = "#splitline{#bf{DM + t} (100% FC, 35.8 fb^{-1}) }{#it{[EXO-16-051]}}"
     return text
 
-def get_scenario_label_coordinates():
+def get_scenario_label_coordinates(metxonly=False):
     coords = {}
     coords["A1"] = (0.22,0.42,0.6,0.85)
-    coords["A2"] = (0.1,0.3,0.6,0.85)
+    coords["A2"] = (0.4,0.6,0.6,0.85)
     coords["A3"] = (0.1,0.3,0.6,0.85)
     coords["A4"] = (0.1,0.3,0.6,0.85)
-    coords["V1"] = (0.1,0.3,0.6,0.85)
-    coords["V2"] = (0.65,0.85,0.6,0.85)
+    coords["V1"] = (0.23,0.43,0.6,0.85)
+    coords["V2"] = (0.45,0.65,0.6,0.85)
     coords["V3"] = (0.1,0.3,0.6,0.85)
     coords["V4"] = (0.1,0.3,0.6,0.85)
 
+    if(metxonly):
+        coords["A1"] = (0.15,0.35,0.6,0.85)
     return coords
 
 def get_relic_coordinates():
@@ -460,17 +472,18 @@ def make_legend(scenario_name):
     import ROOT as r
     coords = {}
     coords["A1"] = (0.68,0.15,0.87,0.65)
-    coords["A2"] = (0.6,0.12,0.87,0.25)
+    coords["A2"] = (0.65,0.15,0.87,0.45)
     coords["A3"] = (0.68,0.12,0.87,0.25)
     coords["A4"] = (0.68,0.15,0.87,0.65)
     coords["V1"] = (0.68,0.15,0.87,0.65)
-    coords["V2"] = (0.6,0.12,0.87,0.25)
+    coords["V2"] = (0.63,0.15,0.87,0.45)
     coords["V3"] = (0.68,0.12,0.87,0.25)
     coords["V4"] = (0.68,0.15,0.87,0.65)
 
     leg = r.TLegend(*coords[scenario_name])
     leg.SetBorderSize(1)
     leg.SetTextFont(42)
+    leg.SetTextSize(0.025)
     leg.SetFillColor(r.kWhite)
     leg.SetFillStyle(1001)
     leg.SetHeader("#bf{Exclusion at 95% CL}")
@@ -481,11 +494,11 @@ def make_auxiliary_legend(scenario_name):
     import ROOT as r
     coords = {}
     coords["A1"] = (0.68,0.7,0.87,0.85)
-    coords["A2"] = (0.6,0.12,0.87,0.25)
+    coords["A2"] = (0.68,0.48,0.87,0.63)
     coords["A3"] = (0.68,0.12,0.87,0.25)
     coords["A4"] = (0.68,0.7,0.87,0.85)
     coords["V1"] = (0.68,0.7,0.87,0.85)
-    coords["V2"] = (0.6,0.12,0.87,0.25)
+    coords["V2"] = (0.68,0.5,0.87,0.65)
     coords["V3"] = (0.68,0.12,0.87,0.25)
     coords["V4"] = (0.68,0.7,0.87,0.85)
 

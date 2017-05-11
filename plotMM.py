@@ -150,8 +150,10 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     else :
         if scenario_name in ["A3","V3"]:
             frame = C.cd(1).DrawFrame(0,0,5500,2000)
-        if scenario_name in ["A4","V4"]:
+        elif scenario_name in ["A4","V4"]:
             frame = C.cd(1).DrawFrame(0,0,2900,800)
+        elif scenario_name in ["A2"]:
+            frame = C.cd(1).DrawFrame(0,0,4500,2000)
         elif Dilepton :
             frame = C.cd(1).DrawFrame(0,0,4500,2000)
 
@@ -171,8 +173,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     ### Diagonal
     f1 = TF1("f1","x/2.",0,4000)
     g1 = TGraph(f1)
-    g1.SetLineColor(color["relic"]-2)
-    g1.SetMarkerColor(color["relic"]-2)
+    g1.SetLineColor(color["relic"])
+    g1.SetMarkerColor(color["relic"])
     g1.SetLineStyle(2)
     g1.Draw("L")
 
@@ -202,7 +204,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     #~ texts.append(add_text(*diagonal_coords[scenario_name],TEXT="M_{Med} = 2 x m_{DM}",color=color["relic"],angle=diagonal_angles[scenario_name]))
 
     # Scenario
-    scenario_coords = get_scenario_label_coordinates()
+    scenario_coords = get_scenario_label_coordinates(not Dijet)
     scenario_label = get_scenario_labels()
     texts.append(add_text(0.1,0.2,0.9,0.97,"#bf{CMS}"))
     try:
@@ -243,8 +245,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         if analysis == "relic":
             for i in range(0,reliclist[scenario_name].GetSize()):
                 obs = reliclist[scenario_name].At(i)
-                obs.SetLineColor(color[analysis]-1)
-                obs.SetFillColor(color[analysis]-1)
+                obs.SetLineColor(color[analysis])
+                obs.SetFillColor(color[analysis])
                 obs.SetLineStyle(linestyle[analysis])
                 obs.SetLineWidth(202)
                 obs.SetFillStyle(3005)

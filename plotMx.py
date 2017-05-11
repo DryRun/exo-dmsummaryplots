@@ -13,7 +13,7 @@
 from ROOT import *
 import ast
 from Utilities import extrapolation
-
+from Utilities import *
 ################
 ### Settings ###
 ################
@@ -30,7 +30,7 @@ DDresult = "SD"
 Resonances = 1
 DijetOnly = 0
 
-Extend    = False
+Extend    = True
 vFloor    = False
 mDM_lb = 1
 
@@ -46,18 +46,23 @@ def make_plot(DDresult, Resonances, DijetOnly):
         resonances = ["trijet","dijet"]
 
 
-    cmsanalyses = metx
-    if Resonances  : cmsanalyses = metx+resonances
-    if DijetOnly:
-        resonances = ["dijet_2016"]
-        cmsanalyses = resonances
+    analyses = []
+    cmsanalyses = []
+    if Resonances  :
+        analyses.extend(resonances)
+        cmsanalyses.extend(resonances)
 
 
-    if   DDresult == "SI" and DijetOnly : analyses = cmsanalyses+["Cresst","CDMSlite","PandaX","LUX"]
-    elif DDresult == "SD" and DijetOnly : analyses = cmsanalyses+["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"]
-    elif DDresult == "SI"               : analyses = ["Cresst","CDMSlite","PandaX","LUX"]+cmsanalyses
-    elif DDresult == "SD"               : analyses = ["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"]+cmsanalyses
+    if   DDresult == "SI" and DijetOnly : analyses.extend(["Cresst","CDMSlite","PandaX","LUX"])
+    elif DDresult == "SD" and DijetOnly : analyses.extend(["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"])
+    elif DDresult == "SI"               : analyses.extend(["Cresst","CDMSlite","PandaX","LUX"])
+    elif DDresult == "SD"               : analyses.extend(["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"])
 
+
+    if not DijetOnly:
+        analyses.extend(metx)
+        cmsanalyses.extend(metx)
+        
     if vFloor: analyses += ["vFloor"]
 
     print "***********************"
@@ -183,8 +188,11 @@ def make_plot(DDresult, Resonances, DijetOnly):
     color["IceCubett"]     = kGreen
     ### CMS Met-less
     color["dijet"]      = kAzure-9
+    color["dijet"]      = kBlue-8
+    color["dijet"]      = kYellow-10
     color["dijet_2016"] = kAzure
-    color["trijet"]     = kAzure+8
+    color["trijet"]     = kAzure+10
+    color["trijet"]     = kCyan-10
 
     color["chi"]        = kBlue
     ### CMS MET+X
@@ -194,6 +202,10 @@ def make_plot(DDresult, Resonances, DijetOnly):
     color["monoHgg"]          = kMagenta-7
     color["monotop"]    = kViolet+1
 
+    linecolor = {}
+    linecolor["dijet"] = kYellow +3
+    linecolor["trijet"] = kCyan-5
+    
     ##################
     ### Plot texts ###
     ##################
@@ -321,12 +333,12 @@ def make_plot(DDresult, Resonances, DijetOnly):
             tgraph[analysis] = DDgraph[analysis]
 
         print "****BEFORE EXTRAPOLATIOn*****"
-        for analysis in cmsanalyses :
+        #~ for analysis in cmsanalyses :
     #        print "Analysis ", analysis
-            for i in range(0,tgraph[analysis].GetN()) :
-                mDM_i  = Double(0)
-                xsec_i = Double(0)
-                tgraph[analysis].GetPoint(i,mDM_i,xsec_i)
+            #~ for i in range(0,tgraph[analysis].GetN()) :
+                #~ mDM_i  = Double(0)
+                #~ xsec_i = Double(0)
+                #~ tgraph[analysis].GetPoint(i,mDM_i,xsec_i)
     #            print "i = ", i, " mDM_i = ", mDM_i, "xsec_i = ", xsec_i
         print "*********"
 
@@ -372,12 +384,12 @@ def make_plot(DDresult, Resonances, DijetOnly):
     frame.GetXaxis().SetTitleOffset(1.0)
     frame.GetYaxis().SetTitleOffset(1.5)
 
-    if not DijetOnly:
-        if DDresult == "SI" : leg  = TLatex(100,3e-34,"#it{Moriond 2017}")
-        if DDresult == "SD" : leg  = TLatex(100,3e-36,"#it{Moriond 2017}")
-        leg.SetTextFont(42)
-        leg.SetTextSize(0.04)
-        leg.Draw("same")
+    #~ if not DijetOnly:
+        #~ if DDresult == "SI" : leg  = TLatex(100,3e-34,"#it{LHCP 2017}")
+        #~ if DDresult == "SD" : leg  = TLatex(100,3e-36,"#it{LHCP 2017}")
+        #~ leg.SetTextFont(42)
+        #~ leg.SetTextSize(0.04)
+        #~ leg.Draw("same")
     if DijetOnly:
         if DDresult == "SI" : leg  = TLatex(0.1,1.2e-38,"#bf{CMS}")
         if DDresult == "SD" : leg  = TLatex(0.1,1.2e-37,"#bf{CMS}")
@@ -723,7 +735,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
         C.cd(2).SetPad(0.75,0.0,1.0,1.0)
         C.Update()
         C.cd(1)
-        leg.Draw("same")
+        #~ leg.Draw("same")
         C.Update()
 
     if DDresult == "SI" and not DijetOnly:
@@ -772,24 +784,28 @@ def make_plot(DDresult, Resonances, DijetOnly):
 
     C.Update()
 
+
+
     ####################
     ### Draw RESULTS ###
     ####################
-
-    for analysis in reversed(analyses):
+    gStyle.SetHatchesLineWidth(2)
+    for analysis in analyses:
         tgraph[analysis].SetLineColor(color[analysis])
         tgraph[analysis].SetFillColor(color[analysis])
         tgraph[analysis].SetFillColor(color[analysis])
         tgraph[analysis].SetFillStyle(3005)
-        tgraph[analysis].SetLineWidth( 202)
+        tgraph[analysis].SetLineWidth( 204)
         tgraph[analysis].SetLineStyle(linestyle[analysis])
         tgraph[analysis].SetMarkerSize(0.1)
         tgraph[analysis].SetMarkerColor(color[analysis])
         if analysis=="monoZ":
-            tgraph[analysis].SetLineWidth(-202)
+            tgraph[analysis].SetLineWidth(-204)
         if analysis=="dijet" or analysis == "dijet_2016" or analysis=="trijet":
             tgraph[analysis].SetLineWidth(2)
             tgraph[analysis].SetFillStyle(1001)
+            tgraph[analysis].SetLineColor(linecolor[analysis])
+            tgraph[analysis].SetMarkerColor(linecolor[analysis])
             tgraph[analysis].Draw("F,same")
             tgraph[analysis].Draw("same")
         elif analysis == "LUX" or analysis=="PandaX" or analysis=="CDMSlite" or analysis=="Cresst":
@@ -808,6 +824,12 @@ def make_plot(DDresult, Resonances, DijetOnly):
             tgraph[analysis].SetLineWidth(-102)
             tgraph[analysis].Draw("same")
 
+    texts = []
+    #~ if(DDresult=="SD"):
+        #~ texts.append(add_text(0.2,0.45,0.1,0.2,"Spin Dependent"))
+    #~ else:
+        #~ texts.append(add_text(0.2,0.45,0.1,0.2,"Spin Independent"))
+    texts.append(add_text(0.7,0.85,0.9,1.0,"LHCP 2017"))
     C.Update()
     C.cd(1).RedrawAxis()
     ############

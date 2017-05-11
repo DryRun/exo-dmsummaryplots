@@ -22,7 +22,7 @@ def convert_spline_to_graph(spline,xmin,xmax):
 	import numpy
 	g = r.TGraph()
 
-	for x in numpy.linspace(xmin,xmax,10):
+	for x in numpy.linspace(xmin,xmax,100):
 		g.SetPoint(g.GetN(),x,spline.Eval(x))
 	return g
 
@@ -84,7 +84,7 @@ def do_plot(Mediator, ObsOnly):
 	### Plot linestyles ###
 	#######################
 
-	linestyle["BSM" ]           = kDotted
+	linestyle["BSM" ]           = kSolid
 	#MET+jets
 	linestyle["monojet_obs"]    = kSolid
 	linestyle["monojet_exp"]    = kDashed
@@ -216,7 +216,7 @@ def do_plot(Mediator, ObsOnly):
 	leg3.SetTextFont(42)
 	leg3.SetFillColor(0)
 	leg3.Clear()
-	leg3.SetHeader("#it{ICHEP 2016}")
+	leg3.SetHeader("#it{LHCP 2017}")
 
 	############
 	### Draw ###

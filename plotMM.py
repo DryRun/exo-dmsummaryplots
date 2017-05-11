@@ -234,6 +234,9 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
         ### Observed limit
         obs = all_graphs[analysis][scenario_name]["obs"]
+
+        if(analysis=="dijet"):
+            obs.RemovePoint(obs.GetN()-1)
         if( not obs ): continue
         print "analysis "+analysis
         obs.SetFillColor(color[analysis])

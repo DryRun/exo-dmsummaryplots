@@ -126,7 +126,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         else : analyses += ["dijet","trijet"]
 
 
-
+    if(len(analyses)<2):return None
 
 
     ### Get plotting parameters
@@ -294,7 +294,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     C.Close()
 
 for Mediator in ["Axial", "Vector"]:
-    for Scenario in ["1", "2","3","4"]:
+    for Scenario in ["1", "2","3"]:
         for Resonances in [0,1]:
             make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
 

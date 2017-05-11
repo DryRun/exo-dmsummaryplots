@@ -367,10 +367,10 @@ def make_plot(DDresult, Resonances, DijetOnly):
     C.cd(1).SetLogx()
     C.cd(1).SetLogy()
 
-    if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-44,1450,1e-37)
-    elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-45,1450,1e-36)
-    elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,1450,1e-37)
-    elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,1450,1e-34)
+    if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-44,2e3,1e-37)
+    elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-45,2e3,1e-36)
+    elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2e3,1e-37)
+    elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2e3,1e-34)
 
 
     C.cd(1).SetTickx()

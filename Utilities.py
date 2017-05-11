@@ -367,7 +367,7 @@ def get_color():
     color = {}
 
     ### Planck
-    color["relic"]          = r.kGray
+    color["relic"]          = r.kGray+1
     ### Met-less
     color["dijet"]          = r.kYellow-10
     color["dijetchi"]       = r.kAzure
@@ -419,8 +419,8 @@ def get_text():
     text["dijet_2016_exp"] = "Expected"
     text["trijet"]         = "#splitline{#bf{Boosted dijet} (35.9 fb^{-1})}{#it{[EXO-17-001]}}"
     text["chi"]            = "chi obs. (exp.excl.)"
-    text["monojet"]        = "#splitline{#bf{DM + j/V_{qq}} (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
-    text["monoz"]          = "#splitline{#bf{DM + Z_{ll}} (35.9 fb^{-1})}{#it{[EXO-16-052]}}"
+    text["monojet"]        = "#splitline{#bf{DM + j/V(qq)} (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
+    text["monoz"]          = "#splitline{#bf{DM + Z(ll)} (35.9 fb^{-1})}{#it{[EXO-16-052]}}"
     text["monoHgg"]        = "#splitline{#bf{DM + H_{#gamma #gamma}} (35.9 fb^{-1})}{#it{[EXO-16-054]}}"
     text["monophoton"]     = "#splitline{#bf{DM + #gamma} (12.9 fb^{-1})}{#it{[EXO-16-039]}}"
     text["monotop"]        = "#splitline{#bf{DM + t} (100% FC, 35.8 fb^{-1}) }{#it{[EXO-16-051]}}"
@@ -529,11 +529,11 @@ def make_legend(scenario_name):
     import ROOT as r
     coords = {}
     coords["A1"] = (0.68,0.15,0.87,0.65)
-    coords["A2"] = (0.65,0.15,0.87,0.45)
+    coords["A2"] = (0.62,0.15,0.87,0.5)
     coords["A3"] = (0.4,0.12,0.8,0.3)
     coords["A4"] = (0.68,0.15,0.87,0.65)
     coords["V1"] = (0.68,0.15,0.87,0.65)
-    coords["V2"] = (0.63,0.15,0.87,0.45)
+    coords["V2"] = (0.62,0.15,0.87,0.5)
     coords["V3"] = (0.35,0.67,0.75,0.85)
     coords["V4"] = (0.68,0.15,0.87,0.65)
 
@@ -561,11 +561,11 @@ def make_auxiliary_legend(scenario_name):
     import ROOT as r
     coords = {}
     coords["A1"] = (0.68,0.7,0.87,0.85)
-    coords["A2"] = (0.68,0.48,0.87,0.63)
+    coords["A2"] = (0.68,0.53,0.87,0.68)
     coords["A3"] = (0.6,0.33,0.8,0.45)
     coords["A4"] = (0.68,0.7,0.87,0.85)
     coords["V1"] = (0.68,0.7,0.87,0.85)
-    coords["V2"] = (0.68,0.5,0.87,0.65)
+    coords["V2"] = (0.68,0.53,0.87,0.68)
     coords["V3"] = (0.55,0.52,0.75,0.64)
     coords["V4"] = (0.68,0.7,0.87,0.85)
 

@@ -231,13 +231,13 @@ def make_plot(DDresult, Resonances, DijetOnly):
     text["trijet"]     = "CMS Boosted dijet #it{[EXO-17-001]}"
     text["chi"]        = "chi obs. (exp.excl.)"
     ### CMS MET+X
-    text["monojet"]    = "CMS DM+j/V_{qq} #it{[EXO-16-056]}"
-    text["monoZ"]      = "CMS DM+Z_{ll} #it{[EXO-16-052]}"
+    #~ text["monojet"]    = "CMS DM+j/V(qq) #it{[EXO-16-056]}"
+    #~ text["monoZ"]      = "CMS DM+Z(ll) #it{[EXO-16-052]}"
     text["monoHgg"]    = "CMS H_{#gamma #gamma} #it{[EXO-16-054]}"
     text["monophoton"] = "CMS DM+#gamma #it{[EXO-16-039]}"
 
-    text["monojet"]        = "#splitline{DM + j/V_{qq} (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
-    text["monoz"]          = "#splitline{DM + Z_{ll} (35.9 fb^{-1})}{#it{[EXO-16-052]}}"#text["monotop"]    = "CMS DM+t (FC) #it{[EXO-16-040]}"
+    text["monojet"]        = "#splitline{DM + j/V(qq) (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
+    text["monoz"]          = "#splitline{DM + Z_(ll) (35.9 fb^{-1})}{#it{[EXO-16-052]}}"#text["monotop"]    = "CMS DM+t (FC) #it{[EXO-16-040]}"
     text["monoHgg"]        = "#splitline{DM + H_{#gamma #gamma} (35.9 fb^{-1})}{#it{[EXO-16-054]}}"
     text["monophoton"]     = "#splitline{DM + #gamma (12.9 fb^{-1})}{#it{[EXO-16-039]}}"
 

@@ -134,8 +134,8 @@ def do_plot(Mediator,ObsOnly):
 	
 	text["BSM"]            = "#sigma_{theory} (LHC DM WG)"
 	if   Mediator == "Scalar": text["monojet_obs"] = "#splitline{#bf{DM + j} (fermion only, 35.9 fb^{-1})}{[EXO-16-048]}"
-	elif Mediator == "Pseudo": text["monojet_obs"] = "#splitline{#bf{DM + j/V_{qq}}(35.9 fb^{-1})}{[EXO-16-048]}"
-	text["monoz_obs"]       = "#splitline{#bf{DM + Z_{ll}} (fermion only, 35.9 fb^{-1})}{[EXO-16-052]}"
+	elif Mediator == "Pseudo": text["monojet_obs"] = "#splitline{#bf{DM + j/V(qq)}(35.9 fb^{-1})}{[EXO-16-048]}"
+	text["monoz_obs"]       = "#splitline{#bf{DM + Z(ll)} (fermion only, 35.9 fb^{-1})}{[EXO-16-052]}"
 	#~ text["DMtt_obs"]       = "DM + tt (2.2 fb^{-1}) #it{EXO-16-005}"
 	#~ text["METbb_DMbb_obs"] = "DM + bb (2.2 fb^{-1}) #it{B2G-15-007}"
 	#~ text["METbb_DMtt_obs"] = "DM + tt (nj<4) [B2G-15-007]"
@@ -288,11 +288,12 @@ def do_plot(Mediator,ObsOnly):
 	tgraph["fermion"] = tgraph["BSM"].Clone()
 	tgraph["fermion"].SetLineColor(kWhite)
 	text["fermion"] = "fermion only #it{EXO-16-037}"
-	
+
+	leg.AddEntry(tgraph["BSM"],text["BSM"],"FL")
 	for analysis in ["gen_obs","gen_exp"]:
 		leg.AddEntry(tgraph[analysis],text[analysis],"FL")
 	for analysis in analyses:
-		if not "exp" in analysis:
+		if not "exp" in analysis and not "BSM" in analysis:
 			leg.AddEntry(tgraph[analysis],text[analysis],"FL")
 		
 	

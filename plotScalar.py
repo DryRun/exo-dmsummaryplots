@@ -191,7 +191,7 @@ def do_plot(Mediator,ObsOnly):
 	C.cd(1).SetLogy()
 	
 	tgraph["monojet_obs"].SetTitle("")
-	tgraph["monojet_obs"].GetXaxis().SetTitle("M_{Med} [GeV]")
+	tgraph["monojet_obs"].GetXaxis().SetTitle("Mediator mass M_{ Med} [GeV]")
 	tgraph["monojet_obs"].GetYaxis().SetTitle("#sigma / #sigma_{theory}")
 	tgraph["monojet_obs"].GetXaxis().SetTitleOffset(1.0)
 	tgraph["monojet_obs"].GetYaxis().SetTitleOffset(1.0)
@@ -246,7 +246,7 @@ def do_plot(Mediator,ObsOnly):
 
 	texts = []
 	medname = Mediator if Mediator=="Scalar" else Mediator+"scalar"
-	texts.append(add_text(0.5,0.9,0.65,0.85,["#bf{{{MED} Mediator}}".format(MED=medname),"Dirac DM","g_{q} = 1.0", "g_{DM} = 1.0", "m_{DM} = 1 GeV"]))
+	texts.append(add_text(0.55,0.9,0.65,0.85,["#bf{{{MED} Mediator}}".format(MED=medname),"Dirac DM","g_{q} = 1.0", "g_{DM} = 1.0", "m_{DM} = 1 GeV"],alignment=12))
 	texts.append(add_text(0.7,0.85,0.86,1.0,"LHCP 2017"))
 	#~ leg3.SetHeader("2.2 fb^{-1} & 35.9 fb^{-1} (13 TeV)")
 	

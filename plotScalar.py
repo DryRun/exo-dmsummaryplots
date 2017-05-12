@@ -133,14 +133,13 @@ def do_plot(Mediator,ObsOnly):
 	##################
 	
 	text["BSM"]            = "#sigma_{theory} (LHC DM WG)"
-	if   Mediator == "Scalar": text["monojet_obs"] = "#splitline{#bf{DM + j} (fermion only, 35.9 fb^{-1})}{[EXO-16-048]}"
-	elif Mediator == "Pseudo": text["monojet_obs"] = "#splitline{#bf{DM + j/V(qq)}(35.9 fb^{-1})}{[EXO-16-048]}"
-	text["monoz_obs"]       = "#splitline{#bf{DM + Z(ll)} (fermion only, 35.9 fb^{-1})}{[EXO-16-052]}"
+	text["monojet_obs"] = "#splitline{#bf{DM + j/V(qq)} (35.9 fb^{-1})}{[EXO-16-048]}"
+	text["monoz_obs"]       = "#splitline{#bf{DM + Z(ll)} (35.9 fb^{-1})}{[EXO-16-052]}"
 	#~ text["DMtt_obs"]       = "DM + tt (2.2 fb^{-1}) #it{EXO-16-005}"
 	#~ text["METbb_DMbb_obs"] = "DM + bb (2.2 fb^{-1}) #it{B2G-15-007}"
 	#~ text["METbb_DMtt_obs"] = "DM + tt (nj<4) [B2G-15-007]"
 	#~ text["METbb_DMhf_obs"] = "MET+bb: DM+HF [B2G-15-007]"
-	text["METHF_DMhf_obs"] = "#splitline{#bf{DM + tt/bb} (2.2 fb^{-1})}{[EXO-16-005,B2G-15-007]}"
+	text["METHF_DMhf_obs"] = "#splitline{#bf{DM + tt/bb} (2.2 fb^{-1})}{[EXO-16-005]}"
 	#exp
 	#~ text["monojet_exp"]    = "exp.excl 95%CL"
 	#~ text["monoz_exp"]    = "exp.excl 95%CL"
@@ -291,10 +290,10 @@ def do_plot(Mediator,ObsOnly):
 
 	leg.AddEntry(tgraph["BSM"],text["BSM"],"FL")
 	for analysis in ["gen_obs","gen_exp"]:
-		leg.AddEntry(tgraph[analysis],text[analysis],"FL")
+		leg.AddEntry(tgraph[analysis],text[analysis],"L")
 	for analysis in analyses:
 		if not "exp" in analysis and not "BSM" in analysis:
-			leg.AddEntry(tgraph[analysis],text[analysis],"FL")
+			leg.AddEntry(tgraph[analysis],text[analysis],"L")
 		
 	
 	leg.Draw()

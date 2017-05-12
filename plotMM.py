@@ -305,7 +305,7 @@ for Mediator in ["Axial", "Vector"]:
         for Resonances in [0,1]:
             make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
             if(Scenario=="2"):
-                make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
+                make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=True, CL="95",do_expected=True)
 
 
 ###########

@@ -104,7 +104,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v_90.root"
         filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/limits_DD_vector.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SI_MM_ICHEP2016_obs.root" #outdated
-        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl90.txt"
+        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl90_Mmedmore10.txt"
         filepath["monoHgg"]          = "MonoHgg/ScanMM/EXO-16-054/input_combo_MonoHgg_25April_90CL.root"
 
     elif DDresult == "SD" :
@@ -140,7 +140,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av_90.root"
         filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/limits_DD_axial.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root" #outdated
-        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl90.txt"
+        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl90_Mmedmore10.txt"
 
     #######################
     ### Plot linestyles ###
@@ -259,10 +259,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
     #    elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed")
         elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")
         elif analysis == "monojet"        :
-            if DDresult == "SI" :
-                tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed_dd")
-            elif DDresult == "SD" :
-                tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed_dd")
+            tgraph["monojet"]        = TFile(filepath[analysis]).Get("contour_obs_graph")
         elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
         elif analysis == "monoZ"   : tgraph["monoZ"]          = TGraph(filepath[analysis])
         elif analysis == "monoHgg"        : tgraph["monoHgg"]     = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")
@@ -292,11 +289,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
                 mDM  = Double(0)
                 tgraph[analysis].GetPoint(i,mMed,mDM)
                 #~ print "SI - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
-                if analysis == "monojet" :
-                    DDgraph[analysis]=tgraph[analysis]
-
-
-                elif analysis == "monophoton":
+                if analysis == "monophoton":
                     DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))
                 # elif analysis == "monojet" or analysis == "monoZ":
                 #     DDgraph[analysis]=tgraph[analysis]
@@ -321,10 +314,6 @@ def make_plot(DDresult, Resonances, DijetOnly):
     #            print "SD - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
                 if analysis == "monophoton":
                     DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))
-                # elif analysis == "monojet" or analysis == "monoZ":
-                #     DDgraph[analysis]=tgraph[analysis]
-                elif analysis == "monojet" :
-                    DDgraph[analysis]=tgraph[analysis]
                 else:
                     mR = Double(0.939*mDM)/(0.939+mDM)
                     xsec = Double(c_SD*(mR*mR)/(mMed*mMed*mMed*mMed))
@@ -368,9 +357,9 @@ def make_plot(DDresult, Resonances, DijetOnly):
     C.cd(1).SetLogy()
 
     if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-44,2000,1e-37)
-    elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-45,2000,1e-36)
+    elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-45,2000,5*1e-37)
     elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2000,1e-37)
-    elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2000,1e-34)
+    elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2000,2*1e-35)
 
 
     C.cd(1).SetTickx()

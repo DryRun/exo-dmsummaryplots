@@ -7,7 +7,7 @@
 ###                                   ###
 #########################################
 #########################################
-
+import os
 from ROOT import *
 import ast
 from Utilities import *
@@ -309,8 +309,10 @@ def do_plot(Mediator,ObsOnly):
 	############
 	gPad.SetTicky()
 	gPad.SetTickx()
-	if ObsOnly: C.SaveAs(Mediator+"_METX_Summary_obsonly.pdf")
-	else      : C.SaveAs(Mediator+"_METX_Summary_obsnexp.pdf")
+
+	if( not os.path.exists("./output") ): os.makedirs("./output")
+	if ObsOnly: C.SaveAs("./output/"+Mediator+"_METX_Summary_obsonly.pdf")
+	else      : C.SaveAs("./output/"+Mediator+"_METX_Summary_obsnexp.pdf")
 	C.Close()
 
 do_plot("Scalar",0)

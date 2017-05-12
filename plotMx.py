@@ -9,7 +9,7 @@
 ###                                   ###
 #########################################
 #########################################
-
+import os
 from ROOT import *
 import ast
 from Utilities import extrapolation
@@ -826,9 +826,10 @@ def make_plot(DDresult, Resonances, DijetOnly):
     ### Save ###
     ############
 
-    if DijetOnly : C.SaveAs(DDresult+"_CMSDD_Dijet.pdf")
-    elif Resonances : C.SaveAs(DDresult+"_CMSDD_Summary.pdf")
-    else         : C.SaveAs(DDresult+"_CMSDD_Summary_nodijet.pdf")
+    if( not os.path.exists("./output") ): os.makedirs("./output")
+    if DijetOnly : C.SaveAs("./output/"+DDresult+"_CMSDD_Dijet.pdf")
+    elif Resonances : C.SaveAs("./output/"+DDresult+"_CMSDD_Summary.pdf")
+    else         : C.SaveAs("./output/"+DDresult+"_CMSDD_Summary_nodijet.pdf")
 
     ###########
     ### FIN ###

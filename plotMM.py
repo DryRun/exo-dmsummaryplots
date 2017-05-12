@@ -253,8 +253,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
             leg.AddEntry(obs,text[analysis],"FL")
         elif not  analysis=="relic":
             leg.AddEntry(obs,text[analysis],"L")
-
-        if analysis == "relic":
+        else:
             for i in range(0,reliclist[scenario_name].GetSize()):
                 obs = reliclist[scenario_name].At(i)
                 obs.SetLineColor(color[analysis])
@@ -263,7 +262,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
                 obs.SetLineWidth(101)
                 obs.SetFillStyle(3005)
                 obs.Draw("same")
-            auxleg.AddEntry(obs,"#Omega_{c} h^{2} #geq 0.12","LF")
+            auxleg.AddEntry(obs,"#Omega_{c} h^{2} #geq 0.12","L")
             g1.Draw("same")
         #~ elif analysis == "dijetchi":
             #~ obs.SetLineWidth(-404)

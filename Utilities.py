@@ -510,7 +510,7 @@ def make_dummy_entries(legend):
     dummy_obs.SetFillColor(kBlack)
     dummy_obs.SetFillStyle(3005)
 
-    legend.AddEntry(dummy_obs,"Observed","FL")
+    legend.AddEntry(dummy_obs,"Observed","L")
 
     dummy_exp = TGraph()
 

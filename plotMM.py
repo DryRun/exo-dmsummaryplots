@@ -165,8 +165,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         else :
             frame = C.cd(1).DrawFrame(0,0,5200,2000)
 
-    frame.SetXTitle("Mediator mass [GeV]")
-    frame.SetYTitle("m_{DM} [GeV]")
+    frame.SetXTitle("Mediator mass M_{ med} [GeV]")
+    frame.SetYTitle("Dark matter mass m_{ DM} [GeV]")
     frame.GetXaxis().SetTitleSize(0.052)
     frame.GetYaxis().SetTitleSize(0.052)
     frame.GetXaxis().SetTitleOffset(0.85)

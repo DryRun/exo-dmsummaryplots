@@ -306,7 +306,7 @@ def get_line_style():
     import ROOT as r
     linestyle = {}
     ### Planck
-    linestyle["relic"]          = 9
+    linestyle["relic"]          = 1
     ### Met-less
     linestyle["dijet"]          = r.kSolid
     linestyle["dijetchi"]       = r.kSolid

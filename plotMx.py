@@ -365,7 +365,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
     C.cd(1).SetTickx()
     C.cd(1).SetTicky()
 
-    frame.SetXTitle("m_{DM} [GeV]")
+    frame.SetXTitle("Dark matter mass m_{ DM} [GeV]")
     if   DDresult=="SD": frame.SetYTitle("#sigma^{SD}_{DM-proton} [cm^{2}]")
     elif DDresult=="SI": frame.SetYTitle("#sigma^{SI}_{DM-nucleon} [cm^{2}]")
     frame.GetXaxis().SetTitleSize(0.045)

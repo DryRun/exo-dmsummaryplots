@@ -196,9 +196,9 @@ def make_plot(DDresult, Resonances, DijetOnly):
 
     color["chi"]        = kBlue
     ### CMS MET+X
-    color["monojet"]    = kRed+1#kRed+1
-    color["monophoton"] = kOrange+10#kRed+2
-    color["monoZ"]      = kOrange-3#kRed+3
+    color["monojet"]    = kRed+2#kRed+1
+    color["monophoton"] = kOrange+9#kRed+2
+    color["monoZ"]      = kOrange+1#kRed+3
     color["monoHgg"]          = kMagenta-7
     color["monotop"]    = kViolet+1
 
@@ -398,9 +398,9 @@ def make_plot(DDresult, Resonances, DijetOnly):
         leg1.SetTextAlign(12)
         leg1.Clear()
         if DDresult=="SI":
-            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Vector med., Dirac DM; g_{ q} = 0.25, g_{DM} = 1.0}")
+            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Vector med., Dirac DM; g_{ q} = 0.25, g_{ DM} = 1.0}")
         elif DDresult=="SD":
-            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Axial-vector med., Dirac DM; g_{ q} = 0.25, g_{DM} = 1.0}")
+            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Axial-vector med., Dirac DM; g_{ q} = 0.25, g_{ DM} = 1.0}")
 
         leg2=C.BuildLegend(0.7,0.05,0.95,0.4)
         leg2.SetBorderSize(0)
@@ -423,10 +423,10 @@ def make_plot(DDresult, Resonances, DijetOnly):
             elif analysis == "SuperKbb"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1503.04858]}}","L")
             elif analysis == "IceCubebb"  : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1612.05949]}}","L")
             elif analysis == "IceCubett"  : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1601.00653]}}","L")
-            elif analysis == "monojet"    : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + j/V_{qq}} (35.9 fb^{-1})}{#it{[EXO-16-048]}}","FL")
-            elif analysis == "monoZ"      : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + Z_{ll}} (35.9 fb^{-1})}{#it{[EXO-16-052]}}","FL")
-            elif analysis == "monophoton" : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + #gamma} (12.9 fb^{-1})}{#it{[EXO-16-039]}}","FL")
-            elif analysis == "monoHgg" : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + H_{#gamma #gamma}} (35.9 fb^{-1})}{#it{[EXO-16-054]}}","FL")
+            elif analysis == "monojet"    : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + j/V_{qq}} (35.9 fb^{-1})}{#it{[EXO-16-048]}}","L")
+            elif analysis == "monoZ"      : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + Z_{ll}} (35.9 fb^{-1})}{#it{[EXO-16-052]}}","L")
+            elif analysis == "monophoton" : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + #gamma} (12.9 fb^{-1})}{#it{[EXO-16-039]}}","L")
+            elif analysis == "monoHgg" : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + H_{#gamma #gamma}} (35.9 fb^{-1})}{#it{[EXO-16-054]}}","L")
             #else                          : leg1.AddEntry(tgraph[analysis],text[analysis])
 
 
@@ -784,12 +784,12 @@ def make_plot(DDresult, Resonances, DijetOnly):
         tgraph[analysis].SetFillColor(color[analysis])
         tgraph[analysis].SetFillColor(color[analysis])
         tgraph[analysis].SetFillStyle(3005)
-        tgraph[analysis].SetLineWidth( 204)
+        tgraph[analysis].SetLineWidth( 203)
         tgraph[analysis].SetLineStyle(linestyle[analysis])
         tgraph[analysis].SetMarkerSize(0.1)
         tgraph[analysis].SetMarkerColor(color[analysis])
         if analysis=="monoZ":
-            tgraph[analysis].SetLineWidth(-204)
+            tgraph[analysis].SetLineWidth(-203)
         if analysis=="dijet" or analysis == "dijet_2016" or analysis=="trijet":
             tgraph[analysis].SetLineWidth(2)
             tgraph[analysis].SetFillStyle(1001)

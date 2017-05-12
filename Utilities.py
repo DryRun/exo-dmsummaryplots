@@ -268,13 +268,13 @@ def read_graphs():
 
     graphs["trijet"]["A1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("obs_025")
     graphs["trijet"]["A1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("exp_025")
-    graphs["trijet"]["A2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root").Get("obs_025")
+    graphs["trijet"]["A2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1_MT.root").Get("obs_025")
     graphs["trijet"]["A2"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root").Get("exp_025")
 
 
     graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("obs_025")
     graphs["trijet"]["V1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("exp_025")
-    graphs["trijet"]["V2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root").Get("obs_025")
+    graphs["trijet"]["V2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1_MT.root").Get("obs_025")
     graphs["trijet"]["V2"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root").Get("exp_025")
 
 

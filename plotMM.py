@@ -199,7 +199,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
     # Scenario
     scenario_coords = get_scenario_label_coordinates(not Dijet,logx)
-    scenario_label = get_scenario_labels()
+    scenario_label = get_scenario_labels(logx)
     texts.append(add_text(0.08,0.33,0.9,1.0,"#bf{CMS} Preliminary"))
     try:
         texts.append(add_text(*scenario_coords[scenario_name],TEXT=scenario_label[scenario_name],alignment=12))

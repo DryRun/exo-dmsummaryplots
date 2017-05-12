@@ -151,7 +151,7 @@ def extrapolation( tgraph, DijetOnly, Resonances, metless, metx, mDM_lb ):
             tgraph[analysis].GetPoint(i,mDM,xsec)
             DDgraph_extr[analysis].SetPoint(i,mDM,xsec)
 
-        extrafac = 5000
+        extrafac = 10
 
         mDM_ref  = Double(0)
         xsec_ref = Double(0)

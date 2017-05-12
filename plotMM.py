@@ -213,7 +213,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     scenario_label = get_scenario_labels()
     texts.append(add_text(0.08,0.33,0.9,1.0,"#bf{CMS} Preliminary"))
     try:
-        texts.append(add_text(*scenario_coords[scenario_name],TEXT=scenario_label[scenario_name]))
+        texts.append(add_text(*scenario_coords[scenario_name],TEXT=scenario_label[scenario_name],alignment=12))
     except KeyError:
         pass
 

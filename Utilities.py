@@ -428,17 +428,18 @@ def get_text():
 
 def get_scenario_label_coordinates(metxonly=False):
     coords = {}
-    coords["A1"] = (0.22,0.42,0.6,0.85)
-    coords["A2"] = (0.4,0.6,0.6,0.85)
+    coords["A1"] = (0.2,0.7,0.6,0.85)
+    coords["A2"] = (0.37,0.87,0.6,0.85)
     coords["A3"] = (0.1,0.3,0.6,0.85)
     coords["A4"] = (0.1,0.3,0.6,0.85)
-    coords["V1"] = (0.23,0.43,0.6,0.85)
-    coords["V2"] = (0.45,0.65,0.6,0.85)
+    coords["V1"] = (0.215,0.415,0.6,0.85)
+    coords["V2"] = (0.4,0.6,0.6,0.85)
     coords["V3"] = (0.1,0.3,0.6,0.85)
     coords["V4"] = (0.1,0.3,0.6,0.85)
 
     if(metxonly):
-        coords["A1"] = (0.15,0.35,0.6,0.85)
+        coords["A1"] = (0.12,0.62,0.6,0.85)
+        coords["V1"] = (0.12,0.62,0.6,0.85)
     return coords
 
 def get_relic_coordinates():
@@ -488,13 +489,13 @@ def get_diagonal_coordinates():
     return coords
 def get_scenario_labels():
     label = {}
-    label["A1"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.25}","#it{g_{l} = 0}" ]
-    label["A2"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.1}","#it{g_{l} = 0.1}" ]
-    label["A3"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 1.0}","#it{g_{l} = 0}" ]
+    label["A1"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q}  = 0.25}","#it{g_{l} = 0}" ]
+    label["A2"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q}  = 0.1}","#it{g_{l} = 0.1}" ]
+    label["A3"] = [ "#bf{Axial-vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q}  = 1.0}","#it{g_{l} = 0}" ]
     label["A4"] = label["A1"]
-    label["V1"] = [ "#bf{Vector mediator}", "Dirac DM",          "#it{g_{DM} = 1.0}","#it{g_{q} = 0.25}","#it{g_{l} = 0}" ]
-    label["V2"] = [ "#bf{Vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 0.1}","#it{g_{l} = 0.01}" ]
-    label["V3"] = [ "#bf{Vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q} = 1.0}","#it{g_{l} = 0}" ]
+    label["V1"] = [ "#bf{Vector mediator}", "Dirac DM","#it{g_{DM} = 1.0}","#it{g_{q}  = 0.25}","#it{g_{l} = 0}" ]
+    label["V2"] = [ "#bf{Vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q}  = 0.1}","#it{g_{l} = 0.01}" ]
+    label["V3"] = [ "#bf{Vector mediator}","Dirac DM", "#it{g_{DM} = 1.0}","#it{g_{q}  = 1.0}","#it{g_{l} = 0}" ]
     label["V4"] = label["V1"]
 
     return label

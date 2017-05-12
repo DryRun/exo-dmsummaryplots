@@ -409,9 +409,9 @@ def make_plot(DDresult, Resonances, DijetOnly):
         leg1.SetTextAlign(12)
         leg1.Clear()
         if DDresult=="SI":
-            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Vector med., Dirac DM; g_{q} = 0.25, g_{DM} = 1.0}")
+            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Vector med., Dirac DM; g_{ q} = 0.25, g_{DM} = 1.0}")
         elif DDresult=="SD":
-            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Axial-vector med., Dirac DM; g_{q} = 0.25, g_{DM} = 1.0}")
+            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Axial-vector med., Dirac DM; g_{ q} = 0.25, g_{DM} = 1.0}")
 
         leg2=C.BuildLegend(0.7,0.05,0.95,0.4)
         leg2.SetBorderSize(0)

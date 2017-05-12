@@ -185,7 +185,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     #### Legend
     leg = make_legend(scenario_name,logx)
     auxleg = make_auxiliary_legend(scenario_name,logx)
-    auxleg.AddEntry(g1,"M_{Med} = 2 x m_{DM}","L")
+    auxleg.AddEntry(g1,"M_{Med} = 2 x m_{ DM}","L")
     # Dummy entries are non-colored lines
     # Do not need to do anything with them
     # just keep them around

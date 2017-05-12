@@ -268,13 +268,13 @@ def read_graphs():
 
     graphs["trijet"]["A1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("obs_025")
     graphs["trijet"]["A1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("exp_025")
-    graphs["trijet"]["A2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root").Get("obs_025")
+    graphs["trijet"]["A2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1_MT.root").Get("obs_025")
     graphs["trijet"]["A2"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root").Get("exp_025")
 
 
     graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("obs_025")
     graphs["trijet"]["V1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("exp_025")
-    graphs["trijet"]["V2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root").Get("obs_025")
+    graphs["trijet"]["V2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1_MT.root").Get("obs_025")
     graphs["trijet"]["V2"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root").Get("exp_025")
 
 
@@ -443,7 +443,7 @@ def get_scenario_label_coordinates(metxonly=False,logx=False):
 
     if(logx):
         coords["A1"] = (0.12,0.62,0.6,0.85)
-        coords["A2"] = (0.1,0.5,0.6,0.85)
+        coords["A2"] = (0.65,0.9,0.7,0.9)
         coords["A3"] = (0.1,0.3,0.6,0.85)
         coords["A4"] = (0.1,0.3,0.6,0.85)
         coords["V1"] = (0.215,0.415,0.6,0.85)
@@ -497,7 +497,7 @@ def get_diagonal_coordinates():
     coords["V3"] = (0.1,0.3,0.6,0.85)
     coords["V4"] = (0.1,0.3,0.6,0.85)
     return coords
-def get_scenario_labels():
+def get_scenario_labels(logx):
     label = {}
     label["A1"] = [ "#bf{Axial-vector mediator}","Dirac DM", "g_{DM} = 1.0","g_{q}  = 0.25","g_{l} = 0" ]
     label["A2"] = [ "#bf{Axial-vector mediator}","Dirac DM", "g_{DM} = 1.0","g_{q}  = 0.1","g_{l} = 0.1" ]
@@ -508,6 +508,8 @@ def get_scenario_labels():
     label["V3"] = [ "#bf{Vector mediator}","Dirac DM", "g_{DM} = 1.0","g_{q}  = 1.0","g_{l} = 0" ]
     label["V4"] = label["V1"]
 
+    if(logx):
+        label["A2"] = [ "#bf{Axial-vector mediator}","Dirac DM, g_{DM} = 1.0", "g_{q} = 0.1, g_{ l} = 0.1" ]
     return label
 
 def make_dummy_entries(legend):

@@ -426,7 +426,7 @@ def get_text():
     text["monotop"]        = "#splitline{#bf{DM + t} (100% FC, 35.8 fb^{-1}) }{#it{[EXO-16-051]}}"
     return text
 
-def get_scenario_label_coordinates(metxonly=False):
+def get_scenario_label_coordinates(metxonly=False,logx=False):
     coords = {}
     coords["A1"] = (0.2,0.7,0.6,0.85)
     coords["A2"] = (0.37,0.87,0.6,0.85)
@@ -440,6 +440,16 @@ def get_scenario_label_coordinates(metxonly=False):
     if(metxonly):
         coords["A1"] = (0.12,0.62,0.6,0.85)
         coords["V1"] = (0.12,0.62,0.6,0.85)
+
+    if(logx):
+        coords["A1"] = (0.12,0.62,0.6,0.85)
+        coords["A2"] = (0.1,0.5,0.6,0.85)
+        coords["A3"] = (0.1,0.3,0.6,0.85)
+        coords["A4"] = (0.1,0.3,0.6,0.85)
+        coords["V1"] = (0.215,0.415,0.6,0.85)
+        coords["V2"] = (0.55,0.75,0.6,0.85)
+        coords["V3"] = (0.1,0.3,0.6,0.85)
+        coords["V4"] = (0.1,0.3,0.6,0.85)
     return coords
 
 def get_relic_coordinates():
@@ -526,7 +536,7 @@ def make_dummy_entries(legend):
 
     return [dummy_obs,dummy_exp]
 
-def make_legend(scenario_name):
+def make_legend(scenario_name,logx=False):
     import ROOT as r
     coords = {}
     coords["A1"] = (0.68,0.15,0.87,0.65)
@@ -558,7 +568,7 @@ def make_legend(scenario_name):
 
     return leg
 
-def make_auxiliary_legend(scenario_name):
+def make_auxiliary_legend(scenario_name,logx=False):
     import ROOT as r
     coords = {}
     coords["A1"] = (0.68,0.7,0.87,0.85)

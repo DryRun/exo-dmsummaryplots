@@ -148,7 +148,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     C.cd(1).SetTicky()
 
     if logx:
-        frame = C.cd(1).DrawFrame(90,0,3700, 1450)
+        frame = C.cd(1).DrawFrame(40,0,4e4,2000)
         C.cd(1).SetLogx()
     else :
         if scenario_name in ["A3","V3"]:
@@ -183,8 +183,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     g1.Draw("L")
 
     #### Legend
-    leg = make_legend(scenario_name)
-    auxleg = make_auxiliary_legend(scenario_name)
+    leg = make_legend(scenario_name,logx)
+    auxleg = make_auxiliary_legend(scenario_name,logx)
     auxleg.AddEntry(g1,"M_{Med} = 2 x m_{DM}","L")
     # Dummy entries are non-colored lines
     # Do not need to do anything with them
@@ -197,19 +197,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     ### Labeling
     texts.append(add_text(0.7,0.85,0.9,1.0,"LHCP 2017"))
 
-    #~ # Relic
-    #~ relic_coords = get_relic_coordinates()
-    #~ relic_angles = get_relic_angles()
-    #~ for coord in relic_coords[scenario_name]:
-        #~ texts.append(add_text(*coord,TEXT="#Omega_{c} h^{2} #geq 0.12",color=color["relic"],angle=relic_angles[scenario_name]))
-
-    #~ # Diagonal
-    #~ diagonal_coords = get_diagonal_coordinates()
-    #~ diagonal_angles = get_diagonal_angles()
-    #~ texts.append(add_text(*diagonal_coords[scenario_name],TEXT="M_{Med} = 2 x m_{DM}",color=color["relic"],angle=diagonal_angles[scenario_name]))
-
     # Scenario
-    scenario_coords = get_scenario_label_coordinates(not Dijet)
+    scenario_coords = get_scenario_label_coordinates(not Dijet,logx)
     scenario_label = get_scenario_labels()
     texts.append(add_text(0.08,0.33,0.9,1.0,"#bf{CMS} Preliminary"))
     try:
@@ -303,18 +292,19 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     if METX      : figname += "_METX"
     if Dilepton  : figname += "_Dilepton"
     if Dijet     : figname += "_Multijet"
-    figname += "_Scenario"+Scenario+"_Summary.pdf"
+    figname += "_Scenario"+Scenario+"_Summary"
+    if(logx): figname += "logx"
+    figname +=".pdf"
     C.cd(1).RedrawAxis()
-    #~ if(scenario_name in ["A2","V2"]):
-        #~ C.cd(1).SetLogx(1)
+    C.cd(1).SetLogx(logx)
     C.SaveAs("{OUTPUT}/{FILE}".format(OUTPUT=output,FILE=figname))
     C.Close()
 
 for Mediator in ["Axial", "Vector"]:
     for Scenario in ["1", "2"]:
         for Resonances in [0,1]:
-            make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
-
+            for logx in [0,1]:
+                make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=logx, CL="95",do_expected=True)
 
 ###########
 ### FIN ###

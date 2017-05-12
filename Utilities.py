@@ -375,8 +375,8 @@ def get_color():
     color["trijet"]         = r.kCyan-10
     color["chi"]            = r.kBlue
     ### MET+X
-    color["monojet"]        = r.kRed+1#kRed+1
-    color["monophoton"]     = r.kOrange+10#kRed+2
+    color["monojet"]        = r.kRed+2#kRed+1
+    color["monophoton"]     = r.kOrange+9#kRed+2
     color["monoz"]          = r.kOrange-3#kRed+3
     color["monoHgg"]        = r.kMagenta-7#kRed+3
     color["monotop"]        = r.kViolet+1
@@ -400,9 +400,9 @@ def get_line_color():
     color["trijet"]         = r.kCyan-5
     color["chi"]            = r.kBlue
     ### MET+X
-    color["monojet"]        = r.kRed+1#kRed+1
-    color["monophoton"]     = r.kOrange+10#kRed+2
-    color["monoz"]          = r.kOrange-3#kRed+3
+    color["monojet"]        = r.kRed+2#kRed+1
+    color["monophoton"]     = r.kOrange+9#kRed+2
+    color["monoz"]          = r.kOrange+1#kRed+3
     color["monoHgg"]        = r.kMagenta-7#kRed+3
     color["monotop"]        = r.kViolet+1
 

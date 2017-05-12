@@ -303,8 +303,10 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 for Mediator in ["Axial", "Vector"]:
     for Scenario in ["1", "2"]:
         for Resonances in [0,1]:
-            for logx in [0,1]:
-                make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=logx, CL="95",do_expected=True)
+            make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
+            if(Scenario=="2"):
+                make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
+
 
 ###########
 ### FIN ###

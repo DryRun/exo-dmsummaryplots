@@ -206,11 +206,128 @@ def add_text(x1, x2, y1, y2, TEXT, color=1, alignment=22, angle = 0, argument="N
    T.Draw("same");
    T.SetBorderSize(0);
    return T
+
+def load_inputs(analyses,scenarios,quantiles):
+
+    inputfiles = {}
+    objects = {}
+    for a in analyses:
+        inputfiles[a] = {}
+        objects[a] = {}
+        for s in scenarios:
+            inputfiles[a][s] = {}
+            objects[a][s] = {}
+            for q in quantiles:
+                inputfiles[a][s][q] = None
+                objects[a][s][q] = None
+
+
+    inputfiles["monojet"]["A1"]["obs"] = "Monojet/EXO-16-048/ScanMM/scan2D_axial.root"
+    inputfiles["monojet"]["A1"]["exp"] = "Monojet/EXO-16-048/ScanMM/scan2D_axial.root"
+    inputfiles["monojet"]["V1"]["obs"] = "Monojet/EXO-16-048/ScanMM/scan2D_vector.root"
+    inputfiles["monojet"]["V1"]["exp"] = "Monojet/EXO-16-048/ScanMM/scan2D_vector.root"
+    inputfiles["dilepton"]["A2"]["obs"] = "Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root"
+    inputfiles["dilepton"]["A2"]["exp"] = "Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root"
+    inputfiles["dilepton"]["V2"]["obs"] = "Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root"
+    inputfiles["dilepton"]["V2"]["exp"] = "Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root"
+    inputfiles["monoz"]["A1"]["obs"] = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt"
+    inputfiles["monoz"]["A1"]["exp"] = "MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_axial_cl95.txt"
+    inputfiles["monoz"]["V1"]["obs"] = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt"
+    inputfiles["monoz"]["V1"]["exp"] = "MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_vector_cl95.txt"
+    inputfiles["monophoton"]["A1"]["obs"] ="Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
+    inputfiles["monophoton"]["A1"]["exp"] ="Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_exp.root"
+    inputfiles["monophoton"]["V1"]["obs"] ="Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
+    inputfiles["monophoton"]["V1"]["exp"] ="Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_exp.root"
+    inputfiles["monoHgg"]["V1"]["obs"] = "MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
+    inputfiles["monoHgg"]["V1"]["exp"] = "MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
+    inputfiles["monotop"]["V4"]["obs"] = "Monotop/ScanMM/fcnc2d_obs_vector.root"
+    inputfiles["dijet"]["A1"]["obs"] = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_MT.root"
+    inputfiles["dijet"]["A1"]["exp"] = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.root"
+    inputfiles["dijet"]["A2"]["obs"] = "Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1_MT.root"
+    inputfiles["dijet"]["A2"]["exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1.root"
+    inputfiles["dijet"]["V1"]["obs"] = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_MT.root"
+    inputfiles["dijet"]["V1"]["exp"] = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root"
+    inputfiles["dijet"]["V2"]["obs"] = "Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1_MT.root"
+    inputfiles["dijet"]["V2"]["exp"] = "Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1.root"
+    inputfiles["dijetchi"]["A3"]["obs"] = "DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root"
+    inputfiles["dijetchi"]["V3"]["obs"] = "DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root"
+    inputfiles["trijet"]["A1"]["obs"] = "Trijet/ScanMM/MMedMDM_av.root"
+    inputfiles["trijet"]["A1"]["exp"] = "Trijet/ScanMM/MMedMDM_av.root"
+    inputfiles["trijet"]["A2"]["obs"] = "Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1_MT.root"
+    inputfiles["trijet"]["A2"]["exp"] = "Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root"
+    inputfiles["trijet"]["V1"]["obs"] = "Trijet/ScanMM/MMedMDM_v.root"
+    inputfiles["trijet"]["V1"]["exp"] = "Trijet/ScanMM/MMedMDM_v.root"
+    inputfiles["trijet"]["V2"]["obs"] = "Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1_MT.root"
+    inputfiles["trijet"]["V2"]["exp"] = "Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root"
+
+    inputfiles["relic"]["A1"]["obs"] = "Relic/madDMv2_0_6/relic_A1.root"
+    inputfiles["relic"]["A2"]["obs"] = "Relic/madDMv2_0_6/relic_A2.root"
+    inputfiles["relic"]["A3"]["obs"] = "Relic/madDMv2_0_6/relic_axial_gq1.root"
+    inputfiles["relic"]["V1"]["obs"] = "Relic/madDMv2_0_6/relic_V1.root"
+    inputfiles["relic"]["V2"]["obs"] = "Relic/madDMv2_0_6/relic_V2.root"
+    inputfiles["relic"]["V3"]["obs"] = "Relic/madDMv2_0_6/relic_vector_gq1.root"
+    inputfiles["relic"]["V4"]["obs"] = "Relic/madDMv2_0_6/relic_V1.root"
+
+
+
+
+
+
+    objects["monojet"]["A1"]["obs"] = "contour_observed"
+    objects["monojet"]["A1"]["exp"] = "contour_expected"
+    objects["monojet"]["V1"]["obs"] = "contour_observed"
+    objects["monojet"]["V1"]["exp"] = "contour_expected"
+    objects["dilepton"]["A2"]["obs"] = "obs"
+    objects["dilepton"]["A2"]["exp"] = "exp"
+    objects["dilepton"]["V2"]["obs"] = "obs"
+    objects["dilepton"]["V2"]["exp"] = "exp"
+    objects["monoz"]["A1"]["obs"] = ""
+    objects["monoz"]["A1"]["exp"] = ""
+    objects["monoz"]["V1"]["obs"] = ""
+    objects["monoz"]["V1"]["exp"] = ""
+    objects["monophoton"]["A1"]["obs"] = "monophoton_obs"
+    objects["monophoton"]["A1"]["exp"] = "monophoton_exp"
+    objects["monophoton"]["V1"]["obs"] = "monophoton_obs"
+    objects["monophoton"]["V1"]["exp"] = "monophoton_exp"
+    objects["monoHgg"]["V1"]["obs"] = "observed_baryonic_MonoHgg"
+    objects["monoHgg"]["V1"]["exp"] = "expected_baryonic_MonoHgg"
+    objects["monotop"]["V4"]["obs"] = "observed"
+    objects["dijet"]["A1"]["obs"] = "Obs_90"
+    objects["dijet"]["A1"]["exp"] = "Obs_90"
+    objects["dijet"]["A2"]["obs"] = "obs_025"
+    objects["dijet"]["A2"]["exp"] = "exp_025"
+    objects["dijet"]["V1"]["obs"] = "Obs_90"
+    objects["dijet"]["V1"]["exp"] = "Obs_90"
+    objects["dijet"]["V2"]["obs"] = "obs_025"
+    objects["dijet"]["V2"]["exp"] = "exp_025"
+    objects["dijetchi"]["A3"]["obs"] = "obs_MvsM"
+    objects["dijetchi"]["V3"]["obs"] = "obs_MvsM"
+    objects["trijet"]["A1"]["obs"] = "obs_025"
+    objects["trijet"]["A1"]["exp"] = "exp_025"
+    objects["trijet"]["A2"]["obs"] = "obs_025"
+    objects["trijet"]["A2"]["exp"] = "exp_025"
+    objects["trijet"]["V1"]["obs"] = "obs_025"
+    objects["trijet"]["V1"]["exp"] = "exp_025"
+    objects["trijet"]["V2"]["obs"] = "obs_025"
+    objects["trijet"]["V2"]["exp"] = "exp_025"
+    objects["relic"]["A1"]["obs"] = "mytlist"
+    objects["relic"]["A2"]["obs"] = "mytlist"
+    objects["relic"]["A3"]["obs"] = "mytlist"
+    objects["relic"]["V1"]["obs"] = "mytlist"
+    objects["relic"]["V2"]["obs"] = "mytlist"
+    objects["relic"]["V3"]["obs"] = "mytlist"
+    objects["relic"]["V4"]["obs"] = "mytlist"
+
+
+
+    return inputfiles,objects
+
 def read_graphs():
     import ROOT as r
 
     ### Initialize
     graphs = {}
+    inputfiles = {}
     scenarios = ["A1", "A2", "A3","A4","V1", "V2", "V3","V4"]
     quantiles = ["obs", "exp"]
     analyses = ["monojet","monophoton","monoz","dilepton","dijet","monoHgg","monotop","dijet","trijet","dijetchi","relic"]
@@ -222,70 +339,27 @@ def read_graphs():
                 graphs[a][s][q] = None
 
 
-    graphs["monojet"]["A1"]["obs"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_observed")
-    graphs["monojet"]["A1"]["exp"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_expected")
-    graphs["monojet"]["V1"]["obs"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_observed")
-    graphs["monojet"]["V1"]["exp"] = TFile("Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_expected")
-
-    graphs["dilepton"]["A2"]["obs"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root").Get("obs"),1e3,1e3)
-    graphs["dilepton"]["A2"]["exp"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root").Get("exp"),1e3,1e3)
-    graphs["dilepton"]["V2"]["obs"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root").Get("obs"),1e3,1e3)
-    graphs["dilepton"]["V2"]["exp"] = rescale_graph_axis(TFile("Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root").Get("exp"),1e3,1e3)
-
-
-    graphs["monoz"]["A1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
-    graphs["monoz"]["A1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_axial_cl95.txt")
-    graphs["monoz"]["V1"]["obs"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
-    graphs["monoz"]["V1"]["exp"] = r.TGraph("MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_vector_cl95.txt")
-
-    graphs["monophoton"]["A1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root").Get("monophoton_obs")
-    graphs["monophoton"]["A1"]["exp"] =TFile("Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_exp.root").Get("monophoton_exp")
-    graphs["monophoton"]["V1"]["obs"] =TFile("Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root").Get("monophoton_obs")
-    graphs["monophoton"]["V1"]["exp"] =TFile("Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_exp.root").Get("monophoton_exp")
-
-
-    graphs["monoHgg"]["V1"]["obs"] = TFile("MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("observed_baryonic_MonoHgg")
-    graphs["monoHgg"]["V1"]["exp"] = TFile("MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("expected_baryonic_MonoHgg")
-
-    graphs["monotop"]["V4"]["obs"] = TFile("Monotop/ScanMM/fcnc2d_obs_vector.root").Get("observed")
-
-    graphs["dijet"]["A1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_MT.root").Get("Obs_90")
-    graphs["dijet"]["A1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.root").Get("Obs_90")
-    graphs["dijet"]["A2"]["obs"] = TFile("Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1_MT.root").Get("obs_025")
-    graphs["dijet"]["A2"]["exp"] = TFile("Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1.root").Get("exp_025")
+    inputfiles,objects = load_inputs(analyses,scenarios,quantiles)
 
 
 
+    for a in analyses:
+        for s in scenarios:
+            for q in quantiles:
+                if inputfiles[a][s][q] == None : continue
+                
+                if a == "monoz" :
+                    graphs[a][s][q] = r.TGraph(inputfiles[a][s][q]) #txt files
+                elif a == "relic":
+                    graphs[a][s][q] = TFile(inputfiles[a][s][q]).Get(objects[a][s][q]).At(0)
+                else :
+                    graphs[a][s][q] = TFile(inputfiles[a][s][q]).Get(objects[a][s][q])
 
 
-    graphs["dijet"]["V1"]["obs"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_MT.root").Get("Obs_90")
-    graphs["dijet"]["V1"]["exp"] = TFile("Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root").Get("Obs_90")
-    graphs["dijet"]["V2"]["obs"] = TFile("Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1_MT.root").Get("obs_025")
-    graphs["dijet"]["V2"]["exp"] = TFile("Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1.root").Get("exp_025")
-
-    graphs["dijetchi"]["A3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root").Get("obs_MvsM")
-    graphs["dijetchi"]["V3"]["obs"] = TFile("DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root").Get("obs_MvsM")
-
-    graphs["trijet"]["A1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("obs_025")
-    graphs["trijet"]["A1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_av.root").Get("exp_025")
-    graphs["trijet"]["A2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1_MT.root").Get("obs_025")
-    graphs["trijet"]["A2"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root").Get("exp_025")
-
-
-    graphs["trijet"]["V1"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("obs_025")
-    graphs["trijet"]["V1"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_v.root").Get("exp_025")
-    graphs["trijet"]["V2"]["obs"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1_MT.root").Get("obs_025")
-    graphs["trijet"]["V2"]["exp"] = TFile("Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root").Get("exp_025")
-
-
-
-    graphs["relic"]["A1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist").At(0)
-    graphs["relic"]["A2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist").At(0)
-    graphs["relic"]["A3"]["obs"] = TFile("Relic/madDMv2_0_6/relic_axial_gq1.root").Get("mytlist").At(0)
-    graphs["relic"]["V1"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
-    graphs["relic"]["V2"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist").At(0)
-    graphs["relic"]["V3"]["obs"] = TFile("Relic/madDMv2_0_6/relic_vector_gq1.root").Get("mytlist").At(0)
-    graphs["relic"]["V4"]["obs"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
+    graphs["dilepton"]["A2"]["obs"] = rescale_graph_axis(graphs["dilepton"]["A2"]["obs"],1e3,1e3)
+    graphs["dilepton"]["A2"]["exp"] = rescale_graph_axis(graphs["dilepton"]["A2"]["exp"],1e3,1e3)
+    graphs["dilepton"]["V2"]["obs"] = rescale_graph_axis(graphs["dilepton"]["V2"]["obs"],1e3,1e3)
+    graphs["dilepton"]["V2"]["exp"] = rescale_graph_axis(graphs["dilepton"]["V2"]["exp"],1e3,1e3)
 
 
     return graphs

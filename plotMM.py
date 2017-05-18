@@ -27,55 +27,6 @@ if not All :
 
 logx      = ast.literal_eval(raw_input('Log x? '))
 
-# #A1/V1
-# All = 0
-# Mediator = "Vector"
-# Scenario = "1"
-# METxOnly = 0
-# # Resonances = 1
-# # Dijet = 1
-# # Dilepton = 0
-# logx = 0
-
-
-
-#A1/V1 just MET+X
-# Mediator = "Vector"
-# Scenario = "1"
-# METX = 1
-# Resonances = 1
-# Dijet = 1
-# Dilepton = 0
-# logx = 0
-
-#A2
-# Mediator = "Axial"
-# #Mediator = "Vector"
-# Scenario = "2"
-# METX = 0
-# Resonances = 1
-# Dijet = 0
-# Dilepton = 1
-
-# logx = 0
-
-#dijetchi
-# Mediator = "Vector"
-# Scenario = "dijetchi"
-# METX = 0
-# Resonances = 1
-# Dijet = 1
-# Dilepton = 0
-# logx = 0
-
-
-#Monotop
-# Mediator = "Vector"
-# Scenario = "Monotop"
-# METX = 1
-# Resonances = 0
-# logx = 0
-
 
 CL = "95"
 

@@ -30,7 +30,8 @@ def do_plot(Mediator,ObsOnly):
 				#"METbb_DMtt_obs",
 				#"METbb_DMbb_obs"
 				#,"METbb_DMhf_obs"
-				"METHF_DMhf_obs"
+				"METHF_DMhf_obs",
+				"Stop_obs"
 				]
 	
 	if not ObsOnly: analyses=["BSM",
@@ -40,8 +41,8 @@ def do_plot(Mediator,ObsOnly):
 							#"METbb_DMbb_obs","METbb_DMbb_exp"
 							#"METbb_DMtt_exp","METbb_DMtt_obs",
 							"METHF_DMhf_obs","METHF_DMhf_exp",
+							"Stop_obs","Stop_exp"
 							]
-	
 	tgraph    = {}
 	color     = {}
 	text      = {}
@@ -68,6 +69,8 @@ def do_plot(Mediator,ObsOnly):
 		filepath["METbb_DMbb_exp"] = "DMbb/2015/Limits_hfDMs.root"
 		filepath["METbb_DMhf_exp"] = "DMbb/2015/Limits_hfDMs.root"
 		filepath["METHF_DMhf_exp"] = "DMHF/2015/HF_spin0_limits.root"
+		filepath["Stop_obs"]	   = "Stop/SUS-17-001/S_1_obs.txt"
+		filepath["Stop_exp"]	   = "Stop/SUS-17-001/S_1_exp.txt"
 	if Mediator == "Pseudo":
 		filepath["monojet_obs"]    = "Monojet/EXO-16-048/ScanMM/limit_pseudoscalar_1D.root"
 		filepath["monojet_exp"]    = "Monojet/EXO-16-048/ScanMM/limit_pseudoscalar_1D.root"
@@ -83,29 +86,21 @@ def do_plot(Mediator,ObsOnly):
 		filepath["METbb_DMbb_exp"] = "DMbb/2015/Limits_hfDMps.root"
 		filepath["METbb_DMhf_exp"] = "DMbb/2015/Limits_hfDMps.root"
 		filepath["METHF_DMhf_exp"] = "DMHF/2015/HF_spin0_limits.root"
-	
+		filepath["Stop_obs"]	   = "Stop/SUS-17-001/PS_1_obs.txt"
+		filepath["Stop_exp"]	   = "Stop/SUS-17-001/PS_1_exp.txt"
 	#######################
 	### Plot linestyles ###
 	#######################
 	
 	linestyle["BSM" ]           = 1
 	#MET+jets
-	linestyle["monojet_obs"]    = kSolid
-	linestyle["monojet_exp"]    = kDashed
-	linestyle["monoz_obs"]    = kSolid
-	linestyle["monoz_exp"]    = kDashed
-	# HF
-	linestyle["DMtt_obs"]       = kSolid
-	linestyle["METbb_DMtt_obs"] = kSolid
-	linestyle["METbb_DMbb_obs"] = kSolid
-	linestyle["METbb_DMhf_obs"] = kSolid
-	linestyle["METHF_DMhf_obs"] = kSolid
-	linestyle["DMtt_exp"]       = kDashed
-	linestyle["METbb_DMtt_exp"] = kDashed
-	linestyle["METbb_DMbb_exp"] = kDashed
-	linestyle["METbb_DMhf_exp"] = kDashed
-	linestyle["METHF_DMhf_exp"] = kDashed
-	
+
+	for analysis in analyses:
+		if("obs" in analysis.lower()):
+			linestyle[analysis] = kSolid
+		elif("exp" in analysis.lower()):
+			linestyle[analysis] = kDashed
+
 	###################
 	### Plot colors ###
 	###################
@@ -119,6 +114,8 @@ def do_plot(Mediator,ObsOnly):
 	color["METbb_DMhf_obs"] = kGreen+2
 	color["METbb_DMtt_obs"] = kGreen+2
 	color["METHF_DMhf_obs"] = kGreen+2
+
+	color["Stop_obs"] = kAzure+2
 	##
 	color["monojet_exp"]    = color["monojet_obs"]
 	color["monoz_exp"]    = color["monoz_obs"]
@@ -127,7 +124,7 @@ def do_plot(Mediator,ObsOnly):
 	color["METbb_DMtt_exp"] = color["METbb_DMtt_obs"]
 	color["METbb_DMhf_exp"] = color["METbb_DMhf_obs"]
 	color["METHF_DMhf_exp"] = color["METHF_DMhf_obs"]
-	
+	color["Stop_exp"] = color["Stop_obs"]
 	##################
 	### Plot texts ###
 	##################
@@ -140,6 +137,7 @@ def do_plot(Mediator,ObsOnly):
 	#~ text["METbb_DMtt_obs"] = "DM + tt (nj<4) [B2G-15-007]"
 	#~ text["METbb_DMhf_obs"] = "MET+bb: DM+HF [B2G-15-007]"
 	text["METHF_DMhf_obs"] = "#splitline{#bf{DM + tt/bb} (2.2 fb^{-1})}{[EXO-16-005]}"
+	text["Stop_obs"] = "#splitline{#bf{DM + tt(ll)} (35.9 fb^{-1})}{[SUS-17-001]}"
 	#exp
 	#~ text["monojet_exp"]    = "exp.excl 95%CL"
 	#~ text["monoz_exp"]    = "exp.excl 95%CL"
@@ -247,7 +245,7 @@ def do_plot(Mediator,ObsOnly):
 	texts = []
 	medname = Mediator if Mediator=="Scalar" else Mediator+"scalar"
 	texts.append(add_text(0.55,0.9,0.65,0.85,["#bf{{{MED} Mediator}}".format(MED=medname),"Dirac DM","g_{q} = 1.0", "g_{DM} = 1.0", "m_{DM} = 1 GeV"],alignment=12))
-	texts.append(add_text(0.7,0.85,0.86,1.0,"LHCP 2017"))
+	texts.append(add_text(0.7,0.85,0.86,1.0,"EPS 2017"))
 	#~ leg3.SetHeader("2.2 fb^{-1} & 35.9 fb^{-1} (13 TeV)")
 	
 	############

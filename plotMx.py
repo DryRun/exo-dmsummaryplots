@@ -91,7 +91,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
     if DDresult == "SI":
         filepath["XENON1T"]        = "DD/SI/xenon1t.txt" 
         filepath["LUX"]            = "DD/SI/LUX_SI_Combination_Oct2016.txt"#"DD/SI/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
-        filepath["PandaX"]         = "DD/SI/pandax.txt"
+        filepath["PandaX"]         = "DD/SI/pandax_2017.txt"
         filepath["CDMSlite"]       = "DD/SI/cdmslite2015.txt"
         filepath["Cresst"]         = "DD/SI/cresstii.txt"
         filepath["vFloor"]         = "DD/SI/Neutrino_SI.txt"
@@ -420,7 +420,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
             elif analysis == "trijet"     : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{Boosted dijet} (35.9 fb^{-1})}{#it{[EXO-17-001]}}")
             elif analysis == "XENON1T"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1705.06655]}}","L")
             elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}","L")#1608.07648]}}") #[arXiv:1512.03506]}}")
-            elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1607.07400]}}","L")
+            elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1708.06917]}}","L")
             elif analysis == "CDMSlite"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.02448]}}","L")
             elif analysis == "Cresst"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.01515]}}","L")
             elif analysis == "PICASSO"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1611.01499]}}","L")

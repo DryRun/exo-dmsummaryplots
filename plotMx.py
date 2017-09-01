@@ -22,10 +22,6 @@ TextonPlot = False
 
 DijetOnly = False
 
-#~ DDresult = raw_input('Choose DD [SI or SD]: ')
-#~ Resonances  = ast.literal_eval(raw_input('Resonances? [True or False]: '))
-#~ if Resonances: DijetOnly = ast.literal_eval(raw_input('Dijet only? [True or False]: '))
-
 DDresult = "SD"
 Resonances = 1
 DijetOnly = 0
@@ -62,7 +58,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
     if not DijetOnly:
         analyses.extend(metx)
         cmsanalyses.extend(metx)
-        
+
     if vFloor: analyses += ["vFloor"]
 
     print "***********************"
@@ -89,14 +85,13 @@ def make_plot(DDresult, Resonances, DijetOnly):
     #############
 
     if DDresult == "SI":
-        filepath["XENON1T"]        = "DD/SI/xenon1t.txt" 
+        filepath["XENON1T"]        = "DD/SI/xenon1t.txt"
         filepath["LUX"]            = "DD/SI/LUX_SI_Combination_Oct2016.txt"#"DD/SI/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
         filepath["PandaX"]         = "DD/SI/pandax_2017.txt"
         filepath["CDMSlite"]       = "DD/SI/cdmslite2015.txt"
         filepath["Cresst"]         = "DD/SI/cresstii.txt"
         filepath["vFloor"]         = "DD/SI/Neutrino_SI.txt"
 
-        #~ filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
         filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
         filepath["dijet_exp"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
 
@@ -109,35 +104,13 @@ def make_plot(DDresult, Resonances, DijetOnly):
         filepath["monoHgg"]          = "MonoHgg/ScanMM/EXO-16-054/input_combo_MonoHgg_25April_90CL.root"
 
     elif DDresult == "SD" :
-        # filepath["Pico2L"]         = "DD/SD/Pico2L.txt"
-        # filepath["Pico60"]         = "DD/SD/Pico60.txt"
-        # filepath["SuperK"]         = "DD/SD/SuperKtautau.txt"
-        # filepath["IceCube"]        = "DD/SD/IceCubetautau.txt"
-
-        # filepath["PICASSO"]         = "Pico60/PicassoFinal.root"
-        # filepath["Pico60"]         = "Pico60/Pico602017.root"
-        # filepath["SuperKbb"]      = "Pico60/Neutrino.root"
-        # filepath["IceCubebb"]     = "Pico60/Neutrino.root"
-        # filepath["IceCubett"]     = "Pico60/Neutrino.root"
-
         filepath["PICASSO"]         = "DirectDetection/PicassoFinal.root"
         filepath["Pico60"]         = "DirectDetection/Pico602017.root"
         filepath["SuperKbb"]      = "DirectDetection/SuperKbb.root"
         filepath["IceCubebb"]     = "DirectDetection/IceCubebb.root"
         filepath["IceCubett"]     = "DirectDetection/IceCubett.root"
         filepath["vFloor"]         = "DD/SD/Neutrino_SD.txt"
-        ### ICHEP
-    #    filepath["dijet"]          = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil500.root"
-    #from Tyler EXO-16-056
         filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
-        ### Dijet paper
-        #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil600.root"
-        #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_90_Phil600.root"
-
-        #filepath["dijet_2016"]     = "Dijet/ScanMM/MMedMDM_dijet_av_90_top56.root"
-        #filepath["dijet_2016_exp"] = "Dijet/ScanMM/MMedMDM_dijet_av_90_top56.root"
-        #~ filepath["dijet_2016"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
-        #~ filepath["dijet_2016_exp"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
         filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av_90.root"
         filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/limits_DD_axial.root"
         filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root" #outdated
@@ -208,7 +181,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
     linecolor = {}
     linecolor["dijet"] = kYellow +3
     linecolor["trijet"] = kCyan-5
-    
+
     ##################
     ### Plot texts ###
     ##################
@@ -251,25 +224,16 @@ def make_plot(DDresult, Resonances, DijetOnly):
     ####################
 
     for analysis in analyses:
-    #    if   analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("obs_025")
-
-    #from Tyler EXO-16-056
         if   analysis == "dijet"          : tgraph["dijet"]          = TFile(filepath[analysis]).Get("Obs_90")
-
-        #elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("obs_025")
-        #elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("exp_025")
         elif analysis == "dijet_2016"     : tgraph["dijet_2016"]     = TFile(filepath[analysis]).Get("Obs_90")
         elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("Obs_90")
-    #    elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("observed")
         elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")
-        elif analysis == "monojet"        :
-            tgraph["monojet"]        = TFile(filepath[analysis]).Get("contour_obs_graph")
+        elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("contour_obs_graph")
         elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
-        elif analysis == "monoZ"   : tgraph["monoZ"]          = TGraph(filepath[analysis])
-        elif analysis == "monoHgg"        : tgraph["monoHgg"]     = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")
+        elif analysis == "monoZ"          : tgraph["monoZ"]          = TGraph(filepath[analysis])
+        elif analysis == "monoHgg"        : tgraph["monoHgg"]        = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")
 
 
-    #    elif analysis == "monotop"        : tgraph["monotop"]        = TFile(filepath[analysis]).Get("observed")
         elif analysis == "PICASSO"        : tgraph["PICASSO"]        = TFile(filepath[analysis]).Get("Obs_90")
         elif analysis == "Pico60"         : tgraph["Pico60"]         = TFile(filepath[analysis]).Get("Obs_90")
         elif analysis == "SuperKbb"       : tgraph["SuperKbb"]       = TFile(filepath[analysis]).Get("Obs_90")
@@ -292,15 +256,11 @@ def make_plot(DDresult, Resonances, DijetOnly):
                 mMed = Double(0)
                 mDM  = Double(0)
                 tgraph[analysis].GetPoint(i,mMed,mDM)
-                #~ print "SI - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
                 if analysis == "monophoton":
                     DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))
-                # elif analysis == "monojet" or analysis == "monoZ":
-                #     DDgraph[analysis]=tgraph[analysis]
                 else:
                     mR = Double(0.939*mDM)/(0.939+mDM)
                     xsec = Double(c_SI*(mR*mR)/(mMed*mMed*mMed*mMed))
-    #                print "x-sec = ", xsec
                     DDgraph[analysis].SetPoint(i,mDM,xsec)
                     if analysis == "monoHgg" :
                         print "SD - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
@@ -315,26 +275,13 @@ def make_plot(DDresult, Resonances, DijetOnly):
                 mMed = Double(1)
                 mDM  = Double(1)
                 tgraph[analysis].GetPoint(i,mMed,mDM)
-    #            print "SD - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
                 if analysis == "monophoton":
                     DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))
                 else:
                     mR = Double(0.939*mDM)/(0.939+mDM)
                     xsec = Double(c_SD*(mR*mR)/(mMed*mMed*mMed*mMed))
-    #               print "x-sec = ", xsec
                     DDgraph[analysis].SetPoint(i,mDM,xsec)
             tgraph[analysis] = DDgraph[analysis]
-
-        print "****BEFORE EXTRAPOLATIOn*****"
-        #~ for analysis in cmsanalyses :
-    #        print "Analysis ", analysis
-            #~ for i in range(0,tgraph[analysis].GetN()) :
-                #~ mDM_i  = Double(0)
-                #~ xsec_i = Double(0)
-                #~ tgraph[analysis].GetPoint(i,mDM_i,xsec_i)
-    #            print "i = ", i, " mDM_i = ", mDM_i, "xsec_i = ", xsec_i
-        print "*********"
-
 
     if Extend :
         extrapolation( tgraph, DijetOnly, Resonances, resonances, metx, mDM_lb )
@@ -377,12 +324,6 @@ def make_plot(DDresult, Resonances, DijetOnly):
     frame.GetXaxis().SetTitleOffset(1.0)
     frame.GetYaxis().SetTitleOffset(1.5)
 
-    #~ if not DijetOnly:
-        #~ if DDresult == "SI" : leg  = TLatex(100,3e-34,"#it{LHCP 2017}")
-        #~ if DDresult == "SD" : leg  = TLatex(100,3e-36,"#it{LHCP 2017}")
-        #~ leg.SetTextFont(42)
-        #~ leg.SetTextSize(0.04)
-        #~ leg.Draw("same")
     if DijetOnly:
         if DDresult == "SI" : leg  = TLatex(0.1,1.2e-38,"#bf{CMS}")
         if DDresult == "SD" : leg  = TLatex(0.1,1.2e-37,"#bf{CMS}")
@@ -431,301 +372,8 @@ def make_plot(DDresult, Resonances, DijetOnly):
             elif analysis == "monojet"    : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + j/V_{qq}} (35.9 fb^{-1})}{#it{[EXO-16-048]}}","L")
             elif analysis == "monoZ"      : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + Z_{ll}} (35.9 fb^{-1})}{#it{[EXO-16-052]}}","L")
             elif analysis == "monophoton" : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + #gamma} (12.9 fb^{-1})}{#it{[EXO-16-039]}}","L")
-            elif analysis == "monoHgg" : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + H_{#gamma #gamma}} (35.9 fb^{-1})}{#it{[EXO-16-054]}}","L")
-            #else                          : leg1.AddEntry(tgraph[analysis],text[analysis])
+            elif analysis == "monoHgg"    : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + H_{#gamma #gamma}} (35.9 fb^{-1})}{#it{[EXO-16-054]}}","L")
 
-
-
-    ######################
-    ### Plot SI LEGEND ###
-    ######################
-    if TextonPlot :
-        if not DijetOnly and not Resonances and DDresult=="SI":
-            # SI MET+X monoZ
-            legx1  = TLatex(15,4e-40,"CMS "+text["monoZ"])
-            legx1.SetTextAngle(1)
-            legx1.SetTextFont(42)
-            legx1.SetTextColor(color["monoZ"])
-            legx1.SetTextSize(0.025)
-            legx1.Draw("same")
-        # SI MET+X monophoton
-            legx2  = TLatex(30,6e-41,"CMS "+text["monophoton"])
-            legx2.SetTextAngle(1)
-            legx2.SetTextFont(42)
-            legx2.SetTextColor(color["monophoton"])
-            legx2.SetTextSize(0.025)
-            legx2.Draw("same")
-        # SI MET+X monojet
-            legx3 = TLatex(50,1e-42,"CMS "+text["monojet"])
-            legx3.SetTextAngle(1)
-            legx3.SetTextFont(42)
-            legx3.SetTextColor(color["monojet"])
-            legx3.SetTextSize(0.025)
-            legx3.Draw("same")
-
-        elif DDresult=="SI" and DijetOnly:
-        #Cresst Dijet
-            legy1 = TLatex(7,3e-41,"#splitline{"+text["Cresst"]+"}{#it{arXiv:1509.01515}}")
-            legy1.SetTextAngle(0)
-            legy1.SetTextFont(42)
-            legy1.SetTextColor(color["Cresst"])
-            legy1.SetTextSize(0.025)
-            legy1.Draw("same")
-        #CDMS Dijet
-            legy2 = TLatex(2.,8e-39,"#splitline{"+text["CDMSlite"]+"}{#it{arXiv:1509.02448}}")
-            legy2.SetTextAngle(0)
-            legy2.SetTextFont(42)
-            legy2.SetTextColor(color["CDMSlite"])
-            legy2.SetTextSize(0.025)
-            legy2.Draw("same")
-        #PandaX Dijet
-            legy4 = TLatex(30,1e-45,"#splitline{"+text["PandaX"]+"}{#it{arXiv:1607.07400}}")
-            legy4.SetTextAngle(0)
-            legy4.SetTextFont(42)
-            legy4.SetTextColor(color["PandaX"])
-            legy4.SetTextSize(0.025)
-            legy4.Draw("same")
-        #LUX Dijet
-            legy3 = TLatex(200,8.0e-47,"#splitline{"+text["LUX"]+"}{#it{arXiv:1608.07648}}")
-            legy3.SetTextAngle(0)
-            legy3.SetTextFont(42)
-            legy3.SetTextColor(color["LUX"])
-            legy3.SetTextSize(0.025)
-            legy3.Draw("same")
-        #Dijet
-            legy5  = TLatex(100,1.3e-40,"#splitline{#bf{CMS (dijet)}}{#splitline{Vector mediator, Dirac DM}{g_{q} = 0.25, g_{DM} = 1.0}}")
-            legy5.SetTextAngle(0)
-            legy5.SetTextFont(42)
-            legy5.SetTextColor(color["dijet"])
-            legy5.SetTextSize(0.025)
-            legy5.Draw("same")
-
-        elif DDresult=="SI":
-        # v Floor
-            if vFloor == True :
-                legy0  = TLatex(1.5,3.0e-46,"#splitline{#nu Floor (perm.)}{arXiv/1506.08309}")
-                legy0.SetTextAngle(0)
-                legy0.SetTextFont(42)
-                legy0.SetTextColor(color["vFloor"])
-                legy0.SetTextSize(0.025)
-                legy0.Draw("same")
-
-            legy1 = TLatex(1.7,2.0e-38,text["CDMSlite"])
-            legy1.SetTextAngle(280)
-            legy1.SetTextFont(42)
-            legy1.SetTextColor(color["CDMSlite"])
-            legy1.SetTextSize(0.020)
-            legy1.Draw("same")
-        #Cresst MET+X
-            legy2 = TLatex(10,3e-41,text["Cresst"])
-            legy2.SetTextAngle(5)
-            legy2.SetTextFont(42)
-            legy2.SetTextColor(color["Cresst"])
-            legy2.SetTextSize(0.020)
-            legy2.Draw("same")
-        #PandaX MET+X
-            legy4 = TLatex(85,6e-46,text["PandaX"])
-            legy4.SetTextAngle(13)
-            legy4.SetTextFont(42)
-            legy4.SetTextColor(color["PandaX"])
-            legy4.SetTextSize(0.020)
-            legy4.Draw("same")
-        #LUX MET+X
-            legy3 = TLatex(100,6e-47,text["LUX"])
-            legy3.SetTextAngle(13)
-            legy3.SetTextFont(42)
-            legy3.SetTextColor(color["LUX"])
-            legy3.SetTextSize(0.020)
-            legy3.Draw("same")
-        #XENON1T MET+X
-            legy4 = TLatex(100,6e-47,text["XENON1T"])
-            legy4.SetTextAngle(13)
-            legy4.SetTextFont(42)
-            legy4.SetTextColor(color["XENON1T"])
-            legy4.SetTextSize(0.020)
-            legy4.Draw("same")
-
-            legx5  = TLatex(10,2e-39,text["monoZ"])
-            legx5.SetTextAngle(2)
-            legx5.SetTextFont(42)
-            legx5.SetTextColor(color["monoZ"])
-            legx5.SetTextSize(0.020)
-            legx5.Draw("same")
-        # SD MET+X monophoton
-            legx6  = TLatex(40,4.0e-41,text["monophoton"])
-            legx6.SetTextAngle(0)
-            legx6.SetTextFont(42)
-            legx6.SetTextColor(color["monophoton"])
-            legx6.SetTextSize(0.020)
-            legx6.Draw("same")
-        # SD MET+X monojet
-            legx7  = TLatex(40,6.0e-42,text["monojet"])
-            legx7.SetTextAngle(0)
-            legx7.SetTextFont(42)
-            legx7.SetTextColor(color["monojet"])
-            legx7.SetTextSize(0.020)
-            legx7.Draw("same")
-        # SD dijet
-            legx8  = TLatex(1.2,1.0e-41,text["dijet"])
-            legx8.SetTextAngle(0)
-            legx8.SetTextFont(42)
-            legx8.SetTextColor(color["dijet"])
-            legx8.SetTextSize(0.020)
-            legx8.Draw("same")
-        # SD trijet
-            legx9  = TLatex(2,1.0e-37,text["trijet"])
-            legx9.SetTextAngle(0)
-            legx9.SetTextFont(42)
-            legx9.SetTextColor(color["trijet"])
-            legx9.SetTextSize(0.020)
-            legx9.Draw("same")
-
-    ###############
-    ### Plot SD ###
-    ###############
-
-        if not DijetOnly and not Resonances and DDresult=="SD":
-            # SD MET+X monoZ
-            legx1  = TLatex(3,1e-41,text["monoZ"])
-            legx1.SetTextAngle(5)
-            legx1.SetTextFont(42)
-            legx1.SetTextColor(color["monoZ"])
-            legx1.SetTextSize(0.025)
-            legx1.Draw("same")
-        # SD MET+X monophoton
-            legx2  = TLatex(3,1.6e-42,text["monophoton"])
-            legx2.SetTextAngle(3)
-            legx2.SetTextFont(42)
-            legx2.SetTextColor(color["monophoton"])
-            legx2.SetTextSize(0.025)
-            legx2.Draw("same")
-        # SD MET+X monojet
-            legx3  = TLatex(3,4.0e-44,text["monojet"])
-            legx3.SetTextAngle(2)
-            legx3.SetTextFont(42)
-            legx3.SetTextColor(color["monojet"])
-            legx3.SetTextSize(0.025)
-            legx3.Draw("same")
-
-
-        elif DDresult=="SD" and DijetOnly:
-            legy0  = TLatex(11,6.3e-39,"#splitline{"+text["PICASSO"]+"}{#it{arXiv:1611.01499}}")
-            legy0.SetTextAngle(0)
-            legy0.SetTextFont(42)
-            legy0.SetTextColor(color["PICASSO"])
-            legy0.SetTextSize(0.020)
-            legy0.Draw("same")
-            # Pico60 MET+X
-            legy1  = TLatex(15,8e-41,"#splitline{"+text["Pico60"]+"}{#it{arXiv:1702.07666}}")
-            legy1.SetTextAngle(0)
-            legy1.SetTextFont(42)
-            legy1.SetTextColor(color["Pico60"])
-            legy1.SetTextSize(0.020)
-            legy1.Draw("same")
-        # SuperK MET+X
-            legy2  = TLatex(10,6.0e-40,"#splitline{"+text["SuperKbb"]+"}{#it{arXiv:1503.04858}}")
-            legy2.SetTextAngle(0)
-            legy2.SetTextFont(42)
-            legy2.SetTextColor(color["SuperKbb"])
-            legy2.SetTextSize(0.020)
-            legy2.Draw("same")
-        # IceCube MET+X
-            legy3  = TLatex(300,1.3e-39,"#splitline{"+text["IceCubebb"]+"}{#it{arXiv:1612.05949}}")
-            legy3.SetTextAngle(0)
-            legy3.SetTextFont(42)
-            legy3.SetTextColor(color["IceCubebb"])
-            legy3.SetTextSize(0.020)
-            legy3.Draw("same")
-            legy4  = TLatex(330,7.0e-41,"#splitline{"+text["IceCubett"]+"}{#it{arXiv:1601.00653}}")
-            legy4.SetTextAngle(0)
-            legy4.SetTextFont(42)
-            legy4.SetTextColor(color["IceCubett"])
-            legy4.SetTextSize(0.020)
-            legy4.Draw("same")
-        # SD dijet
-            legx5  = TLatex(30,6.0e-42,"#splitline{#bf{CMS (dijet)}}{#splitline{Axial-vector mediator, Dirac DM}{g_{q} = 0.25, g_{DM} = 1.0}}")
-            legx5.SetTextAngle(0)
-            legx5.SetTextFont(42)
-            legx5.SetTextColor(color["dijet"])
-            legx5.SetTextSize(0.030)
-            legx5.Draw("same")
-        elif DDresult=="SD":
-                        # v Floor
-            if vFloor == True :
-                legy0  = TLatex(30,5.0e-45,"#nu Floor (permeable) arXiv/1506.08309")
-                legy0.SetTextAngle(10)
-                legy0.SetTextFont(42)
-                legy0.SetTextColor(color["vFloor"])
-                legy0.SetTextSize(0.025)
-                legy0.Draw("same")
-            legy1  = TLatex(200,2.0e-38,text["PICASSO"])
-            legy1.SetTextAngle(20)
-            legy1.SetTextFont(42)
-            legy1.SetTextColor(color["PICASSO"])
-            legy1.SetTextSize(0.020)
-            legy1.Draw("same")
-            # Pico60 MET+X
-            legy2  = TLatex(8,4e-40,text["Pico60"])
-            legy2.SetTextAngle(320)
-            legy2.SetTextFont(42)
-            legy2.SetTextColor(color["Pico60"])
-            legy2.SetTextSize(0.020)
-            legy2.Draw("same")
-        # SuperK MET+X
-            legy3  = TLatex(7,2.0e-39,text["SuperKbb"])
-            legy3.SetTextAngle(5)
-            legy3.SetTextFont(42)
-            legy3.SetTextColor(color["SuperKbb"])
-            legy3.SetTextSize(0.020)
-            legy3.Draw("same")
-        # IceCube MET+X
-            legy4  = TLatex(200,1.5e-39,text["IceCubebb"])
-            legy4.SetTextAngle(0)
-            legy4.SetTextFont(42)
-            legy4.SetTextColor(color["IceCubebb"])
-            legy4.SetTextSize(0.020)
-            legy4.Draw("same")
-            legy5  = TLatex(250,5.0e-41,text["IceCubett"])
-            legy5.SetTextAngle(0)
-            legy5.SetTextFont(42)
-            legy5.SetTextColor(color["IceCubett"])
-            legy5.SetTextSize(0.020)
-            legy5.Draw("same")
-
-            legx6  = TLatex(1.1,2.5e-41,text["monoZ"])
-            legx6.SetTextAngle(5)
-            legx6.SetTextFont(42)
-            legx6.SetTextColor(color["monoZ"])
-            legx6.SetTextSize(0.020)
-            legx6.Draw("same")
-        # SD MET+X monophoton
-            legx7  = TLatex(30,2.0e-42,text["monophoton"])
-            legx7.SetTextAngle(3)
-            legx7.SetTextFont(42)
-            legx7.SetTextColor(color["monophoton"])
-            legx7.SetTextSize(0.020)
-            legx7.Draw("same")
-        # SD MET+X monojet
-            legx8  = TLatex(30,2.0e-43,text["monojet"])
-            legx8.SetTextAngle(2)
-            legx8.SetTextFont(42)
-            legx8.SetTextColor(color["monojet"])
-            legx8.SetTextSize(0.020)
-            legx8.Draw("same")
-        # SD dijet
-            legx9  = TLatex(2,5.0e-43,text["dijet"])
-            legx9.SetTextAngle(0)
-            legx9.SetTextFont(42)
-            legx9.SetTextColor(color["dijet"])
-            legx9.SetTextSize(0.020)
-            legx9.Draw("same")
-        # SD trijet
-            legx10  = TLatex(0.02,2.0e-42,text["trijet"])
-            legx10.SetTextAngle(45)
-            legx10.SetTextFont(42)
-            legx10.SetTextColor(color["trijet"])
-            legx10.SetTextSize(0.020)
-            legx10.Draw("same")
 
 
     ############
@@ -736,52 +384,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
         C.cd(2).SetPad(0.75,0.0,1.0,1.0)
         C.Update()
         C.cd(1)
-        #~ leg.Draw("same")
         C.Update()
-
-    #~ if DDresult == "SI" and not DijetOnly:
-        #~ leg3=TLatex(mDM_lb,3e-34,"#bf{CMS} #it{Preliminary}")
-        #~ leg3.SetTextFont(42)
-        #~ leg3.SetTextSize(0.04)
-    #    leg4=TLatex(20,2e-35,"13 fb^{-1} & 27 fb^{-1} & 36 fb^{-1} (13 TeV)")
-        #~ leg4=TLatex(30,2e-34,"12.9 fb^{-1} & 35.9 fb^{-1} (13 TeV)")
-        #~ leg4.SetTextFont(42)
-        #~ leg4.SetTextSize(0.033)
-    #~ elif DDresult == "SD" and not DijetOnly:
-        #~ leg3=TLatex(mDM_lb,3e-36,"#bf{CMS} #it{Preliminary}")
-        #~ leg3.SetTextFont(42)
-        #~ leg3.SetTextSize(0.04)
-    #    leg4=TLatex(20,2e-37,"13 fb^{-1} & 27 fb^{-1} & 36 fb^{-1} (13 TeV)")
-        #~ leg4=TLatex(30,2e-36,"12.9 fb^{-1} & 35.9 fb^{-1} (13 TeV)")
-        #~ leg4.SetTextFont(42)
-        #~ leg4.SetTextSize(0.033)
-    #~ elif DDresult == "SI" and DijetOnly:
-    #    leg3=TLatex(600,2e-38,"#bf{CMS}")
-        #~ leg3=TLatex(mDM_lb,1.2e-37,"#bf{CMS} #it{Preliminary}")
-        #~ leg3.SetTextFont(42)
-        #~ leg3.SetTextSize(0.04)
-    #    leg4=TLatex(10,3e-36,"#splitline{#bf{Axial-vector med., Dirac DM}}{#it{g_{q} = 0.25, g_{DM} = 1}}")
-        #~ leg4=TLatex(70,1.2e-37,"27 fb^{-1} & 36 fb^{-1} (13 TeV)")
-        #~ leg4.SetTextFont(42)
-        #~ leg4.SetTextSize(0.033)
-        #~ leg5=TLatex(15,2.4e-38,"#scale[0.7]{Excluded at 90% CL}")
-        #~ leg5.SetTextFont(42)
-        #~ leg5.SetTextSize(0.033)
-        #~ leg5.Draw("same")
-    #~ elif DDresult == "SD" and DijetOnly:
-        #~ leg3=TLatex(mDM_lb,1.2e-37,"#bf{CMS} #it{Preliminary}")
-        #~ leg3.SetTextFont(42)
-        #~ leg3.SetTextSize(0.04)
-        #~ leg4=TLatex(70,1.2e-37,"27 fb^{-1} & 36 fb^{-1} (13 TeV)")
-        #~ leg4.SetTextFont(42)
-        #~ leg4.SetTextSize(0.033)
-        #~ leg5=TLatex(10,4e-38,"#scale[0.7]{Excluded at 90% CL}")
-        #~ leg5.SetTextFont(42)
-        #~ leg5.SetTextSize(0.033)
-        #~ leg5.Draw("same")
-
-    #~ leg3.Draw("same")
-    #~ leg4.Draw("same")
 
     C.Update()
 
@@ -826,10 +429,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
             tgraph[analysis].Draw("same")
 
     texts = []
-    #~ if(DDresult=="SD"):
-        #~ texts.append(add_text(0.2,0.45,0.1,0.2,"Spin Dependent"))
-    #~ else:
-        #~ texts.append(add_text(0.2,0.45,0.1,0.2,"Spin Independent"))
+
     texts.append(add_text(0.15,0.4,0.89,0.99,"#bf{CMS} Preliminary"))
     texts.append(add_text(0.7,0.88,0.89,0.99,"LHCP 2017"))
     C.Update()

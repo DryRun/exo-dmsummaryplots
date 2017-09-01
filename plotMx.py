@@ -14,6 +14,39 @@ from ROOT import *
 import ast
 from Utilities import extrapolation
 from Utilities import *
+
+
+def convert_to_nucleon_xs(input_graph, scenario, gq=0.25):
+
+    if(scenario == "SI"):
+        if(gq==0.25): c = 6.9e-41*1e12
+        elif(gq==1): c = 0.3984e-27*(9./3.14159)
+    elif(scenario == "SD"):
+        if(gq==0.25): c = 2.4e-42*1e12
+        elif(gq==1): c = 4.6*1e-29
+
+    xs_graph = TGraph()
+    for i in range(0,input_graph.GetN()) :
+            mMed = Double(0)
+            mDM  = Double(0)
+            input_graph.GetPoint(i,mMed,mDM)
+            mR = Double(0.939*mDM)/(0.939+mDM)
+            xsec = Double(c*(mR**2)/(mMed**4))
+            xs_graph.SetPoint(i,mDM,xsec)
+    return xs_graph
+
+
+
+def convert_graph_to_lin_scale(graph, convert_x=True, convert_y=True):
+    new_graph = TGraph()
+    for i in range(0,graph.GetN()):
+        x = Double(0)
+        y = Double(0)
+        graph.GetPoint(i,x,y)
+        print x,y
+        new_graph.SetPoint(i, pow(10,x) if convert_x else x, pow(10,y) if convert_y else y )
+    return new_graph
+
 ################
 ### Settings ###
 ################
@@ -229,7 +262,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
         elif analysis == "dijet_2016_exp" : tgraph["dijet_2016_exp"] = TFile(filepath[analysis]).Get("Obs_90")
         elif analysis == "trijet"         : tgraph["trijet"]         = TFile(filepath[analysis]).Get("obs_025")
         elif analysis == "monojet"        : tgraph["monojet"]        = TFile(filepath[analysis]).Get("contour_obs_graph")
-        elif analysis == "monophoton"     : tgraph["monophoton"]     = TFile(filepath[analysis]).Get("monophoton_obs")
+        elif analysis == "monophoton"     : tgraph["monophoton"]     = convert_graph_to_lin_scale(TFile(filepath[analysis]).Get("monophoton_obs"))
         elif analysis == "monoZ"          : tgraph["monoZ"]          = TGraph(filepath[analysis])
         elif analysis == "monoHgg"        : tgraph["monoHgg"]        = TFile(filepath[analysis]).Get("observed_baryonic_MonoHgg")
 
@@ -246,42 +279,11 @@ def make_plot(DDresult, Resonances, DijetOnly):
     ### to DD plane     ###
     #######################
 
-    if DDresult=="SI":
-        #c_SI = 0.3984e-27*(9./3.14159) #gq=1
-        c_SI = 6.9e-41*1e12
-        for analysis in cmsanalyses:
 
-            DDgraph[analysis]=TGraph()
-            for i in range(0,tgraph[analysis].GetN()) :
-                mMed = Double(0)
-                mDM  = Double(0)
-                tgraph[analysis].GetPoint(i,mMed,mDM)
-                if analysis == "monophoton":
-                    DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))
-                else:
-                    mR = Double(0.939*mDM)/(0.939+mDM)
-                    xsec = Double(c_SI*(mR*mR)/(mMed*mMed*mMed*mMed))
-                    DDgraph[analysis].SetPoint(i,mDM,xsec)
-                    if analysis == "monoHgg" :
-                        print "SD - analysis = ", analysis, ", i = ", i, ", mMed = ", mMed, ", mDM = ", mDM
-                        print "xsec ", xsec, " mR ", mR
-            tgraph[analysis] = DDgraph[analysis]
-    elif DDresult=="SD":
-        #c_SD = 4.6*1e-29  #gq=1
-        c_SD = 2.4e-42*1e12
-        for analysis in cmsanalyses:
-            DDgraph[analysis]=TGraph()
-            for i in range(0,tgraph[analysis].GetN()) :
-                mMed = Double(1)
-                mDM  = Double(1)
-                tgraph[analysis].GetPoint(i,mMed,mDM)
-                if analysis == "monophoton":
-                    DDgraph[analysis].SetPoint(i,pow(10,mMed),pow(10,mDM))
-                else:
-                    mR = Double(0.939*mDM)/(0.939+mDM)
-                    xsec = Double(c_SD*(mR*mR)/(mMed*mMed*mMed*mMed))
-                    DDgraph[analysis].SetPoint(i,mDM,xsec)
-            tgraph[analysis] = DDgraph[analysis]
+
+    for analysis in cmsanalyses:
+        if not analysis=="monophoton":
+            tgraph[analysis] = convert_to_nucleon_xs(tgraph[analysis],DDresult)
 
     if Extend :
         extrapolation( tgraph, DijetOnly, Resonances, resonances, metx, mDM_lb )

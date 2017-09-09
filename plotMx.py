@@ -117,12 +117,12 @@ def make_plot(DDresult, Resonances, DijetOnly):
     #############
 
     if DDresult == "SI":
-        filepath["XENON1T"]        = "DD/SI/xenon1t.txt"
-        filepath["LUX"]            = "DD/SI/LUX_SI_Combination_Oct2016.txt"#"DD/SI/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
-        filepath["PandaX"]         = "DD/SI/pandax_2017.txt"
-        filepath["CDMSlite"]       = "DD/SI/cdmslite2015.txt"
-        filepath["Cresst"]         = "DD/SI/cresstii.txt"
-        filepath["vFloor"]         = "DD/SI/Neutrino_SI.txt"
+        filepath["XENON1T"]        = "input/DD/SI/xenon1t.txt"
+        filepath["LUX"]            = "input/DD/SI/LUX_SI_Combination_Oct2016.txt"#"DD/SI/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
+        filepath["PandaX"]         = "input/DD/SI/pandax_2017.txt"
+        filepath["CDMSlite"]       = "input/DD/SI/cdmslite2015.txt"
+        filepath["Cresst"]         = "input/DD/SI/cresstii.txt"
+        filepath["vFloor"]         = "input/DD/SI/Neutrino_SI.txt"
 
         filepath["dijet"]          = "input/CMS/Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
         filepath["dijet_exp"]      = "input/CMS/Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
@@ -136,12 +136,12 @@ def make_plot(DDresult, Resonances, DijetOnly):
         filepath["monoHgg"]        = "input/CMS/MonoHgg/ScanMM/EXO-16-054/input_combo_MonoHgg_25April_90CL.root"
 
     elif DDresult == "SD" :
-        filepath["PICASSO"]       = "DirectDetection/PicassoFinal.root"
-        filepath["Pico60"]        = "DirectDetection/Pico602017.root"
-        filepath["SuperKbb"]      = "DirectDetection/SuperKbb.root"
-        filepath["IceCubebb"]     = "DirectDetection/IceCubebb.root"
-        filepath["IceCubett"]     = "DirectDetection/IceCubett.root"
-        filepath["vFloor"]        = "DD/SD/Neutrino_SD.txt"
+        filepath["PICASSO"]       = "input/DD/SD/PicassoFinal.root"
+        filepath["Pico60"]        = "input/DD/SD/Pico602017.root"
+        filepath["SuperKbb"]      = "input/DD/SD/SuperKbb.root"
+        filepath["IceCubebb"]     = "input/DD/SD/IceCubebb.root"
+        filepath["IceCubett"]     = "input/DD/SD/IceCubett.root"
+        filepath["vFloor"]        = "input/DD/SD/Neutrino_SD.txt"
         filepath["dijet"]         = "input/CMS/Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
         filepath["trijet"]        = "input/CMS/Trijet/ScanMM/MMedMDM_av_90.root"
         filepath["monojet"]       = "input/CMS/Monojet/EXO-16-048/ScanMM/limits_DD_axial.root"

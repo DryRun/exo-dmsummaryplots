@@ -19,14 +19,19 @@ from Utilities import *
 Dijet    = False
 Dilepton = False
 
-All        = ast.literal_eval(raw_input('Want to plot all Scenarios/Mediators [True or False]: '))
+try:
+    All        = ast.literal_eval(raw_input('Want to plot all Scenarios/Mediators [True or False]: '))
+except SyntaxError:
+    All = True
+
 if not All :
     Mediator  = raw_input('Choose mediator [Vector or Axial]: ')
     Scenario  = raw_input('Choose Scenario according to 1703.05703 [1 or 2 or dijetchi or Monotop]: ')
     METxOnly        = ast.literal_eval(raw_input('MET+X Only? [True or False]: '))
-
-logx      = ast.literal_eval(raw_input('Log x? '))
-
+try:
+    logx      = ast.literal_eval(raw_input('Log x? '))
+except SyntaxError:
+    logx = False
 
 CL = "95"
 

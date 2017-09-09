@@ -178,8 +178,6 @@ def make_plot(Mediator, Scenario, METxOnly, logx, CL,do_expected=False):
         #~ if(analysis=="dijet"):
             #~ obs.RemovePoint(obs.GetN()-1)
 
-        print "analysis", analysis, "obs ", obs
-
         if( not obs ): continue
 
         obs.SetFillColor(color[analysis])
@@ -212,9 +210,7 @@ def make_plot(Mediator, Scenario, METxOnly, logx, CL,do_expected=False):
         if(analysis in ["dijet","dilepton","trijet"]):
             obs.Draw("F,same")
             obs.Draw("L,same")
-            print "DRAWING 1"
         else:
-            print "DRAWING"
             obs.Draw("same")
 
         ### Expected limit

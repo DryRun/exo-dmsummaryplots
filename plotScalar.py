@@ -264,9 +264,12 @@ def do_plot(Mediator,ObsOnly):
 			tgraph[analysis].SetLineWidth( 202)
 		tgraph[analysis].SetLineStyle(linestyle[analysis])
 
-	dummy1 = TGraph("dummy_100.dat")
-	dummy2 = TGraph("dummy_600.dat")
-
+	dummy1 = TGraph()
+	dummy1.SetPoint(0,100,-99)
+	dummy1.SetPoint(1,100,1e3)
+	dummy2 = TGraph()
+	dummy2.SetPoint(0,100,-99)
+	#~ dummy2.SetPoint(1,100,1e3)
 	tgraph["gen_obs"]=dummy1
 	tgraph["gen_exp"]=dummy2
 

@@ -43,7 +43,6 @@ def convert_graph_to_lin_scale(graph, convert_x=True, convert_y=True):
         x = Double(0)
         y = Double(0)
         graph.GetPoint(i,x,y)
-        print x,y
         new_graph.SetPoint(i, pow(10,x) if convert_x else x, pow(10,y) if convert_y else y )
     return new_graph
 

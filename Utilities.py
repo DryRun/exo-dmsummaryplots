@@ -260,19 +260,6 @@ def load_inputs(analyses,scenarios,quantiles):
     inputfiles["trijet"]["V2"]["obs"] = "input/CMS/Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1_MT.root"
     inputfiles["trijet"]["V2"]["exp"] = "input/CMS/Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root"
 
-    inputfiles["relic"]["A1"]["obs"] = "Relic/madDMv2_0_6/relic_A1.root"
-    inputfiles["relic"]["A2"]["obs"] = "Relic/madDMv2_0_6/relic_A2.root"
-    inputfiles["relic"]["A3"]["obs"] = "Relic/madDMv2_0_6/relic_axial_gq1.root"
-    inputfiles["relic"]["V1"]["obs"] = "Relic/madDMv2_0_6/relic_V1.root"
-    inputfiles["relic"]["V2"]["obs"] = "Relic/madDMv2_0_6/relic_V2.root"
-    inputfiles["relic"]["V3"]["obs"] = "Relic/madDMv2_0_6/relic_vector_gq1.root"
-    inputfiles["relic"]["V4"]["obs"] = "Relic/madDMv2_0_6/relic_V1.root"
-
-
-
-
-
-
     objects["monojet"]["A1"]["obs"] = "contour_observed"
     objects["monojet"]["A1"]["exp"] = "contour_expected"
     objects["monojet"]["V1"]["obs"] = "contour_observed"
@@ -367,13 +354,13 @@ def read_graphs():
 def read_relic_lists():
     import ROOT as r
     lists = {}
-    lists["A1"] = TFile("Relic/madDMv2_0_6/relic_A1.root").Get("mytlist")
-    lists["A2"] = TFile("Relic/madDMv2_0_6/relic_A2.root").Get("mytlist")
-    lists["A3"] = TFile("Relic/madDMv2_0_6/relic_axial_gq1.root").Get("mytlist")
-    lists["V1"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
-    lists["V2"] = TFile("Relic/madDMv2_0_6/relic_V2.root").Get("mytlist")
-    lists["V3"] = TFile("Relic/madDMv2_0_6/relic_vector_gq1.root").Get("mytlist")
-    lists["V4"] = TFile("Relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
+    lists["A1"] = TFile("input/relic/madDMv2_0_6/relic_A1.root").Get("mytlist")
+    lists["A2"] = TFile("input/relic/madDMv2_0_6/relic_A2.root").Get("mytlist")
+    lists["A3"] = TFile("input/relic/madDMv2_0_6/relic_axial_gq1.root").Get("mytlist")
+    lists["V1"] = TFile("input/relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
+    lists["V2"] = TFile("input/relic/madDMv2_0_6/relic_V2.root").Get("mytlist")
+    lists["V3"] = TFile("input/relic/madDMv2_0_6/relic_vector_gq1.root").Get("mytlist")
+    lists["V4"] = TFile("input/relic/madDMv2_0_6/relic_V1.root").Get("mytlist")
     return lists
 
 def get_line_style():

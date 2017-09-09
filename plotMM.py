@@ -70,8 +70,8 @@ def make_plot(Mediator, Scenario, METxOnly, logx, CL,do_expected=False):
 
     analyses = []
 
-    if not METxOnly                 : 
-        analyses += ["dilepton"]       
+    if not METxOnly                 :
+        analyses += ["dilepton"]
         if scenario_name in ["A3","V3"] : analyses += ["dijetchi"]
         else                            : analyses += ["dijet","trijet"]
 
@@ -109,7 +109,7 @@ def make_plot(Mediator, Scenario, METxOnly, logx, CL,do_expected=False):
         if scenario_name in ["A1","V1"]:
             if METxOnly == 1 :
                 frame = C.cd(1).DrawFrame(0,0,2800,1000)
-            else : 
+            else :
                 frame = C.cd(1).DrawFrame(0,0,4500,2000)
         elif scenario_name in ["A2","V2"]:
             frame = C.cd(1).DrawFrame(0,0,4500,2000)

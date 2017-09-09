@@ -334,7 +334,7 @@ def read_graphs():
         for s in scenarios:
             for q in quantiles:
                 if inputfiles[a][s][q] == None : continue
-                
+
                 if a == "monoz" :
                     graphs[a][s][q] = r.TGraph(inputfiles[a][s][q]) #txt files
                 elif a == "relic":

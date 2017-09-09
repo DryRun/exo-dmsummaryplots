@@ -124,29 +124,29 @@ def make_plot(DDresult, Resonances, DijetOnly):
         filepath["Cresst"]         = "DD/SI/cresstii.txt"
         filepath["vFloor"]         = "DD/SI/Neutrino_SI.txt"
 
-        filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
-        filepath["dijet_exp"]          = "Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
+        filepath["dijet"]          = "input/CMS/Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
+        filepath["dijet_exp"]      = "input/CMS/Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_90.root"
 
 
 
-        filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_v_90.root"
-        filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/limits_DD_vector.root"
-        filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SI_MM_ICHEP2016_obs.root" #outdated
-        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl90_Mmedmore10.txt"
-        filepath["monoHgg"]          = "MonoHgg/ScanMM/EXO-16-054/input_combo_MonoHgg_25April_90CL.root"
+        filepath["trijet"]         = "input/CMS/Trijet/ScanMM/MMedMDM_v_90.root"
+        filepath["monojet"]        = "input/CMS/Monojet/EXO-16-048/ScanMM/limits_DD_vector.root"
+        filepath["monophoton"]     = "input/CMS/Monophoton/ScanMM/Monophoton_SI_MM_ICHEP2016_obs.root" #outdated
+        filepath["monoZ"]          = "input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl90_Mmedmore10.txt"
+        filepath["monoHgg"]        = "input/CMS/MonoHgg/ScanMM/EXO-16-054/input_combo_MonoHgg_25April_90CL.root"
 
     elif DDresult == "SD" :
-        filepath["PICASSO"]         = "DirectDetection/PicassoFinal.root"
-        filepath["Pico60"]         = "DirectDetection/Pico602017.root"
+        filepath["PICASSO"]       = "DirectDetection/PicassoFinal.root"
+        filepath["Pico60"]        = "DirectDetection/Pico602017.root"
         filepath["SuperKbb"]      = "DirectDetection/SuperKbb.root"
         filepath["IceCubebb"]     = "DirectDetection/IceCubebb.root"
         filepath["IceCubett"]     = "DirectDetection/IceCubett.root"
-        filepath["vFloor"]         = "DD/SD/Neutrino_SD.txt"
-        filepath["dijet"]          = "Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
-        filepath["trijet"]         = "Trijet/ScanMM/MMedMDM_av_90.root"
-        filepath["monojet"]        = "Monojet/EXO-16-048/ScanMM/limits_DD_axial.root"
-        filepath["monophoton"]     = "Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root" #outdated
-        filepath["monoZ"]          = "MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl90_Mmedmore10.txt"
+        filepath["vFloor"]        = "DD/SD/Neutrino_SD.txt"
+        filepath["dijet"]         = "input/CMS/Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_90.root"
+        filepath["trijet"]        = "input/CMS/Trijet/ScanMM/MMedMDM_av_90.root"
+        filepath["monojet"]       = "input/CMS/Monojet/EXO-16-048/ScanMM/limits_DD_axial.root"
+        filepath["monophoton"]    = "input/CMS/Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root" #outdated
+        filepath["monoZ"]         = "input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl90_Mmedmore10.txt"
 
     #######################
     ### Plot linestyles ###

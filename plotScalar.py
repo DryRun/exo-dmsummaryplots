@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+
 #########################################
 #########################################
 ###                                   ###
@@ -11,38 +15,12 @@ import os
 from ROOT import *
 import ast
 from Utilities import *
-################
-### Settings ###
-################
 
-
-#~ Mediator = raw_input('Choose Mediator [Scalar or Pseudo]: ')
-#~ ObsOnly  = ast.literal_eval(raw_input('Obs only? [True or False]: '))
 
 #################
 ### Analyses ####
 #################
-def do_plot(Mediator,ObsOnly):
-	analyses = ["BSM",
-				"monojet_obs",
-				"monoz_obs",
-				#"DMtt_obs",
-				#"METbb_DMtt_obs",
-				#"METbb_DMbb_obs"
-				#,"METbb_DMhf_obs"
-				"METHF_DMhf_obs",
-				"Stop_obs"
-				]
-
-	if not ObsOnly: analyses=["BSM",
-							"monojet_obs",   "monojet_exp",
-							"monoz_obs",     "monoz_exp",
-							#"DMtt_obs",      "DMtt_exp",
-							#"METbb_DMbb_obs","METbb_DMbb_exp"
-							#"METbb_DMtt_exp","METbb_DMtt_obs",
-							"METHF_DMhf_obs","METHF_DMhf_exp",
-							"Stop_obs","Stop_exp"
-							]
+def do_plot(Mediator,analyses):
 	tgraph    = {}
 	color     = {}
 	text      = {}
@@ -58,7 +36,6 @@ def do_plot(Mediator,ObsOnly):
  		filepath["monojet_exp"]    = "input/CMS/Monojet/EXO-16-048/ScanMM/limit_scalar_1D.root"
 		filepath["monoz_obs"]      = "input/CMS/MonoZll/EXO-16-052/ScanMM/spin0/monoz_limit_S_obs.txt"
 		filepath["monoz_exp"]      = "input/CMS/MonoZll/EXO-16-052/ScanMM/spin0/monoz_limit_S_exp.txt"
-
 		filepath["DMtt_obs"]       = "input/CMS/DMtt/DMtt_Scalar_ICHEP2016_Mx_obs.txt"
 		filepath["DMtt_exp"]       = "input/CMS/DMtt/DMtt_Scalar_ICHEP2016_Mx_exp.txt"
 		filepath["METbb_DMtt_obs"] = "input/CMS/DMbb/2015/Limits_hfDMs.root"
@@ -132,20 +109,8 @@ def do_plot(Mediator,ObsOnly):
 	text["BSM"]            = "#sigma_{theory} (LHC DM WG)"
 	text["monojet_obs"] = "#splitline{#bf{DM + j/V(qq)} (35.9 fb^{-1})}{[EXO-16-048]}"
 	text["monoz_obs"]       = "#splitline{#bf{DM + Z(ll)} (35.9 fb^{-1})}{[EXO-16-052]}"
-	#~ text["DMtt_obs"]       = "DM + tt (2.2 fb^{-1}) #it{EXO-16-005}"
-	#~ text["METbb_DMbb_obs"] = "DM + bb (2.2 fb^{-1}) #it{B2G-15-007}"
-	#~ text["METbb_DMtt_obs"] = "DM + tt (nj<4) [B2G-15-007]"
-	#~ text["METbb_DMhf_obs"] = "MET+bb: DM+HF [B2G-15-007]"
 	text["METHF_DMhf_obs"] = "#splitline{#bf{DM + tt/bb} (2.2 fb^{-1})}{[EXO-16-005]}"
 	text["Stop_obs"] = "#splitline{#bf{DM + tt(ll)} (35.9 fb^{-1})}{[SUS-17-001]}"
-	#exp
-	#~ text["monojet_exp"]    = "exp.excl 95%CL"
-	#~ text["monoz_exp"]    = "exp.excl 95%CL"
-	#~ text["DMtt_exp"]       = "exp.excl 95%CL"
-	#~ text["METbb_DMbb_exp"] = "exp.excl 95%CL"
-	#~ text["METbb_DMtt_exp"] = "exp.excl 95%CL"
-	#~ text["METbb_DMhf_exp"] = "exp.excl 95%CL"
-	#~ text["METHF_DMhf_exp"] = "exp.excl 95%CL"
 
 	text["gen_obs"] = "Observed exclusion 95% CL"
 	text["gen_exp"] = "Expected exclusion 95% CL"
@@ -185,8 +150,7 @@ def do_plot(Mediator,ObsOnly):
 	###################
 
 	C=TCanvas("C","C",750,600)
-	#C.cd(1).SetLogx()
-	C.cd(1).SetLogy()
+	C.SetLogy()
 
 	tgraph["monojet_obs"].SetTitle("")
 	tgraph["monojet_obs"].GetXaxis().SetTitle("Mediator mass M_{ Med} [GeV]")
@@ -202,32 +166,19 @@ def do_plot(Mediator,ObsOnly):
 	##################
 	### Add legend ###
 	##################
+	texts = []
+	texts.append(TLatex(130, 40000, "#bf{{{MEDIATOR} mediator}}".format(MEDIATOR=Mediator)))
+	texts.append(TLatex(130, 20000, "#bf{Dirac DM}, #it{m_{DM} = 1 GeV}"))
+	texts.append(TLatex(130, 11000, "#it{g_{q} = 1, g_{DM} = 1}"))
+        for t in texts:
+		t.SetTextFont(42)
+		t.SetTextSize(0.03)
+		t.Draw("same")
 
-	if Mediator == "Scalar":
-		tex1=TLatex(130, 40000, "#bf{Scalar mediator}")
-	if Mediator == "Pseudo":
-		tex1=TLatex(130, 40000, "#bf{Pseudoscalar mediator}")
-
-	tex2=TLatex(130, 20000, "#bf{Dirac DM}, #it{m_{DM} = 1 GeV}")
-	tex3=TLatex(130, 11000, "#it{g_{q} = 1, g_{DM} = 1}")
-
-	tex1.SetTextFont(42)
-	tex2.SetTextFont(42)
-	tex3.SetTextFont(42)
-	tex1.SetTextSize(0.03)
-	tex2.SetTextSize(0.03)
-	tex3.SetTextSize(0.03)
-	tex1.Draw("same")
-	tex2.Draw("same")
-	tex3.Draw("same")
-
-	#~ if Mediator == "Scalar": leg=C.BuildLegend(0.15,0.59,0.50,0.88)
-	#~ if Mediator == "Pseudo": leg=C.BuildLegend(0.21,0.62,0.55,0.88)
 	leg = TLegend(0.13,0.47,0.53,0.87)
 	leg.SetBorderSize(0)
 	leg.SetTextFont(42)
 	leg.SetTextSize(0.025)
-	leg.Clear()
 
 	leg2=C.BuildLegend(0.10,0.905,0.90,0.955)
 	leg2.SetBorderSize(0)
@@ -236,17 +187,11 @@ def do_plot(Mediator,ObsOnly):
 	leg2.Clear()
 	leg2.SetHeader("#bf{CMS} #it{Preliminary}")
 
-	#~ leg3=C.BuildLegend(0.44,0.905,1.54,0.955)
-	#~ leg3.SetBorderSize(0)
-	#~ leg3.SetTextFont(42)
-	#~ leg3.SetFillColor(0)
-	#~ leg3.Clear()
 
 	texts = []
 	medname = Mediator if Mediator=="Scalar" else Mediator+"scalar"
 	texts.append(add_text(0.55,0.9,0.65,0.85,["#bf{{{MED} Mediator}}".format(MED=medname),"Dirac DM","g_{q} = 1.0", "g_{DM} = 1.0", "m_{DM} = 1 GeV"],alignment=12))
 	texts.append(add_text(0.7,0.85,0.86,1.0,"EPS 2017"))
-	#~ leg3.SetHeader("2.2 fb^{-1} & 35.9 fb^{-1} (13 TeV)")
 
 	############
 	### Draw ###
@@ -269,7 +214,6 @@ def do_plot(Mediator,ObsOnly):
 	dummy1.SetPoint(1,100,1e3)
 	dummy2 = TGraph()
 	dummy2.SetPoint(0,100,-99)
-	#~ dummy2.SetPoint(1,100,1e3)
 	tgraph["gen_obs"]=dummy1
 	tgraph["gen_exp"]=dummy2
 
@@ -282,7 +226,6 @@ def do_plot(Mediator,ObsOnly):
 			tgraph[analysis].SetFillColor(kBlack)
 			tgraph[analysis].SetLineWidth( 403)
 
-	#~ tgraph["gen_exp"].SetFillColor(kWhite)
 	tgraph["gen_exp"].SetLineStyle(kDashed)
 
 	tgraph["fermion"] = tgraph["BSM"].Clone()
@@ -298,8 +241,6 @@ def do_plot(Mediator,ObsOnly):
 
 
 	leg.Draw()
-	#~ leg2.Draw()
-	#~ leg3.Draw()
 	C.Update()
 	for analysis in analyses:
 		tgraph[analysis].Draw("same")
@@ -312,9 +253,22 @@ def do_plot(Mediator,ObsOnly):
 	gPad.SetTickx()
 
 	if( not os.path.exists("./output") ): os.makedirs("./output")
-	if ObsOnly: C.SaveAs("./output/"+Mediator+"_METX_Summary_obsonly.pdf")
-	else      : C.SaveAs("./output/"+Mediator+"_METX_Summary_obsnexp.pdf")
+	C.SaveAs("./output/"+Mediator+"_METX_Summary_obsnexp.pdf")
 	C.Close()
 
-do_plot("Scalar",0)
-do_plot("Pseudo",0)
+
+def main():
+        analyses = ["BSM",
+                "monojet_obs",   "monojet_exp",
+                "monoz_obs",     "monoz_exp",
+                "METHF_DMhf_obs","METHF_DMhf_exp",
+                "Stop_obs","Stop_exp"
+                ]
+
+        do_plot("Scalar",analyses)
+        do_plot("Pseudo",analyses)
+
+
+
+if __name__ == '__main__':
+        main()

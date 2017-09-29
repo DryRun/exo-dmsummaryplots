@@ -1,7 +1,7 @@
 from ROOT import *
 import ast
 
-def extrapolation( tgraph, DijetOnly, Resonances, metless, metx, mDM_lb ):
+def extrapolation( tgraph, Resonances, metless, metx, mDM_lb ):
 
     DDgraph_extr = {}
     num_extr = 100
@@ -10,27 +10,26 @@ def extrapolation( tgraph, DijetOnly, Resonances, metless, metx, mDM_lb ):
 ## MET+X
 #Step1 : Extrapolate from first non -100 point downto mDM_lb)
 ####################
-    if not DijetOnly :
-        for analysis in metx :
-            print "Analysis ", analysis
-            DDgraph_extr[analysis]=TGraph()
-            #extrapolation based on the first point
-            mDM_ref  = Double(0)
-            xsec_ref = Double(0)
-            tgraph[analysis].GetPoint(0,mDM_ref,xsec_ref);
-            mR_ref = 0.939*mDM_ref/(0.939+mDM_ref);
-            for i in range(0, num_extr) :
-                mDM_i = mDM_lb + i*(mDM_ref-mDM_lb)/num_extr
-                mR_i = 0.939*mDM_i/(0.939+mDM_i);
-                xsec_i = xsec_ref*(mR_i*mR_i)/(mR_ref*mR_ref)
-                DDgraph_extr[analysis].SetPoint(i,mDM_i,xsec_i)
-                for i in range(0,tgraph[analysis].GetN()) :
-                    mDM  = Double(0)
-                    xsec  = Double(0)
-                    tgraph[analysis].GetPoint(i,mDM,xsec)
-                    DDgraph_extr[analysis].SetPoint(i+num_extr,mDM,xsec)
+    for analysis in metx :
+        print "Analysis ", analysis
+        DDgraph_extr[analysis]=TGraph()
+        #extrapolation based on the first point
+        mDM_ref  = Double(0)
+        xsec_ref = Double(0)
+        tgraph[analysis].GetPoint(0,mDM_ref,xsec_ref);
+        mR_ref = 0.939*mDM_ref/(0.939+mDM_ref);
+        for i in range(0, num_extr) :
+            mDM_i = mDM_lb + i*(mDM_ref-mDM_lb)/num_extr
+            mR_i = 0.939*mDM_i/(0.939+mDM_i);
+            xsec_i = xsec_ref*(mR_i*mR_i)/(mR_ref*mR_ref)
+            DDgraph_extr[analysis].SetPoint(i,mDM_i,xsec_i)
+            for i in range(0,tgraph[analysis].GetN()) :
+                mDM  = Double(0)
+                xsec  = Double(0)
+                tgraph[analysis].GetPoint(i,mDM,xsec)
+                DDgraph_extr[analysis].SetPoint(i+num_extr,mDM,xsec)
 
-            tgraph[analysis] = DDgraph_extr[analysis]
+        tgraph[analysis] = DDgraph_extr[analysis]
 ####################
 
 

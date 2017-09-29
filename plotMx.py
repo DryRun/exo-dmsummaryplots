@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+
 #########################################
 #########################################
 ###                                   ###
@@ -11,8 +15,6 @@
 #########################################
 import os
 from ROOT import *
-import ast
-from Utilities import extrapolation
 from Utilities import *
 
 
@@ -46,26 +48,10 @@ def convert_graph_to_lin_scale(graph, convert_x=True, convert_y=True):
         new_graph.SetPoint(i, pow(10,x) if convert_x else x, pow(10,y) if convert_y else y )
     return new_graph
 
-################
-### Settings ###
-################
-TextonPlot = False
-
-
-DijetOnly = False
-
-DDresult = "SD"
-Resonances = 1
-DijetOnly = 0
-
-Extend    = True
-vFloor    = False
 mDM_lb = 1
 
-#################
-### Analyses ####
-#################
-def make_plot(DDresult, Resonances, DijetOnly):
+def make_plot(DDresult,Resonances):
+    Extend    = True
     if   DDresult == "SI":
         metx    = ["monojet","monophoton","monoZ"]
         resonances = ["trijet","dijet"]
@@ -81,17 +67,13 @@ def make_plot(DDresult, Resonances, DijetOnly):
         cmsanalyses.extend(resonances)
 
 
-    if   DDresult == "SI" and DijetOnly : analyses.extend(["Cresst","CDMSlite","PandaX","LUX","XENON1T"])
-    elif DDresult == "SD" and DijetOnly : analyses.extend(["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"])
-    elif DDresult == "SI"               : analyses.extend(["Cresst","CDMSlite","PandaX","LUX","XENON1T"])
-    elif DDresult == "SD"               : analyses.extend(["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"])
+    if   DDresult == "SI": analyses.extend(["Cresst","CDMSlite","PandaX","LUX","XENON1T"])
+    elif DDresult == "SD": analyses.extend(["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"])
 
 
-    if not DijetOnly:
-        analyses.extend(metx)
-        cmsanalyses.extend(metx)
+    analyses.extend(metx)
+    cmsanalyses.extend(metx)
 
-    if vFloor: analyses += ["vFloor"]
 
     print "***********************"
     print "DD result = ", DDresult
@@ -105,8 +87,6 @@ def make_plot(DDresult, Resonances, DijetOnly):
         print "*******************"
 
     tgraph    = {}
-    tgraph_original    = {}
-    DDgraph   = {}
     color     = {}
     text      = {}
     filepath  = {}
@@ -148,35 +128,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
         filepath["monophoton"]    = "input/CMS/Monophoton/ScanMM/Monophoton_SD_MM_ICHEP2016_obs.root" #outdated
         filepath["monoZ"]         = "input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl90_Mmedmore10.txt"
 
-    #######################
-    ### Plot linestyles ###
-    #######################
-
-    linestyle["vFloor"]     = kDashed
-    ### SI
-    linestyle["XENON1T"]    = kSolid
-    linestyle["LUX"]        = kSolid
-    linestyle["PandaX"]     = kSolid
-    linestyle["CDMSlite"]   = kSolid
-    linestyle["Cresst"]     = kSolid
-    ### SD
-    linestyle["PICASSO"]     = kSolid
-    linestyle["Pico60"]     = kSolid
-    linestyle["SuperKbb"]     = kSolid
-    linestyle["IceCubebb"]     = kSolid
-    linestyle["IceCubett"]     = kSolid
-    ### CMS Met-less
-    linestyle["dijet"]      = kSolid
-    linestyle["dijet_2016"] = kSolid
-    linestyle["trijet"]     = kSolid
-    ### CMS MET+X
-    linestyle["monophoton"] = kSolid
-    linestyle["monoZ"]      = kSolid
-    linestyle["monoHgg"]      = kSolid
-    linestyle["monotop"]    = kSolid
-    linestyle["monojet"]    = kSolid
-
-
+    for ana in analyses: linestyle[ana] = kSolid
     ###################
     ### Plot colors ###
     ###################
@@ -217,8 +169,6 @@ def make_plot(DDresult, Resonances, DijetOnly):
     ##################
     ### Plot texts ###
     ##################
-
-    text["vFloor"]     = "#nu floor (permeable)"
     ### SI
     text["XENON1T"]    = "#bf{XENON1T}"
     text["LUX"]        = "#bf{LUX}"
@@ -237,19 +187,16 @@ def make_plot(DDresult, Resonances, DijetOnly):
     else :
         text["dijet"]      = "#splitline{CMS Dijet}{[EXO-16-056]}"
     text["dijet_2016"] = "CMS Dijet #it{[EXO-16-056]}"
-    text["trijet"]     = "CMS Boosted dijet #it{[EXO-17-001]}"
+    text["trijet"]     = "#splitline{#bf{Boosted dijet} (35.9 fb^{-1})}{#it{[EXO-17-001]}}"
     text["chi"]        = "chi obs. (exp.excl.)"
     ### CMS MET+X
-    #~ text["monojet"]    = "CMS DM+j/V(qq) #it{[EXO-16-056]}"
-    #~ text["monoZ"]      = "CMS DM+Z(ll) #it{[EXO-16-052]}"
     text["monoHgg"]    = "CMS H_{#gamma #gamma} #it{[EXO-16-054]}"
-    text["monophoton"] = "CMS DM+#gamma #it{[EXO-16-039]}"
 
-    text["monojet"]        = "#splitline{DM + j/V(qq) (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
-    text["monoz"]          = "#splitline{DM + Z_(ll) (35.9 fb^{-1})}{#it{[EXO-16-052]}}"#text["monotop"]    = "CMS DM+t (FC) #it{[EXO-16-040]}"
-    text["monoHgg"]        = "#splitline{DM + H_{#gamma #gamma} (35.9 fb^{-1})}{#it{[EXO-16-054]}}"
-    text["monophoton"]     = "#splitline{DM + #gamma (12.9 fb^{-1})}{#it{[EXO-16-039]}}"
+    text["monojet"]    = "#splitline{#bf{DM + j/V_{qq}} (35.9 fb^{-1})}{#it{[EXO-16-048]}}"
 
+    text["monoZ"]      = "#splitline{#bf{DM + Z_{ll}} (35.9 fb^{-1})}{#it{[EXO-16-052]}}"
+    text["monophoton"] = "#splitline{#bf{DM + #gamma} (12.9 fb^{-1})}{#it{[EXO-16-039]}}"
+    text["monoHgg"]    = "#splitline{#bf{DM + H_{#gamma #gamma}} (35.9 fb^{-1})}{#it{[EXO-16-054]}}"
     ####################
     ### Get datfiles ###
     ### Get graphs   ###
@@ -285,7 +232,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
             tgraph[analysis] = convert_to_nucleon_xs(tgraph[analysis],DDresult)
 
     if Extend :
-        extrapolation( tgraph, DijetOnly, Resonances, resonances, metx, mDM_lb )
+        extrapolation( tgraph, Resonances, resonances, metx, mDM_lb )
 
 
     ###################
@@ -293,29 +240,22 @@ def make_plot(DDresult, Resonances, DijetOnly):
     ### Add legend  ###
     ###################
 
-    if not DijetOnly:
-        C=TCanvas("C","C",1000,600)
-        C.Divide(2)
-        C.cd(1).SetPad(0.0,0,0.75,1.0)
-        C.cd(1).SetLeftMargin(0.15)
-    else :
-        C=TCanvas("C","C",600,600)
-        C.Divide(1)
-        C.cd(1).SetPad(0.0,0,1.0,1.0)
-        C.cd(1).SetLeftMargin(0.15)
-        C.cd(1).SetRightMargin(0.05)
+    C=TCanvas("C","C",1000,600)
+    C.Divide(2)
+    C.cd(1).SetPad(0.0,0,0.75,1.0)
+    C.cd(1).SetLeftMargin(0.15)
 
     C.cd(1).SetLogx()
     C.cd(1).SetLogy()
 
-    if   DDresult=="SD" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-44,2000,1e-37)
-    elif DDresult=="SD"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-45,2000,5*1e-37)
-    elif DDresult=="SI" and DijetOnly : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2000,1e-37)
-    elif DDresult=="SI"               : frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2000,2*1e-35)
-
-
     C.cd(1).SetTickx()
     C.cd(1).SetTicky()
+
+
+    if DDresult=="SD"  : frame = C.cd(1).DrawFrame(mDM_lb,1e-45,2000,5*1e-37)
+    elif DDresult=="SI": frame = C.cd(1).DrawFrame(mDM_lb,1e-47,2000,2*1e-35)
+
+
 
     frame.SetXTitle("Dark matter mass m_{ DM} [GeV]")
     if   DDresult=="SD": frame.SetYTitle("#sigma^{SD}_{DM-proton} [cm^{2}]")
@@ -325,67 +265,53 @@ def make_plot(DDresult, Resonances, DijetOnly):
     frame.GetXaxis().SetTitleOffset(1.0)
     frame.GetYaxis().SetTitleOffset(1.5)
 
-    if DijetOnly:
-        if DDresult == "SI" : leg  = TLatex(0.1,1.2e-38,"#bf{CMS}")
-        if DDresult == "SD" : leg  = TLatex(0.1,1.2e-37,"#bf{CMS}")
-        leg.SetTextFont(42)
-        leg.SetTextSize(0.04)
-        leg.Draw("same")
-
     ###################
     ### Add legend  ###
     ###################
 
-    if not DijetOnly:
-        leg1=C.BuildLegend(0.7,0.4,0.95,0.95)
-        leg1.SetBorderSize(0)
-        leg1.SetTextFont(42)
-        leg1.SetTextSize(0.025)
-        leg1.SetTextAlign(12)
-        leg1.Clear()
-        if DDresult=="SI":
-            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Vector med., Dirac DM; g_{ q} = 0.25, g_{ DM} = 1.0}")
-        elif DDresult=="SD":
-            leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Axial-vector med., Dirac DM; g_{ q} = 0.25, g_{ DM} = 1.0}")
+    leg1=C.BuildLegend(0.7,0.4,0.95,0.95)
+    leg1.SetBorderSize(0)
+    leg1.SetTextFont(42)
+    leg1.SetTextSize(0.025)
+    leg1.SetTextAlign(12)
+    leg1.Clear()
+    if DDresult=="SI":
+        leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Vector med., Dirac DM; g_{ q} = 0.25, g_{ DM} = 1.0}")
+    elif DDresult=="SD":
+        leg1.SetHeader("#splitline{#bf{CMS observed exclusion 90% CL}}{Axial-vector med., Dirac DM; g_{ q} = 0.25, g_{ DM} = 1.0}")
 
-        leg2=C.BuildLegend(0.7,0.05,0.95,0.4)
-        leg2.SetBorderSize(0)
-        leg2.SetTextFont(42)
-        leg2.SetTextSize(0.025)
-        leg2.SetTextAlign(12)
-        leg2.Clear()
-        if   DDresult == "SI": leg2.SetHeader("#bf{DD observed exclusion 90% CL}")
-        elif DDresult == "SD": leg2.SetHeader("#bf{DD/ID observed exclusion 90% CL}")
+    leg2=C.BuildLegend(0.7,0.05,0.95,0.4)
+    leg2.SetBorderSize(0)
+    leg2.SetTextFont(42)
+    leg2.SetTextSize(0.025)
+    leg2.SetTextAlign(12)
+    leg2.Clear()
+    if   DDresult == "SI": leg2.SetHeader("#bf{DD observed exclusion 90% CL}")
+    elif DDresult == "SD": leg2.SetHeader("#bf{DD/ID observed exclusion 90% CL}")
 
-        for analysis in analyses:
-            if analysis=="dijet" or analysis == "dijet_2016": leg1.AddEntry(tgraph[analysis],"#splitline{#bf{Dijet} (35.9 fb^{-1})}{#it{[EXO-16-056]}}")
-            elif analysis == "trijet"     : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{Boosted dijet} (35.9 fb^{-1})}{#it{[EXO-17-001]}}")
-            elif analysis == "XENON1T"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1705.06655]}}","L")
-            elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}","L")#1608.07648]}}") #[arXiv:1512.03506]}}")
-            elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1708.06917]}}","L")
-            elif analysis == "CDMSlite"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.02448]}}","L")
-            elif analysis == "Cresst"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.01515]}}","L")
-            elif analysis == "PICASSO"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1611.01499]}}","L")
-            elif analysis == "Pico60"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1702.07666]}}","L")
-            elif analysis == "SuperKbb"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1503.04858]}}","L")
-            elif analysis == "IceCubebb"  : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1612.05949]}}","L")
-            elif analysis == "IceCubett"  : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1601.00653]}}","L")
-            elif analysis == "monojet"    : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + j/V_{qq}} (35.9 fb^{-1})}{#it{[EXO-16-048]}}","L")
-            elif analysis == "monoZ"      : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + Z_{ll}} (35.9 fb^{-1})}{#it{[EXO-16-052]}}","L")
-            elif analysis == "monophoton" : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + #gamma} (12.9 fb^{-1})}{#it{[EXO-16-039]}}","L")
-            elif analysis == "monoHgg"    : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{DM + H_{#gamma #gamma}} (35.9 fb^{-1})}{#it{[EXO-16-054]}}","L")
-
+    for analysis in analyses:
+        if analysis=="dijet" or analysis == "dijet_2016": leg1.AddEntry(tgraph[analysis],"#splitline{#bf{Dijet} (35.9 fb^{-1})}{#it{[EXO-16-056]}}")
+        elif analysis == "XENON1T"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1705.06655]}}","L")
+        elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}","L")#1608.07648]}}") #[arXiv:1512.03506]}}")
+        elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1708.06917]}}","L")
+        elif analysis == "CDMSlite"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.02448]}}","L")
+        elif analysis == "Cresst"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.01515]}}","L")
+        elif analysis == "PICASSO"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1611.01499]}}","L")
+        elif analysis == "Pico60"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1702.07666]}}","L")
+        elif analysis == "SuperKbb"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1503.04858]}}","L")
+        elif analysis == "IceCubebb"  : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1612.05949]}}","L")
+        elif analysis == "IceCubett"  : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1601.00653]}}","L")
+        else: leg1.AddEntry(tgraph[analysis],text[analysis],"L")
 
 
     ############
     ### Draw ###
     ############
 
-    if not DijetOnly:
-        C.cd(2).SetPad(0.75,0.0,1.0,1.0)
-        C.Update()
-        C.cd(1)
-        C.Update()
+    C.cd(2).SetPad(0.75,0.0,1.0,1.0)
+    C.Update()
+    C.cd(1)
+    C.Update()
 
     C.Update()
 
@@ -425,9 +351,6 @@ def make_plot(DDresult, Resonances, DijetOnly):
             tgraph[analysis].Draw("same")
         elif analysis == "monojet" or analysis=="monophoton" or analysis=="monoZ" or analysis=="monoHgg" or analysis=="dijet" or analysis=="dijet_2016":
             tgraph[analysis].Draw("same")
-        elif analysis == "vFloor" :
-            tgraph[analysis].SetLineWidth(-102)
-            tgraph[analysis].Draw("same")
 
     texts = []
 
@@ -440,7 +363,6 @@ def make_plot(DDresult, Resonances, DijetOnly):
     ############
 
     if( not os.path.exists("./output") ): os.makedirs("./output")
-    if DijetOnly : C.SaveAs("./output/"+DDresult+"_CMSDD_Dijet.pdf")
     elif Resonances : C.SaveAs("./output/"+DDresult+"_CMSDD_Summary.pdf")
     else         : C.SaveAs("./output/"+DDresult+"_CMSDD_Summary_nodijet.pdf")
 
@@ -448,5 +370,5 @@ def make_plot(DDresult, Resonances, DijetOnly):
     ### FIN ###
     ###########
 
-make_plot("SI",1,0)
-make_plot("SD",1,0)
+make_plot("SI",True)
+make_plot("SD",True)

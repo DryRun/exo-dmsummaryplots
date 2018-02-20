@@ -53,9 +53,9 @@ def make_plot(DDresult, Resonances, DijetOnly):
         cmsanalyses.extend(resonances)
 
 
-    if   DDresult == "SI" and DijetOnly : analyses.extend(["Cresst","CDMSlite","PandaX","LUX"])
+    if   DDresult == "SI" and DijetOnly : analyses.extend(["Cresst","CDMSlite","PandaX","LUX","XENON1T"])
     elif DDresult == "SD" and DijetOnly : analyses.extend(["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"])
-    elif DDresult == "SI"               : analyses.extend(["Cresst","CDMSlite","PandaX","LUX"])
+    elif DDresult == "SI"               : analyses.extend(["Cresst","CDMSlite","PandaX","LUX","XENON1T"])
     elif DDresult == "SD"               : analyses.extend(["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"])
 
 
@@ -89,6 +89,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
     #############
 
     if DDresult == "SI":
+        filepath["XENON1T"]        = "DD/SI/xenon1t.txt" 
         filepath["LUX"]            = "DD/SI/LUX_SI_Combination_Oct2016.txt"#"DD/SI/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
         filepath["PandaX"]         = "DD/SI/pandax.txt"
         filepath["CDMSlite"]       = "DD/SI/cdmslite2015.txt"
@@ -148,6 +149,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
 
     linestyle["vFloor"]     = kDashed
     ### SI
+    linestyle["XENON1T"]    = kSolid
     linestyle["LUX"]        = kSolid
     linestyle["PandaX"]     = kSolid
     linestyle["CDMSlite"]   = kSolid
@@ -180,6 +182,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
     color["CDMSlite"]   = kGreen+3
     color["PandaX"]     = kGreen+2
     color["LUX"]        = kGreen+4
+    color["XENON1T"]    = kGreen-5
     ### SD
     color["PICASSO"]     = kBlack
     color["Pico60"]     = kGreen+1
@@ -212,6 +215,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
 
     text["vFloor"]     = "#nu floor (permeable)"
     ### SI
+    text["XENON1T"]    = "#bf{XENON1T}"
     text["LUX"]        = "#bf{LUX}"
     text["PandaX"]     = "#bf{PandaX-II}"
     text["CDMSlite"]   = "#bf{CDMSlite}"
@@ -414,6 +418,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
         for analysis in analyses:
             if analysis=="dijet" or analysis == "dijet_2016": leg1.AddEntry(tgraph[analysis],"#splitline{#bf{Dijet} (35.9 fb^{-1})}{#it{[EXO-16-056]}}")
             elif analysis == "trijet"     : leg1.AddEntry(tgraph[analysis],"#splitline{#bf{Boosted dijet} (35.9 fb^{-1})}{#it{[EXO-17-001]}}")
+            elif analysis == "XENON1T"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1705.06655]}}","L")
             elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}","L")#1608.07648]}}") #[arXiv:1512.03506]}}")
             elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1607.07400]}}","L")
             elif analysis == "CDMSlite"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.02448]}}","L")
@@ -532,41 +537,48 @@ def make_plot(DDresult, Resonances, DijetOnly):
             legy3.SetTextColor(color["LUX"])
             legy3.SetTextSize(0.020)
             legy3.Draw("same")
+        #XENON1T MET+X
+            legy4 = TLatex(100,6e-47,text["XENON1T"])
+            legy4.SetTextAngle(13)
+            legy4.SetTextFont(42)
+            legy4.SetTextColor(color["XENON1T"])
+            legy4.SetTextSize(0.020)
+            legy4.Draw("same")
 
-            legx4  = TLatex(10,2e-39,text["monoZ"])
-            legx4.SetTextAngle(2)
-            legx4.SetTextFont(42)
-            legx4.SetTextColor(color["monoZ"])
-            legx4.SetTextSize(0.020)
-            legx4.Draw("same")
-        # SD MET+X monophoton
-            legx5  = TLatex(40,4.0e-41,text["monophoton"])
-            legx5.SetTextAngle(0)
+            legx5  = TLatex(10,2e-39,text["monoZ"])
+            legx5.SetTextAngle(2)
             legx5.SetTextFont(42)
-            legx5.SetTextColor(color["monophoton"])
+            legx5.SetTextColor(color["monoZ"])
             legx5.SetTextSize(0.020)
             legx5.Draw("same")
-        # SD MET+X monojet
-            legx6  = TLatex(40,6.0e-42,text["monojet"])
+        # SD MET+X monophoton
+            legx6  = TLatex(40,4.0e-41,text["monophoton"])
             legx6.SetTextAngle(0)
             legx6.SetTextFont(42)
-            legx6.SetTextColor(color["monojet"])
+            legx6.SetTextColor(color["monophoton"])
             legx6.SetTextSize(0.020)
             legx6.Draw("same")
-        # SD dijet
-            legx7  = TLatex(1.2,1.0e-41,text["dijet"])
+        # SD MET+X monojet
+            legx7  = TLatex(40,6.0e-42,text["monojet"])
             legx7.SetTextAngle(0)
             legx7.SetTextFont(42)
-            legx7.SetTextColor(color["dijet"])
+            legx7.SetTextColor(color["monojet"])
             legx7.SetTextSize(0.020)
             legx7.Draw("same")
-        # SD trijet
-            legx8  = TLatex(2,1.0e-37,text["trijet"])
+        # SD dijet
+            legx8  = TLatex(1.2,1.0e-41,text["dijet"])
             legx8.SetTextAngle(0)
             legx8.SetTextFont(42)
-            legx8.SetTextColor(color["trijet"])
+            legx8.SetTextColor(color["dijet"])
             legx8.SetTextSize(0.020)
             legx8.Draw("same")
+        # SD trijet
+            legx9  = TLatex(2,1.0e-37,text["trijet"])
+            legx9.SetTextAngle(0)
+            legx9.SetTextFont(42)
+            legx9.SetTextColor(color["trijet"])
+            legx9.SetTextSize(0.020)
+            legx9.Draw("same")
 
     ###############
     ### Plot SD ###
@@ -797,7 +809,7 @@ def make_plot(DDresult, Resonances, DijetOnly):
             tgraph[analysis].SetMarkerColor(linecolor[analysis])
             tgraph[analysis].Draw("F,same")
             tgraph[analysis].Draw("same")
-        elif analysis == "LUX" or analysis=="PandaX" or analysis=="CDMSlite" or analysis=="Cresst":
+        elif analysis == "XENON1T" or analysis == "LUX" or analysis=="PandaX" or analysis=="CDMSlite" or analysis=="Cresst":
             tgraph[analysis].SetFillColor(kWhite)
             tgraph[analysis].SetFillStyle(4001)
             tgraph[analysis].SetLineWidth(2)

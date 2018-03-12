@@ -285,6 +285,7 @@ class GQSummaryPlot:
 		legend_obsexp=False, # Add a solid and dotted line to legend for obs and exp
 		legend_header="#bf{95% CL exclusions}",
 		draw_Z_constraint=False,
+		z_width_legend_entry="#splitline{Z width (all #Gamma_{Z'}/M_{Z'})}{#it{[arXiv:1404.3947]}}",
 		draw_upsilon_constraint=False,
 		gom_x=None, # x coordinate for Gamma/M labels
 		model_label=False, # Add a string specifying the model on the plot
@@ -374,7 +375,7 @@ class GQSummaryPlot:
 			self._tf_Z_constraint.SetLineStyle(9)
 			self._tf_Z_constraint.SetLineWidth(2)
 			self._tf_Z_constraint.Draw("same")
-			self._legend.AddEntry(self._tf_Z_constraint, "#splitline{Z width}{#it{[arXiv:1404.3947]}}", "l")
+			self._legend.AddEntry(self._tf_Z_constraint, z_width_legend_entry, "l")
 
 		if draw_upsilon_constraint:
 			self._tf_upsilon_constraint = TF1("upsilon_constraint", gq_upsilon_constraint, x_range[0], x_range[1], 0)

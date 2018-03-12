@@ -80,4 +80,6 @@ def CMSLabel(pad, extra_text="", halign="left", valign="top", in_frame=True):
 
         extra_text_pos_y = 1. - t + rel_pos_y_oof * (1. - t - b) * (1. + extra_text_size / cms_text_size)/2.*0.95
 
+        print "W={}".format(W)
+        extra_text_dx = 0.065 * ((2640 * (1. - 0.09 - 0.4)) / (W * (1. - l - r)))**1.5
         tl_extra_text.DrawLatex(pos_x + extra_text_dx, extra_text_pos_y, extra_text)

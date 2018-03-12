@@ -108,6 +108,8 @@ legend_entries = {
 	"_GOM100":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~100%}}}{}",
 	"_GOM30":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~30%}}}{}",
 	"_GOM10":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~10%}}}{}",
+	"_GOMall":"#frac{#scale[1.1]{#bf{All #Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}}}}{}",
+	"_empty":"",
 }
 
 # Maximum Gamma/M values
@@ -129,6 +131,7 @@ max_gom = {
 
 # Maximum gq values 
 max_gq = {
+	"EXO16046_obs":1.45,
 	"CDF_Run1":2.5/6,
 	"CDF_Run2":2.5/6,
 	"UA2":2.5/6,
@@ -144,7 +147,9 @@ _GOM10,ATLAS_CONF16030_low_obs,ATLAS_CONF16030_high_obs,\
 EXO16056_narrow_obs,ATLAS_CONF16070_ISRy_obs,\
 EXO14005_obs,ATLAS_CONF16070_ISRj_obs,\
 EXO16057_SR1_obs,UA2,\
-EXO17001_obs,CDF_Run1,CDF_Run2,EXO16057_SR2_obs", help="Analyses to plot (CADI lines, comma-separated)") 
+EXO17001_obs,CDF_Run1,\
+CDF_Run2,EXO16057_SR2_obs", 
+		help="Analyses to plot (CADI lines, comma-separated)") 
 	# _GOM30,EXO16056_wide_obs - didn't make Moriond
 	parser.add_argument('--logx', action='store_true', help='Log x')
 	parser.add_argument('--logy', action='store_true', help='Log y')

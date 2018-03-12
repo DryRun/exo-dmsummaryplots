@@ -108,6 +108,7 @@ legend_entries = {
 	"_GOM100":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~100%}}}{}",
 	"_GOM30":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~30%}}}{}",
 	"_GOM10":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~10%}}}{}",
+	"_GOMall":"#frac{#scale[1.1]{#bf{All #Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}}}}{}",
 }
 
 # Maximum Gamma/M values
@@ -129,6 +130,7 @@ max_gom = {
 
 # Maximum gq values 
 max_gq = {
+	"EXO16046_obs":1.45,
 	"CDF_Run1":2.5/6,
 	"CDF_Run2":2.5/6,
 	"UA2":2.5/6,
@@ -142,7 +144,7 @@ _GOM100,EXO16046_obs,_GOM10,EXO16056_narrow_obs,\
 EXO14005_obs,EXO16057_SR1_obs,EXO17001_obs,\
 ATLAS_EXOT1701_obs,ATLAS_EXOT1621_obs,ATLAS_CONF16030_low_obs,\
 ATLAS_CONF16030_high_obs,ATLAS_CONF16070_ISRy_obs,ATLAS_CONF16070_ISRj_obs,\
-UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs", help="Analyses to plot (CADI lines, comma-separated)") 
+UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs,_GOMall", help="Analyses to plot (CADI lines, comma-separated)") 
 	# _GOM30,EXO16056_wide_obs - didn't make Moriond
 	parser.add_argument('--logx', action='store_true', help='Log x')
 	parser.add_argument('--logy', action='store_true', help='Log y')
@@ -212,6 +214,7 @@ UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs", help="Analyses to plot (CADI lines, com
 			legend_text_size=0.023,
 			legend_ncolumns=1,
 			draw_Z_constraint=True,
+			z_width_legend_entry="#splitline{Z width}{#it{[arXiv:1404.3947]}}",
 			gom_x=60.,
 			model_label={"x":2100., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills
@@ -230,6 +233,7 @@ UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs", help="Analyses to plot (CADI lines, com
 			legend_text_size=0.024,
 			legend_ncolumns=1,
 			draw_Z_constraint=True,
+			z_width_legend_entry="#splitline{Z width}{#it{[arXiv:1404.3947]}}",
 			gom_x=6000.,
 			model_label={"x":5500., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills,

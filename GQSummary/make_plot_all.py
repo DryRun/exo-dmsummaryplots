@@ -91,16 +91,16 @@ legend_entries = {
 	"EXO16046_obs":"#splitline{CMS Dijet #chi, 13 TeV}{#it{[EXO-16-046]}}",
 	"EXO16056_narrow_obs":"#splitline{CMS Dijet, 13 TeV}{#it{[EXO-16-056]}}",
 	"EXO16056_wide_obs":"#splitline{CMS Wide Dijet, 13 TeV}{#it{[EXO-16-056]}}",
-	"EXO16057_SR1_obs":"#splitline{CMS Dijet b tagged, 8 TeV}{#it{[EXO-16-057]}}",
+	"EXO16057_SR1_obs":"#splitline{CMS Dijet b tagged, 8 TeV}{#it{[arXiv:1802.06149]}}",
 	"EXO16057_SR2_obs":False, # Only need one of SR1/SR2 for the legend
-	"EXO17001_obs":"#splitline{CMS Boosted Dijet, 13 TeV}{#it{[EXO-17-001]}}",
-	"CDF_Run1":"#splitline{CDF Run1}{#it{[Phys. Rev. D 55, 5263 (1997)]}}",
-	"CDF_Run2":"#splitline{CDF Run2}{#it{[Phys. Rev. D 79, 112002 (2009)]}}",
+	"EXO17001_obs":"#splitline{CMS Boosted Dijet, 13 TeV}{#it{[arXiv:1710.00159]}}",
+	"CDF_Run1":"#splitline{CDF Run1}{#it{[arXiv:hep-ex/9702004]}}", # Phys. Rev. D 55, 5263 (1997)
+	"CDF_Run2":"#splitline{CDF Run2}{#it{[arXiv:0812.4036]}}", # Phys. Rev. D 79, 112002 (2009)
 	"UA2":"#splitline{UA2}{#it{[Nucl. Phys. B 400, 3 (1993)]}}",
-	"EXO14005_obs":"#splitline{CMS Dijet, 8 TeV}{#it{[EXO-14-005]}}",
-	"ATLAS_8TeV":"#splitline{ATLAS Dijet, 8 TeV}{#it{[ATLAS-EXOT-2013-11]}}",
-	"ATLAS_EXOT1701_obs":"#splitline{ATLAS Boosted Dijet, 13 TeV}{#it{[ATLAS-EXOT-2017-01]}}",
-	"ATLAS_EXOT1621_obs":"#splitline{ATLAS Dijet, 13 TeV}{#it{[ATLAS-EXOT-2016-21]}}",
+	"EXO14005_obs":"#splitline{CMS Dijet, 8 TeV}{#it{[arXiv:1604.08907]}}",
+	"ATLAS_8TeV":"#splitline{ATLAS Dijet, 8 TeV}{#it{[arXiv:1407.1376]}}",
+	"ATLAS_EXOT1701_obs":"#splitline{ATLAS Boosted Dijet, 13 TeV}{#it{[arXiv:1801.08769]}}",
+	"ATLAS_EXOT1621_obs":"#splitline{ATLAS Dijet, 13 TeV}{#it{[arXiv:1703.09127]}}",
 	"ATLAS_CONF16030_low_obs":"#splitline{ATLAS TLA, 13 TeV}{#it{[ATLAS-CONF-2016-030]}}",
 	"ATLAS_CONF16030_high_obs":False,
 	"ATLAS_CONF16070_ISRy_obs":"#splitline{ATLAS Dijet+ISR #gamma, 13 TeV}{#it{[ATLAS-CONF-2016-070]}}",
@@ -217,7 +217,8 @@ UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs,_GOMall", help="Analyses to plot (CADI li
 			z_width_legend_entry="#splitline{Z width}{#it{[arXiv:1404.3947]}}",
 			gom_x=60.,
 			model_label={"x":2100., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
-			gom_fills=args.gom_fills
+			gom_fills=args.gom_fills,
+			conference_label={"x":1500., "y":2. * 1.1, "text":"Moriond 2018"}			
 			)
 	else:
 		gq_plot.draw(
@@ -237,8 +238,9 @@ UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs,_GOMall", help="Analyses to plot (CADI li
 			gom_x=6000.,
 			model_label={"x":5500., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills,
+			conference_label={"x":3000., "y":2. * 1.1, "text":"Moriond 2018"}			
 			)
 
-	gq_plot.save("plots")
+	gq_plot.save("plots", exts=["pdf", "png"])
 
 

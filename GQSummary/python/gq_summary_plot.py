@@ -289,7 +289,8 @@ class GQSummaryPlot:
 		draw_upsilon_constraint=False,
 		gom_x=None, # x coordinate for Gamma/M labels
 		model_label=False, # Add a string specifying the model on the plot
-		gom_fills=False # Draw limit fills including upper boundaries
+		gom_fills=False, # Draw limit fills including upper boundaries
+		conference_label=False # Draw "timestamp" label, i.e. "Moriond 2018"
 		):
 		canvas_name = "c_{}_{}_{}{}".format(self._name, ("logx" if logx else "linearx"), ("logy" if logy else "lineary"), ("_gomfills" if gom_fills else ""))
 		self._canvas = TCanvas(canvas_name, canvas_name, canvas_dim[0], canvas_dim[1])
@@ -433,6 +434,12 @@ class GQSummaryPlot:
 
 		if draw_cms:
 			CMSLabel(self._canvas, extra_text=draw_cms, halign="left", valign="top", in_frame=False)
+
+		if conference_label:
+			self._conference_label = TLatex(conference_label["x"], conference_label["y"], conference_label["text"])
+			self._conference_label.SetTextSize(0.045)
+			self._conference_label.SetTextColor(1)
+			self._conference_label.Draw("same")
 
 	def cd(self):
 		self._canvas.cd()

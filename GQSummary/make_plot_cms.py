@@ -88,13 +88,13 @@ legend_entries = {
 	"EXO16056_narrow_exp":False,
 	#"EXO16056_wide_obs":"#splitline{Wide Dijet #it{[EXO-16-056]}}{35.9 fb^{-1}, 13 TeV}",
 	#"EXO16056_wide_exp":False,
-	"EXO16057_SR1_obs":"#splitline{Dijet b-tagged #it{[EXO-16-057]}}{19.7 fb^{-1}, 8 TeV}",
+	"EXO16057_SR1_obs":"#splitline{Dijet b-tagged #it{[arXiv:1802.06149]}}{19.7 fb^{-1}, 8 TeV}",
 	"EXO16057_SR1_exp":False,
 	"EXO16057_SR2_obs":False, # Only need one of SR1/SR2 for the legend
 	"EXO16057_SR2_exp":False,
-	"EXO17001_obs":"#splitline{Boosted Dijet #it{[EXO-17-001]}}{35.9 fb^{-1}, 13 TeV}",
+	"EXO17001_obs":"#splitline{Boosted Dijet #it{[arXiv:1710.00159]}}{35.9 fb^{-1}, 13 TeV}",
 	"EXO17001_exp":False,
-	"EXO14005_obs":"#splitline{Dijet #it{[EXO-14-005]}}{19.7 fb^{-1}, 8 TeV}",
+	"EXO14005_obs":"#splitline{Dijet #it{[arXiv:1604.08907]}}{19.7 fb^{-1}, 8 TeV}",
 	"EXO14005_exp":False,
 	"_GOM100":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~100%}}}{}",
 	"_GOM30":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~30%}}}{}",
@@ -200,7 +200,8 @@ EXO16057_SR2_obs,EXO16057_SR2_exp\
 			legend_obsexp=True,
 			model_label={"x":2000., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_x=60.,
-			gom_fills=args.gom_fills
+			gom_fills=args.gom_fills,
+			conference_label={"x":1500., "y":y_range[1] * 1.1, "text":"Moriond 2018"}
 			)
 	else:
 		gq_plot.draw(
@@ -218,7 +219,8 @@ EXO16057_SR2_obs,EXO16057_SR2_exp\
 			model_label={"x":4500., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_x=1250.,
 			gom_fills=args.gom_fills,
+			conference_label={"x":4000., "y":y_range[1] * 1.1, "text":"Moriond 2018"},
 			)
-	gq_plot.save("plots")
+	gq_plot.save("plots", exts=["pdf", "png"])
 
 

@@ -1,7 +1,8 @@
-Usage: 
+Usage: for example, see moriond2018.sh:
 ```
-python make_plot_all.py --logx --cms_text Preliminary --goms 0.1,0.3,0.5,1.0 --logy
-python make_plot_cms.py --logx --cms_text Preliminary --goms 0.1,0.3,0.5
+python make_plot_cms.py --cms_text Preliminary --goms 0.05,0.1,0.3,0.5,1.0  --logy
+python make_plot_cms.py --cms_text Preliminary --goms 0.05,0.1,0.3,0.5,1.0  --logy --logx
+python make_plot_all_2c.py --cms_text Preliminary --goms 0.05,0.1,0.3,0.5,1.0  --logy --logx
 ```
 
 More details:
@@ -25,3 +26,6 @@ Command line arguments:
 `--cms`: Draw CMS label.
 
 `--cms_text [extra text]`: Draw CMS label with extra text, e.g. CMS Preliminary
+
+Outstanding issues:
+- The CMS label module (python/cms_label.py) isn't very good at adjusting to different canvas sizes. This will probably require tweaking if you change the default canvas size.

@@ -13,7 +13,7 @@ More details:
 
 Command line arguments:
 
-`--analyses`: Analyses to plot, corresponding to filenames in data/*.dat. The order of analyses corresponds to the legend order (remembe that TLegends with multiple columns fill in entries from left to right, then top to bottom).
+`--analyses`: Analyses to plot, corresponding to filenames in data/*.dat. The order of analyses corresponds to the legend order (remember that TLegends with multiple columns fill in entries from left to right, then top to bottom). This is a bit hard to control from the command line, so it's probably best to modify the default argparse value.
 
 `--logx`
 

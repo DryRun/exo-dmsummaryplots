@@ -76,6 +76,14 @@ style = {
 		"line_color":seaborn_colors.get_root_color("Blues_d", 4),
 		"line_style":2, 
 		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),
+	}, "ATLAS_EXOT2016020_low_obs":{
+		"line_color":seaborn_colors.get_root_color("Blues_d", 4),
+		"line_style":2, 
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),
+	}, "ATLAS_EXOT2016020_high_obs":{
+		"line_color":seaborn_colors.get_root_color("Blues_d", 4),
+		"line_style":2, 
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),
 	}, "ATLAS_CONF16070_ISRy_obs":{
 		"line_color":seaborn_colors.get_root_color("Blues_d", 2),
 		"line_style":2, 
@@ -103,6 +111,8 @@ legend_entries = {
 	"ATLAS_EXOT1621_obs":"#splitline{ATLAS Dijet, 13 TeV}{#it{[arXiv:1703.09127]}}",
 	"ATLAS_CONF16030_low_obs":"#splitline{ATLAS TLA, 13 TeV}{#it{[ATLAS-CONF-2016-030]}}",
 	"ATLAS_CONF16030_high_obs":False,
+	"ATLAS_EXOT2016020_low_obs":"#splitline{ATLAS TLA, 13 TeV}{#it{[ATLAS-CONF-2016-030]}}",
+	"ATLAS_EXOT2016020_high_obs":False,
 	"ATLAS_CONF16070_ISRy_obs":"#splitline{ATLAS Dijet+ISR #gamma, 13 TeV}{#it{[ATLAS-CONF-2016-070]}}",
 	"ATLAS_CONF16070_ISRj_obs":"#splitline{ATLAS Dijet+ISR j, 13 TeV}{#it{[ATLAS-CONF-2016-070]}}",
 	"_GOM100":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~100%}}}{}",
@@ -224,7 +234,7 @@ CDF_Run2,EXO16057_SR2_obs",
 			gom_x=60.,
 			model_label={"x":2100., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills,
-			conference_label={"x":1500., "y":2. * 1.1, "text":"Moriond 2018"}			
+			conference_label={"x":1500., "y":2. * 1.1, "text":"LHCP 2018"}			
 			)
 	else:
 		gq_plot.draw(
@@ -243,7 +253,7 @@ CDF_Run2,EXO16057_SR2_obs",
 			gom_x=6000.,
 			model_label={"x":5500., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills,
-			conference_label={"x":3000., "y":2. * 1.1, "text":"Moriond 2018"}
+			conference_label={"x":3000., "y":2. * 1.1, "text":"LHCP 2018"}
 			)
 
 	gq_plot.save("plots", exts=["pdf", "png"])

@@ -17,6 +17,7 @@ import os
 from ROOT import *
 from Utilities import *
 
+gROOT.SetBatch(1)
 
 def convert_to_nucleon_xs(input_graph, scenario, gq=0.25):
 
@@ -96,7 +97,7 @@ def make_plot(DDresult,Resonances):
     #############
 
     if DDresult == "SI":
-        filepath["XENON1T"]        = "input/DD/SI/xenon1t.txt"
+        filepath["XENON1T"]        = "input/DD/SI/xenon1t_2018.txt"
         filepath["LUX"]            = "input/DD/SI/LUX_SI_Combination_Oct2016.txt"#"DD/SI/LUX_SI_DMTools_Jul2016.dat"#"DD/lux2015.txt"
         filepath["PandaX"]         = "input/DD/SI/pandax_2017.txt"
         filepath["CDMSlite"]       = "input/DD/SI/cdmslite2015.txt"
@@ -170,7 +171,7 @@ def make_plot(DDresult,Resonances):
     ### Plot texts ###
     ##################
     ### SI
-    text["XENON1T"]    = "#bf{XENON1T}"
+    text["XENON1T"]    = "#bf{XENON1T 2018}"
     text["LUX"]        = "#bf{LUX}"
     text["PandaX"]     = "#bf{PandaX-II}"
     text["CDMSlite"]   = "#bf{CDMSlite}"
@@ -291,7 +292,8 @@ def make_plot(DDresult,Resonances):
 
     for analysis in analyses:
         if analysis=="dijet" or analysis == "dijet_2016": leg1.AddEntry(tgraph[analysis],"#splitline{#bf{Dijet} (35.9 fb^{-1})}{#it{[EXO-16-056]}}")
-        elif analysis == "XENON1T"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1705.06655]}}","L")
+        if analysis=="trijet": leg1.AddEntry(tgraph[analysis],text[analysis],"LF")
+        elif analysis == "XENON1T"    : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{To be published}","L")
         elif analysis == "LUX"        : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1608.07648]}}","L")#1608.07648]}}") #[arXiv:1512.03506]}}")
         elif analysis == "PandaX"     : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1708.06917]}}","L")
         elif analysis == "CDMSlite"   : leg2.AddEntry(tgraph[analysis],"#splitline{"+text[analysis]+"}{#it{[arXiv:1509.02448]}}","L")

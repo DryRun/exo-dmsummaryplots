@@ -70,7 +70,6 @@ def make_plot(DDresult,Resonances):
     if   DDresult == "SI": analyses.extend(["Cresst","CDMSlite","PandaX","LUX","XENON1T"])
     elif DDresult == "SD": analyses.extend(["PICASSO", "Pico60","SuperKbb","IceCubebb", "IceCubett"])
 
-
     analyses.extend(metx)
     cmsanalyses.extend(metx)
 
@@ -129,6 +128,7 @@ def make_plot(DDresult,Resonances):
         filepath["monoZ"]         = "input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl90_Mmedmore10.txt"
 
     for ana in analyses: linestyle[ana] = kSolid
+
     ###################
     ### Plot colors ###
     ###################

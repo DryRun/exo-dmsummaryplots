@@ -1,0 +1,450 @@
+import os
+import sys
+import math
+import ROOT
+from ROOT import TCanvas, TLegend, TGraph, TF1, TLatex, TH1D, TColor
+ROOT.gROOT.SetBatch(True)
+ROOT.gStyle.SetOptStat(0)
+
+from dijet_data import DijetData
+from zprime_equations import *
+from cms_label import CMSLabel
+
+from seaborn_colors import SeabornColors
+seaborn_colors = SeabornColors()
+seaborn_colors.load_palette("Blues_d", palette_dir="./python/seaborn_palettes")
+seaborn_colors.load_palette("Reds_d", palette_dir="./python/seaborn_palettes")
+seaborn_colors.load_palette("Oranges_d", palette_dir="./python/seaborn_palettes")
+seaborn_colors.load_palette("Greens_d", palette_dir="./python/seaborn_palettes")
+seaborn_colors.load_palette("Purples_d", palette_dir="./python/seaborn_palettes")
+
+
+class GQSummaryPlot:
+	def __init__(self, name):
+		self._name = name
+		self._analyses = []
+		self._dijet_data = {}
+		self._legend_entries = {}
+		self._graphs = {}
+		self._limit_fills = {}
+		self._GoMs = []
+		self._vtype = "vector"
+		self._style = {"default":{
+			"line_color":1,
+			"line_width":402,
+			"line_style":1,
+			"marker_style":20,
+			"marker_size":0,
+			"marker_color":1,
+			"fill_style":3004,
+			"fill_color":0,
+			}
+		}
+
+
+	# style = dict of <analysis name>:{"line_color":1, "marker_style":20, etc}
+	# See the default option in __init__ for the full list of options
+	def set_style(self, style):
+		self._style.update(style)
+
+	def set_vtype(self, vtype):
+		vtype = vtype.lower()
+		if not vtype in ["vector", "axial"]:
+			raise ValueError("[set_vtype] Argument vtype must be 'vector' or 'axial'")
+		self._vtype = vtype
+
+	def add_data(self, dijet_data, name, legend, max_gq=False, max_gom_fill=False, max_gq_fill=False):
+		self._analyses.append(name)
+		self._dijet_data[name] = dijet_data
+		self._legend_entries[name] = legend
+
+		if max_gq:
+			# Truncation at max_gq can result in multiple graphs. Store these as extra graphs with _#
+			truncated_graphs = self.truncate_graph_gq(dijet_data.get_graph(), max_gq)
+			for i, graph in enumerate(truncated_graphs):
+				piece_name = name
+				if i != 0:
+					piece_name += str(i)
+					self._legend_entries[piece_name] = False
+				self._graphs[piece_name] = truncated_graphs[i]
+		else:
+			self._graphs[name] = dijet_data.get_graph()
+
+		if max_gom_fill:
+			self._limit_fills[name] = self.create_limit_gom_fill(dijet_data.get_graph(), max_gom_fill)
+		if max_gq_fill:
+			self._limit_fills[name] = self.create_limit_gq_fill(dijet_data.get_graph(), max_gq_fill)
+
+	# Add legend entry with no object
+	def add_legend_only(self, name, legend_entry):
+		self._legend_entries[name] = legend_entry
+		self._analyses.append(name)
+		self._graphs[name] = 0
+
+
+	def set_width_curves(self, GoMs):
+		self._GoMs = GoMs
+
+	def style_graph(self, graph, name):
+		if not name in self._style:
+			print "[style_graph] ERROR : Analysis {} is not present in the style dict. Please add.".format(name)
+			sys.exit(1)
+		if "line_color" in self._style[name]:
+			graph.SetLineColor(self._style[name]["line_color"])
+		else:
+			graph.SetLineColor(self._style["default"]["line_color"])
+		if "line_style" in self._style[name]:
+			graph.SetLineStyle(self._style[name]["line_style"])
+		else:
+			graph.SetLineStyle(self._style["default"]["line_style"])
+		if "line_width" in self._style[name]:
+			graph.SetLineWidth(self._style[name]["line_width"])
+		else:
+			graph.SetLineWidth(self._style["default"]["line_width"])
+		if "marker_color" in self._style[name]:
+			graph.SetMarkerColor(self._style[name]["marker_color"])
+		else:
+			graph.SetMarkerColor(self._style["default"]["marker_color"])
+		if "marker_style" in self._style[name]:
+			graph.SetMarkerStyle(self._style[name]["marker_style"])
+		else:
+			graph.SetMarkerStyle(self._style["default"]["marker_style"])
+		if "marker_size" in self._style[name]:
+			graph.SetMarkerSize(self._style[name]["marker_size"])
+		else:
+			graph.SetMarkerSize(self._style["default"]["marker_size"])
+		if "fill_style" in self._style[name]:
+			graph.SetFillStyle(self._style[name]["fill_style"])
+		else:
+			graph.SetFillStyle(self._style["default"]["fill_style"])
+		if "fill_color" in self._style[name]:
+			graph.SetFillColor(self._style[name]["fill_color"])
+		else:
+			graph.SetFillColor(self._style["default"]["fill_color"])
+
+	# Create a polygon TGraph corresponding to the excluded range including an upper limit from Gamma/M
+	# This is pretty ugly. Can it be improved?
+	def create_limit_gom_fill(self, limit_graph, max_gom):
+		tf_gom = TF1("tmp_tf1_gq_{}".format(max_gom), lambda x, this_gom=max_gom: gom_to_gq(this_gom, x[0], self._vtype), 0.1, 10000., 0) # 
+
+		# Calculate new graph that stays at or below the gom curve
+		new_limit_points = {}
+		limit_x = limit_graph.GetX()
+		limit_y = limit_graph.GetY()
+		for i in xrange(limit_graph.GetN() - 1):
+			x1 = limit_x[i]
+			x2 = limit_x[i+1]
+			y1 = limit_y[i]
+			y2 = limit_y[i+1]
+			gom1 = tf_gom.Eval(x1)
+			gom2 = tf_gom.Eval(x2)
+			if (y1 < gom1 and y2 > gom2) or (y1 > gom1 and y2 < gom2):
+				# Calculate intersection of interpolation with GOM using bisection
+				xlow  = x1
+				xhigh = x2
+				ylow  = y1
+				yhigh  = y2
+				gomlow = tf_gom.Eval(xlow)
+				gomhigh = tf_gom.Eval(xhigh)
+				for j in xrange(20):
+					xmid = (xlow + xhigh) / 2.
+					ymid = (ylow + yhigh) / 2.
+					gommid = tf_gom.Eval(xmid)
+					if (ylow < gomlow and ymid < gommid) or (ylow > gomlow and ymid > gommid):
+						xlow = xmid
+						ylow = ymid
+						gomlow = gommid
+					elif (yhigh < gomhigh and ymid < gommid) or (yhigh > gomhigh and yhigh > gomhigh):
+						xhigh = xmid
+						yhigh = ymid
+						gomhigh = gommid
+				int_x = (xhigh + xlow) / 2.
+				int_y = (yhigh + ylow) / 2.
+				new_limit_points[int_x] = int_y
+
+		# Move any old points above the GOM to the GOM
+		for i in xrange(limit_graph.GetN()):
+			if limit_y[i] > tf_gom.Eval(limit_x[i]):
+				new_limit_points[limit_x[i]] = tf_gom.Eval(limit_x[i])
+			else:
+				new_limit_points[limit_x[i]] = limit_y[i]
+
+		# New graph: limit points
+		new_graph = TGraph(len(new_limit_points) + 10000)
+		for i, x in enumerate(sorted(new_limit_points.keys())):
+			new_graph.SetPoint(i, x, new_limit_points[x])
+
+		# New graph: upper boundary corresponding to GOM
+		xmin = min(new_limit_points.keys())
+		xmax = max(new_limit_points.keys())
+		for i in xrange(10001):
+			this_x = xmax + (xmin - xmax) * i / 10000.
+			new_graph.SetPoint(len(new_limit_points) + i, this_x, tf_gom.Eval(this_x))
+		return new_graph
+
+	def create_limit_gq_fill(self, limit_graph, max_gq):
+		# Calculate new graph that stays at or below max_gq
+		new_limit_points = {}
+		limit_x = limit_graph.GetX()
+		limit_y = limit_graph.GetY()
+		for i in xrange(limit_graph.GetN() - 1):
+			x1 = limit_x[i]
+			x2 = limit_x[i+1]
+			y1 = limit_y[i]
+			y2 = limit_y[i+1]
+			if (y1 < max_gq and y2 > max_gq) or (y1 > max_gq and y2 < max_gq):
+				# Calculate intersection of interpolation with gq
+				int_x = (max_gq - y1) * (x2 - x1) / (y2 - y1) + x1 
+				int_y = max_gq
+				new_limit_points[int_x] = int_y
+
+		# Move any old points above gq to gq
+		for i in xrange(limit_graph.GetN()):
+			if limit_y[i] > max_gq:
+				new_limit_points[limit_x[i]] = max_gq
+			else:
+				new_limit_points[limit_x[i]] = limit_y[i]
+
+		# New graph: limit points
+		new_graph = TGraph(len(new_limit_points) + 3)
+		for i, x in enumerate(sorted(new_limit_points.keys())):
+			new_graph.SetPoint(i, x, new_limit_points[x])
+
+		# New graph: upper boundary corresponding to gq
+		xmin = min(new_limit_points.keys())
+		xmax = max(new_limit_points.keys())
+		new_graph.SetPoint(len(new_limit_points), xmax, max_gq)
+		new_graph.SetPoint(len(new_limit_points) + 1, xmin, max_gq)
+		new_graph.SetPoint(len(new_limit_points) + 2, xmin, new_limit_points[xmin])
+		return new_graph
+
+	# Returns a set of graphs with a maximum g_q
+	def truncate_graph_gq(self, limit_graph, max_gq):
+		# Calculate the sets of x values for the new graphs
+		limit_x = limit_graph.GetX()
+		limit_y = limit_graph.GetY()
+		x_points = [[]]
+		y_points = [[]]
+		if limit_x[0] < max_gq:
+			x_points[-1].append(limit_x[0])
+			y_points[-1].append(limit_y[0])
+		for i in xrange(1, len(limit_x)):
+			if limit_y[i - 1] < max_gq and limit_y[i] < max_gq:
+				x_points[-1].append(limit_x[i])
+				y_points[-1].append(limit_y[i])
+			elif limit_y[i - 1] > max_gq and limit_y[i] < max_gq: # limit crosses max_gq going down: new set
+				if len(x_points[-1]) >= 1:
+					x_points.append([])
+					y_points.append([])
+				# Calculate crossing point
+				# max_gq = limit_y[i-1] + (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1]) * dx
+				slope = (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1])
+				dx = (max_gq - limit_y[i-1]) / slope
+				x_cross = limit_x[i-1] + dx
+				x_points[-1].append(x_cross)
+				x_points[-1].append(limit_x[i])
+				y_points[-1].append(limit_graph.Eval(x_cross))
+				y_points[-1].append(limit_graph.Eval(limit_x[i]))
+			elif limit_y[i - 1] < max_gq and limit_y[i] > max_gq: # limit crosses max_gq going up: end this set with crossing value
+				# Calculate crossing point
+				# max_gq = limit_y[i-1] + (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1]) * dx
+				slope = (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1])
+				dx = (max_gq - limit_y[i-1]) / slope
+				x_cross = limit_x[i-1] + dx
+				x_points[-1].append(x_cross)
+				y_points[-1].append(limit_graph.Eval(x_cross))
+			else: # Both above limit: ignore point
+				pass
+
+		# Convert sets of points to graphs
+		new_graphs = []
+		for igraph in xrange(len(x_points)):
+			if len(x_points[igraph]) == 0:
+				print "[gq_summary_plot::truncate_graph_gq] ERROR : Graph has zero points".format(self._name)
+				print x_points
+				print y_points
+				sys.exit(1)
+			new_graphs.append(TGraph(len(x_points[igraph])))
+			for ipoint in xrange(len(x_points[igraph])):
+				new_graphs[igraph].SetPoint(ipoint, x_points[igraph][ipoint], y_points[igraph][ipoint])
+		return new_graphs
+
+	def draw(self, 
+		logx=False, 
+		logy=False, 
+		x_title="M_{Z'} [GeV]", 
+		y_title="g'_{q}", 
+		x_range=[40., 7000.],
+		y_range=[0, 1.45],
+		canvas_dim=[1800, 1200],
+		canvas_rm=0.32,
+		legend_coords=[0.69, 0.17, 0.99, 0.9],
+		draw_cms=None,
+		legend_text_size=0.028,
+		legend_ncolumns=None,
+		legend_obsexp=False, # Add a solid and dotted line to legend for obs and exp
+		legend_header="#bf{95% CL exclusions}",
+		draw_Z_constraint=False,
+		z_width_legend_entry="#splitline{Z width (all #Gamma_{Z'}/M_{Z'})}{#it{[arXiv:1404.3947]}}",
+		draw_upsilon_constraint=False,
+		gom_x=None, # x coordinate for Gamma/M labels
+		model_label=False, # Add a string specifying the model on the plot
+		gom_fills=False, # Draw limit fills including upper boundaries
+		conference_label=False # Draw "timestamp" label, i.e. "Moriond 2018"
+		):
+		canvas_name = "c_{}_{}_{}{}".format(self._name, ("logx" if logx else "linearx"), ("logy" if logy else "lineary"), ("_gomfills" if gom_fills else ""))
+		self._canvas = TCanvas(canvas_name, canvas_name, canvas_dim[0], canvas_dim[1])
+		ROOT.gStyle.SetPadTickX(1)
+		ROOT.gStyle.SetPadTickY(1)
+		self._canvas.SetLeftMargin(0.09)
+		self._canvas.SetBottomMargin(0.12)
+		self._canvas.SetTopMargin(0.075)
+		self._canvas.SetRightMargin(canvas_rm)
+
+		if logx:
+			self._canvas.SetLogx()
+		if logy:
+			self._canvas.SetLogy()
+		self._canvas.SetTicks(1, 1)
+		self._canvas.cd()
+		self._legend = TLegend(legend_coords[0], legend_coords[1], legend_coords[2], legend_coords[3])
+		self._legend.SetFillStyle(0)
+		self._legend.SetBorderSize(0)
+		self._legend.SetTextSize(legend_text_size)
+		if legend_ncolumns:
+			self._legend.SetNColumns(legend_ncolumns)
+		
+		# Legend headers and obs/exp lines
+		self._legend.SetHeader(legend_header)
+		if legend_obsexp:
+			self._g_obs_dummy = TGraph(10)
+			self._g_obs_dummy.SetLineStyle(1)
+			self._g_obs_dummy.SetLineColor(1)
+			self._g_obs_dummy.SetLineWidth(402)
+			self._g_obs_dummy.SetMarkerStyle(20)
+			self._g_obs_dummy.SetMarkerSize(0)
+			self._g_obs_dummy.SetFillStyle(3004)
+			self._g_obs_dummy.SetFillColor(1)
+			self._legend.AddEntry(self._g_obs_dummy, "Observed", "lf")
+			self._g_exp_dummy = TGraph(10)
+			self._g_exp_dummy.SetLineStyle(2)
+			self._g_exp_dummy.SetLineColor(1)
+			self._g_exp_dummy.SetLineWidth(402)
+			self._g_exp_dummy.SetMarkerStyle(20)
+			self._g_exp_dummy.SetMarkerSize(0)
+			self._legend.AddEntry(self._g_exp_dummy, "Expected", "l")
+
+		self._frame = TH1D("frame", "frame", 100, x_range[0], x_range[1])
+		self._frame.SetDirectory(0)
+		self._frame.GetYaxis().SetRangeUser(y_range[0], y_range[1])
+		self._frame.GetXaxis().SetTitle(x_title)
+		self._frame.GetYaxis().SetTitle(y_title)
+		self._frame.Draw("axis")
+		if logx:
+			self._frame.GetXaxis().SetMoreLogLabels()
+			self._frame.GetXaxis().SetNdivisions(10)
+			self._frame.GetXaxis().SetNoExponent(True)
+		self._frame.GetXaxis().SetTitleOffset(1.)
+		self._frame.GetXaxis().SetTitleSize(0.05)
+		self._frame.GetXaxis().SetLabelSize(0.04)
+		self._frame.GetYaxis().SetTitleOffset(0.8)
+		self._frame.GetYaxis().SetTitleSize(0.05)
+		self._frame.GetYaxis().SetLabelSize(0.04)
+		#if logy:
+		#	self._frame.GetYaxis().SetMoreLogLabels()
+
+		# Draw limit fills first, if any
+		for name, limit_fill in self._limit_fills.iteritems():
+			self._limit_fills[name].SetFillStyle(3003)
+			self._limit_fills[name].SetFillColor(self._style[name]["fill_color"])
+			self._limit_fills[name].Draw("F")
+
+		for analysis_name in self._analyses:
+			if self._graphs[analysis_name]:
+				self.style_graph(self._graphs[analysis_name], analysis_name)
+				self._graphs[analysis_name].Draw("lp")
+				if self._legend_entries[analysis_name] != False:
+					self._legend.AddEntry(self._graphs[analysis_name], self._legend_entries[analysis_name], "l")
+			else:
+				self._legend.AddEntry(0, self._legend_entries[analysis_name], "")
+
+		if draw_Z_constraint:
+			self._tf_Z_constraint = TF1("Z_constraint", gq_Z_constraint, x_range[0], x_range[1], 0)
+			self._tf_Z_constraint.SetNpx(1000)
+			self._tf_Z_constraint.SetLineColor(15)
+			ROOT.gStyle.SetLineStyleString(9, "40 20");
+			self._tf_Z_constraint.SetLineStyle(9)
+			self._tf_Z_constraint.SetLineWidth(2)
+			self._tf_Z_constraint.Draw("same")
+			self._legend.AddEntry(self._tf_Z_constraint, z_width_legend_entry, "l")
+
+		if draw_upsilon_constraint:
+			self._tf_upsilon_constraint = TF1("upsilon_constraint", gq_upsilon_constraint, x_range[0], x_range[1], 0)
+			self._tf_upsilon_constraint.SetNpx(1000)
+			self._tf_upsilon_constraint.SetLineColor(15)
+			ROOT.gStyle.SetLineStyleString(9, "40 20");
+			self._tf_upsilon_constraint.SetLineStyle(9)
+			self._tf_upsilon_constraint.SetLineWidth(2)
+			self._tf_upsilon_constraint.Draw("same")
+			self._legend.AddEntry(self._tf_Z_constraint, "#splitline{#Upsilon width}{#it{[arXiv:1404.3947]}}", "l")
+
+		# Lines at fixed Gamma / M
+		self._GoM_tf1s = {}
+		self._GoM_labels = {}
+		for i, GoM in enumerate(self._GoMs):
+			self._GoM_tf1s[GoM] = TF1("tf1_gq_{}".format(GoM), lambda x, this_gom=GoM: gom_to_gq(this_gom, x[0], self._vtype), x_range[0], x_range[1], 0) # 
+			self._GoM_tf1s[GoM].SetLineColor(ROOT.kGray+1)
+			self._GoM_tf1s[GoM].SetLineStyle(ROOT.kDashed)
+			self._GoM_tf1s[GoM].SetLineWidth(1)
+			self._GoM_tf1s[GoM].Draw("same")
+
+			# TLatex for Gamma / M
+			if gom_x:
+				label_x = gom_x
+			else: 
+				if logx:
+					label_xfrac = 0.05
+				else:
+					label_xfrac = 0.864
+				label_x = (x_range[1] - x_range[0]) * label_xfrac + x_range[0]
+			if logy:
+				label_y = self._GoM_tf1s[GoM].Eval(label_x) * 0.85
+				gom_text = "#Gamma_{{Z'}}#kern[-0.6]{{ }}/#kern[-0.7]{{ }}M_{{Z'}}#kern[-0.7]{{ }}=#kern[-0.7]{{ }}{}%".format(int(GoM * 100))
+			else:
+				# label_y = self._GoM_tf1s[GoM].Eval(label_x) - 0.085 # For labels under the line
+				label_y = self._GoM_tf1s[GoM].Eval(label_x) + 0.05 # For labels over the line
+				gom_text = "#frac{{#Gamma}}{{M_{{Z'}}}} = {}%".format(int(GoM * 100))
+			self._GoM_labels[GoM] = TLatex(label_x, label_y, gom_text)
+			if logy:
+				self._GoM_labels[GoM].SetTextSize(0.028)
+			else:
+				self._GoM_labels[GoM].SetTextSize(0.027)
+			self._GoM_labels[GoM].SetTextColor(ROOT.kGray+1)
+			self._GoM_labels[GoM].Draw("same")
+
+		# Vector label
+		if model_label:
+			self._model_label = TLatex(model_label["x"], model_label["y"], model_label["text"])
+			self._model_label.SetTextSize(0.04)
+			self._model_label.SetTextColor(1)
+			self._model_label.Draw("same")
+
+		# Legend last, to be on top of lines
+		self._legend.Draw()
+
+		if draw_cms:
+			CMSLabel(self._canvas, extra_text=draw_cms, halign="left", valign="top", in_frame=False)
+
+		if conference_label:
+			self._conference_label = TLatex(conference_label["x"], conference_label["y"], conference_label["text"])
+			self._conference_label.SetTextSize(0.045)
+			self._conference_label.SetTextColor(1)
+			self._conference_label.Draw("same")
+
+	def cd(self):
+		self._canvas.cd()
+
+	def save(self, folder, exts=["pdf"]):
+		for ext in exts:
+			self._canvas.SaveAs("{}/{}.{}".format(folder, self._canvas.GetName(), ext))
+

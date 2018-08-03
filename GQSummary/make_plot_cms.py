@@ -84,9 +84,9 @@ style = {
 legend_entries = {
 	"EXO16046_obs":"#splitline{Dijet #chi #it{[EXO-16-046]}}{35.9 fb^{-1}, 13 TeV}",
 	"EXO16046_exp":False,
-	"EXO16056_narrow_obs":"#splitline{Dijet #it{[EXO-16-056]}}{35.9 fb^{-1}, 13 TeV}",
+	"EXO16056_narrow_obs":"#splitline{Dijet #it{[arXiv:1806.00843]}}{35.9 fb^{-1}, 13 TeV}",
 	"EXO16056_narrow_exp":False,
-	"EXO16056_wide_obs":"#splitline{Wide Dijet #it{[EXO-16-056]}}{35.9 fb^{-1}, 13 TeV}",
+	"EXO16056_wide_obs":"#splitline{Broad Dijet #it{[arXiv:1806.00843]}}{35.9 fb^{-1}, 13 TeV}",
 	"EXO16056_wide_exp":False,
 	"EXO16057_SR1_obs":"#splitline{Dijet b-tagged #it{[arXiv:1802.06149]}}{19.7 fb^{-1}, 8 TeV}",
 	"EXO16057_SR1_exp":False,
@@ -122,7 +122,7 @@ if __name__ == "__main__":
 	parser = ArgumentParser(description='Make g_q summary plot')
 	parser.add_argument('--analyses', type=str, default="\
 _GOM100,EXO16046_obs,EXO16046_exp,\
-EXO16056_wide_obs,EXO16056_wide_exp,\
+_GOM30,EXO16056_wide_obs,EXO16056_wide_exp,\
 _GOM10,EXO16056_narrow_obs,EXO16056_narrow_exp,\
 EXO14005_obs,EXO14005_exp,\
 EXO17001_obs,EXO17001_exp,\

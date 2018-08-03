@@ -3,18 +3,29 @@ import ROOT,sys,os,math
 from math import *
 import numpy as np
 
+quark_masses = {
+    "u":2.3e-3,
+    "d":4.8e-3,
+    "s":0.095,
+    "c":1.275,
+    "b":4.180,
+    "t":173.210
+}
 
-def Gammaqq(gq,Mmed,mq,style):
-    if style=="Axial":
-        return gq**2*Mmed*math.pow((1-float(4*mq**2)/Mmed**2),1.5)/(4*pi)
+def Gammaqq(gq,Mmed,qflavor,style):
+    if quark_masses[qflavor] > Mmed / 2.:
+        return 0.
+    elif style=="Axial":
+        return gq**2*Mmed*math.pow((1-float(4*quark_masses[qflavor]**2)/Mmed**2),1.5)/(4*pi)
     elif style=="Vector":
-        return gq**2*Mmed*math.pow((1-float(4*mq**2)/Mmed**2),0.5)*(1+2*float(mq**2)/Mmed**2)/(4*pi)
+        return gq**2*Mmed*math.pow((1-float(4*quark_masses[qflavor]**2)/Mmed**2),0.5)*(1+2*float(quark_masses[qflavor]**2)/Mmed**2)/(4*pi)
 
 def Gammaqq_tot(gq,Mmed,style):
-    if Mmed>=173*2:
-        return 5*Gammaqq(gq,Mmed,0,style)+Gammaqq(gq,Mmed,173,style)
-    else:
-        return 5*Gammaqq(gq,Mmed,0,style)
+    return sum([Gammaqq(gq, Mmed, qflavor, style) for qflavor in ["u", "d", "s", "c", "b", "t"]])
+    #if Mmed>=173*2:
+    #    return 5*Gammaqq(gq,Mmed,0,style)+Gammaqq(gq,Mmed,173,style)
+    #else:
+    #    return 5*Gammaqq(gq,Mmed,0,style)
 
 def GammaDM(gDM,Mmed,mDM,style):
     if 2*mDM<=Mmed:

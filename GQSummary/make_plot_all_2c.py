@@ -3,6 +3,7 @@ import sys
 sys.path.append("./python/")
 from gq_summary_plot import GQSummaryPlot, seaborn_colors
 from dijet_data import DijetData
+import ROOT
 from ROOT import TLine
 
 # Set all the plot styling here
@@ -92,13 +93,17 @@ style = {
 		"line_color":seaborn_colors.get_root_color("Reds_d", 1),
 		"line_style":2, 
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 1),
+	}, "ATLAS_EXOT16033_obs":{
+		"line_color":ROOT.kMagenta,
+		"line_style":2, 
+		"fill_color":ROOT.kMagenta,
 	}
 }
 
 legend_entries = {
 	"EXO16046_obs":"#splitline{CMS Dijet #chi, 13 TeV}{#it{[EXO-16-046]}}",
-	"EXO16056_narrow_obs":"#splitline{CMS Dijet, 13 TeV}{#it{[EXO-16-056]}}",
-	"EXO16056_wide_obs":"#splitline{CMS Wide Dijet, 13 TeV}{#it{[EXO-16-056]}}",
+	"EXO16056_narrow_obs":"#splitline{CMS Dijet, 13 TeV}{#it{[arXiv:1806.00843]}}",
+	"EXO16056_wide_obs":"#splitline{CMS Broad Dijet, 13 TeV}{#it{[arXiv:1806.00843]}}",
 	"EXO16057_SR1_obs":"#splitline{CMS Dijet b tagged, 8 TeV}{#it{[arXiv:1802.06149]}}",
 	"EXO16057_SR2_obs":False, # Only need one of SR1/SR2 for the legend
 	"EXO17001_obs":"#splitline{CMS Boosted Dijet, 13 TeV}{#it{[arXiv:1710.00159]}}",
@@ -109,10 +114,11 @@ legend_entries = {
 	"ATLAS_8TeV":"#splitline{ATLAS Dijet, 8 TeV}{#it{[arXiv:1407.1376]}}",
 	"ATLAS_EXOT1701_obs":"#splitline{ATLAS Boosted Dijet, 13 TeV}{#it{[arXiv:1801.08769]}}",
 	"ATLAS_EXOT1621_obs":"#splitline{ATLAS Dijet, 13 TeV}{#it{[arXiv:1703.09127]}}",
-	"ATLAS_CONF16030_low_obs":"#splitline{ATLAS TLA, 13 TeV}{#it{[ATLAS-CONF-2016-030]}}",
+	"ATLAS_CONF16030_low_obs":"#splitline{ATLAS Dijet TLA, 13 TeV}{#it{[ATLAS-CONF-2016-030]}}",
 	"ATLAS_CONF16030_high_obs":False,
-	"ATLAS_EXOT2016020_low_obs":"#splitline{ATLAS TLA, 13 TeV}{#it{[ATLAS-CONF-2016-030]}}",
+	"ATLAS_EXOT2016020_low_obs":"#splitline{ATLAS Dijet TLA, 13 TeV}{#it{[arXiv:1804.03496]}}",
 	"ATLAS_EXOT2016020_high_obs":False,
+	"ATLAS_EXOT16033_obs":"#splitline{ATLAS Dijet b tagged, 13 TeV}{#it{[arXiv:1805.09299]}}",
 	"ATLAS_CONF16070_ISRy_obs":"#splitline{ATLAS Dijet+ISR #gamma, 13 TeV}{#it{[ATLAS-CONF-2016-070]}}",
 	"ATLAS_CONF16070_ISRj_obs":"#splitline{ATLAS Dijet+ISR j, 13 TeV}{#it{[ATLAS-CONF-2016-070]}}",
 	"_GOM100":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~100%}}}{}",
@@ -182,6 +188,9 @@ CDF_Run2,EXO16057_SR2_obs",
 	analyses = args.analyses.split(",")
 	for analysis in analyses:
 		# Dummy entries: just go in legend, no actual data
+		if len(analysis) == 0:
+			print "ERROR : analyses contains zero length string."
+			print analyses
 		if analysis[0] == "_":
 			gq_plot.add_legend_only(analysis, legend_entries[analysis])
 			continue

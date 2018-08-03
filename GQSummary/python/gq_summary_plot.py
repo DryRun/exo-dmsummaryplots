@@ -38,8 +38,10 @@ class GQSummaryPlot:
 			"marker_color":1,
 			"fill_style":3004,
 			"fill_color":0,
+			"alpha":1.
 			}
 		}
+		self._tranparency = {}
 
 
 	# style = dict of <analysis name>:{"line_color":1, "marker_style":20, etc}
@@ -90,9 +92,15 @@ class GQSummaryPlot:
 			print "[style_graph] ERROR : Analysis {} is not present in the style dict. Please add.".format(name)
 			sys.exit(1)
 		if "line_color" in self._style[name]:
-			graph.SetLineColor(self._style[name]["line_color"])
+			if "alpha" in self._style[name]:
+				graph.SetLineColorAlpha(self._style[name]["line_color"], self._style[name]["alpha"])
+			else:
+				graph.SetLineColor(self._style[name]["line_color"])
 		else:
-			graph.SetLineColor(self._style["default"]["line_color"])
+			if "alpha" in self._style[name]:
+				graph.SetLineColorAlpha(self._style["default"]["line_color"], self._style["default"]["alpha"])
+			else:
+				graph.SetLineColor(self._style["default"]["line_color"])
 		if "line_style" in self._style[name]:
 			graph.SetLineStyle(self._style[name]["line_style"])
 		else:
@@ -102,9 +110,15 @@ class GQSummaryPlot:
 		else:
 			graph.SetLineWidth(self._style["default"]["line_width"])
 		if "marker_color" in self._style[name]:
-			graph.SetMarkerColor(self._style[name]["marker_color"])
+			if "alpha" in self._style[name]:
+				graph.SetMarkerColorAlpha(self._style[name]["marker_color"], self._style[name]["alpha"])
+			else:
+				graph.SetMarkerColor(self._style[name]["marker_color"])
 		else:
-			graph.SetMarkerColor(self._style["default"]["marker_color"])
+			if "alpha" in self._style[name]:
+				graph.SetMarkerColorAlpha(self._style["default"]["marker_color"], self._style["default"]["alpha"])
+			else:
+				graph.SetMarkerColor(self._style["default"]["marker_color"])
 		if "marker_style" in self._style[name]:
 			graph.SetMarkerStyle(self._style[name]["marker_style"])
 		else:
@@ -118,9 +132,15 @@ class GQSummaryPlot:
 		else:
 			graph.SetFillStyle(self._style["default"]["fill_style"])
 		if "fill_color" in self._style[name]:
-			graph.SetFillColor(self._style[name]["fill_color"])
+			if "alpha" in self._style[name]:
+				graph.SetFillColorAlpha(self._style[name]["fill_color"], self._style[name]["alpha"])
+			else:
+				graph.SetFillColor(self._style[name]["fill_color"])
 		else:
-			graph.SetFillColor(self._style["default"]["fill_color"])
+			if "alpha" in self._style[name]:
+				graph.SetFillColorAlpha(self._style["default"]["fill_color"], self._style["default"]["alpha"])
+			else:
+				graph.SetFillColor(self._style["default"]["fill_color"])
 
 	# Create a polygon TGraph corresponding to the excluded range including an upper limit from Gamma/M
 	# This is pretty ugly. Can it be improved?

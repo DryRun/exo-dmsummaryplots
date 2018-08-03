@@ -4,6 +4,7 @@ import re
 import ROOT
 from ROOT import *
 from math import sqrt
+from equations import Gammaqq_tot, Gammaqq
 
 
 class DijetData:
@@ -15,9 +16,12 @@ class DijetData:
 		self._reference_xses = {
 			8.:{
 				"gq0":0.25, 
-				"txt":os.path.expandvars("$CMSSW_BASE/src/DijetDMSummary/data/reference/ZPrime_8TeV_gq0p25.dat")
+				"txt":os.path.expandvars("$CMSSW_BASE/src/MetxCombo2016/GQSummary/data/reference/ZPrime_8TeV_gq0p25.dat")
 			},
-			13.:{}
+			13.:{
+				"gq0":0.25, 
+				"txt":os.path.expandvars("$CMSSW_BASE/src/MetxCombo2016/GQSummary/data/reference/ZPrime_13TeV_gq0p25.dat")			
+			}
 		}
 
 	def set_sqrts(self, sqrt_s):
@@ -35,6 +39,8 @@ class DijetData:
 			data_name = header_contents[2]
 		if data_name == "gq":
 			self.load_gq(txt)
+		elif data_name == "gq_av":
+			self.load_gq_av(txt)
 		elif "xs" in data_name:
 			re_xs = re.compile("xs(?P<sqrts>\d+)")
 			re_xs_result = re_xs.search(data_name)
@@ -58,6 +64,29 @@ class DijetData:
 				line_contents = line.split()
 				self._masses.append(float(line_contents[0]))
 				self._gqs.append(float(line_contents[1]))
+		self._data_loaded = True
+		self.create_graph()
+		#self.print_gq()
+
+	# Load gq values with AXIAL VECTOR couplings. Convert to vector couplings.
+	# @ param gq_txt = path to text file with mass \t gq, one per row.
+	def load_gq_av(self, gq_txt):
+		self._masses = []
+		self._gqs = []
+		self._graph = None
+		with open(gq_txt, 'r') as f:
+			for line in f:
+				if line[0] == "#":
+					continue
+				line_contents = line.split()
+				mZp = float(line_contents[0])
+				gq_av = float(line_contents[1])
+				# Gammaqq_tot: Gammaqq_tot(gq,Mmed,style):
+				# Gammaqq(gq,Mmed,qflavor,style):
+				gq_v = gq_av * sqrt(sum([Gammaqq(0.25, mZp, qflavor, "Axial") for qflavor in ["u", "d"]]) / sum([Gammaqq(0.25, mZp, qflavor, "Vector") for qflavor in ["u", "d"]]))
+				print "[debug] mZp={}, converted gq_av={} ==> gq_v={}".format(mZp, gq_av, gq_v)
+				self._masses.append(mZp)
+				self._gqs.append(float(gq_v))
 		self._data_loaded = True
 		self.create_graph()
 		#self.print_gq()

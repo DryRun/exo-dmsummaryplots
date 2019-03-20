@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 #########################################
 #########################################
 ###                                   ###
@@ -19,65 +22,19 @@ from Utilities import *
 Dijet    = False
 Dilepton = False
 
-# Mediator  = raw_input('Choose mediator [Vector or Axial]: ')
-# Scenario  = raw_input('Choose Scenario according to 1703.05703 [1 or 2 or dijetchi or Monotop]: ') #1 for Default MET+X, 2 for dil, gq=gDM=1 for dijetchi
-# #METXonly  = ast.literal_eval(raw_input('MET+X only? [True or False]: '))
-# METX        = ast.literal_eval(raw_input('MET+X? [True or False]: '))
-# Resonances  = ast.literal_eval(raw_input('Resonances? [True or False]: '))
-# if Resonances :
-#     Dijet     = ast.literal_eval(raw_input('Dijet? [True or False]: '))
-#     Dilepton  = ast.literal_eval(raw_input('Dilepton? [True or False]: '))
+try:
+    All        = ast.literal_eval(raw_input('Want to plot all Scenarios/Mediators [True or False]: '))
+except SyntaxError:
+    All = True
 
-# if Dilepton : gl = ast.literal_eval(raw_input('gl? [0.10 or 0.025 or 0.01]: '))
-
-# logx      = ast.literal_eval(raw_input('Log x? '))
-
-#A1/V1
-# Mediator = "Vector"
-# Scenario = "1"
-# METX = 1
-# Resonances = 1
-# Dijet = 1
-# Dilepton = 0
-# logx = 0
-
-#A1/V1 just MET+X
-Mediator = "Vector"
-Scenario = "1"
-METX = 1
-Resonances = 1
-Dijet = 1
-Dilepton = 0
-logx = 0
-
-#A2
-# Mediator = "Axial"
-# #Mediator = "Vector"
-# Scenario = "2"
-# METX = 0
-# Resonances = 1
-# Dijet = 0
-# Dilepton = 1
-
-# logx = 0
-
-#dijetchi
-# Mediator = "Vector"
-# Scenario = "dijetchi"
-# METX = 0
-# Resonances = 1
-# Dijet = 1
-# Dilepton = 0
-# logx = 0
-
-
-#Monotop
-# Mediator = "Vector"
-# Scenario = "Monotop"
-# METX = 1
-# Resonances = 0
-# logx = 0
-
+if not All :
+    Mediator  = raw_input('Choose mediator [Vector or Axial]: ')
+    Scenario  = raw_input('Choose Scenario according to 1703.05703 [1 or 2 or dijetchi or Monotop]: ')
+    METxOnly        = ast.literal_eval(raw_input('MET+X Only? [True or False]: '))
+try:
+    logx      = ast.literal_eval(raw_input('Log x? '))
+except SyntaxError:
+    logx = False
 
 CL = "95"
 
@@ -85,11 +42,7 @@ CL = "95"
 ### Analyses ####
 #################
 
-#####DECIDE WHERE TO PUT MONOTOP and DIJETCHI DIJET_EXP
-
-#if Mediator == "Axial": metx = ["monojet","monophoton","monoz"]
-#else                  : metx = ["monojet","monophoton","monoz","monoHgg"]
-def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do_expected=False):
+def make_plot(Mediator, Scenario, METxOnly, logx, CL,do_expected=False):
     output = "./output"
     if(not os.path.exists(output)): os.makedirs(output)
     texts = []
@@ -109,7 +62,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     metx = []
     if   scenario_name in ["A1","V1"]:
         metx = ["monojet","monophoton","monoz"]
-    elif scenario_name in ["A1","V2"]:
+    elif scenario_name in ["A2","V2"]:
         metx = []
     elif scenario_name in ["A3","V3"]:
         metx = []
@@ -120,12 +73,17 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
     analyses = []
 
-    if Dilepton  : analyses += ["dilepton"]
-    if Dijet :
+    if not METxOnly                 :
+        analyses += ["dilepton"]
         if scenario_name in ["A3","V3"] : analyses += ["dijetchi"]
-        else : analyses += ["dijet","trijet"]
+        else                            : analyses += ["dijet","trijet"]
+
+    analyses += metx
     analyses.append("relic")
-    if METX: analyses += metx
+
+    print "****************************"
+    print "Plotting following analyses: ", analyses
+    print "****************************"
 
     if(len(analyses)<2):return None
 
@@ -151,17 +109,17 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         frame = C.cd(1).DrawFrame(40,0,4e4,2000)
         C.cd(1).SetLogx()
     else :
-        if scenario_name in ["A3","V3"]:
+        if scenario_name in ["A1","V1"]:
+            if METxOnly == 1 :
+                frame = C.cd(1).DrawFrame(0,0,2800,1000)
+            else :
+                frame = C.cd(1).DrawFrame(0,0,4500,2000)
+        elif scenario_name in ["A2","V2"]:
+            frame = C.cd(1).DrawFrame(0,0,4500,2000)
+        elif scenario_name in ["A3","V3"]:
             frame = C.cd(1).DrawFrame(0,0,5500,2000)
         elif scenario_name in ["A4","V4"]:
             frame = C.cd(1).DrawFrame(0,0,2900,800)
-        elif scenario_name in ["A2"]:
-            frame = C.cd(1).DrawFrame(0,0,4500,2000)
-        elif Dilepton :
-            frame = C.cd(1).DrawFrame(0,0,4500,2000)
-
-        elif Scenario=="1" and Resonances==0 and Dijet==0 and Dilepton==0 :
-            frame = C.cd(1).DrawFrame(0,0,2800,1000)
         else :
             frame = C.cd(1).DrawFrame(0,0,5200,2000)
 
@@ -219,6 +177,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     all_graphs = read_graphs()
 
     reliclist = read_relic_lists()
+
     for analysis in analyses:
 
         ### Observed limit
@@ -226,8 +185,9 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
 
         #~ if(analysis=="dijet"):
             #~ obs.RemovePoint(obs.GetN()-1)
+
         if( not obs ): continue
-        print "analysis "+analysis
+
         obs.SetFillColor(color[analysis])
         obs.SetLineColor(linecolor[analysis])
         obs.SetMarkerSize(0.1)
@@ -258,8 +218,8 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
         if(analysis in ["dijet","dilepton","trijet"]):
             obs.Draw("F,same")
             obs.Draw("L,same")
-
-        else: obs.Draw("same")
+        else:
+            obs.Draw("same")
 
         ### Expected limit
         exp = all_graphs[analysis][scenario_name]["exp"]
@@ -289,9 +249,7 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     ############
 
     figname = Mediator
-    if METX      : figname += "_METX"
-    if Dilepton  : figname += "_Dilepton"
-    if Dijet     : figname += "_Multijet"
+    if METxOnly      : figname += "_METxOnly"
     figname += "_Scenario"+Scenario+"_Summary"
     if(logx): figname += "logx"
     figname +=".pdf"
@@ -300,13 +258,14 @@ def make_plot(Mediator, Scenario, METX, Resonances, Dijet, Dilepton, logx, CL,do
     C.SaveAs("{OUTPUT}/{FILE}".format(OUTPUT=output,FILE=figname))
     C.Close()
 
-for Mediator in ["Axial", "Vector"]:
-    for Scenario in ["1", "2"]:
-        for Resonances in [0,1]:
-            make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=False, CL="95",do_expected=True)
-            if(Scenario=="2"):
-                make_plot(Mediator, Scenario, METX=True, Resonances=Resonances, Dijet=Resonances, Dilepton=Resonances, logx=True, CL="95",do_expected=True)
 
+if All:
+    for Mediator in ["Axial", "Vector"]:
+        for Scenario in ["1", "2"]:
+            for METxOnly in [0,1]:
+                make_plot(Mediator, Scenario, METxOnly, logx, CL="95",do_expected=True)
+else :
+    make_plot(Mediator, Scenario, METxOnly, logx, CL="95",do_expected=True)
 
 ###########
 ### FIN ###

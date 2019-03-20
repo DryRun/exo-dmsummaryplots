@@ -24,6 +24,10 @@ style = {
 		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
 		"line_style":1,
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
+	}, "EXO17026_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 4),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 4),		
 	}, "EXO16056_wide_obs":{
 		"line_color":seaborn_colors.get_root_color("Purples_d", 3),		
 		"line_style":1,
@@ -89,7 +93,8 @@ style = {
 
 legend_entries = {
 	"EXO16046_obs":"#splitline{CMS Dijet #chi, 13 TeV}{#it{[EXO-16-046]}}",
-	"EXO16056_narrow_obs":"#splitline{CMS Dijet, 13 TeV}{#it{[EXO-16-056]}}",
+	"EXO16056_narrow_obs":"#splitline{CMS Dijet '16, 13 TeV}{#it{[EXO-16-056]}}",
+	"EXO17026_obs":"#splitline{CMS Dijet '16+'17, 13 TeV}{#it{[EXO-16-056]}}",
 	"EXO16056_wide_obs":"#splitline{CMS Wide Dijet, 13 TeV}{#it{[EXO-16-056]}}",
 	"EXO16057_SR1_obs":"#splitline{CMS Dijet b tagged, 8 TeV}{#it{[arXiv:1802.06149]}}",
 	"EXO16057_SR2_obs":False, # Only need one of SR1/SR2 for the legend
@@ -150,12 +155,14 @@ UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs,_GOMall", help="Analyses to plot (CADI li
 	parser.add_argument('--logy', action='store_true', help='Log y')
 	parser.add_argument('--goms', type=str, default="0.1,0.3", help='List of Gamma/M values to draw')
 	parser.add_argument('--gom_fills', action='store_true', help='Draw fills for exclusions with Gamma/M or gq upper bound')	
+	parser.add_argument('--save_tag', type=str, default="", help='Tag for saving')
 	cms_label_group = parser.add_mutually_exclusive_group(required=False)
 	cms_label_group.add_argument('--cms', action='store_true', help="Draw CMS label")
 	cms_label_group.add_argument('--cms_text', type=str, help="Draw CMS label with extra text")
+	parser.add_argument('--conference_label', type=str, default="", help="Text for specifying conference or time period")
 	args = parser.parse_args()
 
-	gq_plot = GQSummaryPlot("gq_all")
+	gq_plot = GQSummaryPlot("gq_all{}".format(args.save_tag))
 
 	# If args.goms_fills is specified, don't draw the "line_width=402" style fill
 	if args.gom_fills:
@@ -218,7 +225,7 @@ UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs,_GOMall", help="Analyses to plot (CADI li
 			gom_x=60.,
 			model_label={"x":2100., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills,
-			conference_label={"x":1500., "y":2. * 1.1, "text":"Moriond 2018"}			
+			conference_label={"x":1500., "y":2. * 1.1, "text":args.conference_label}			
 			)
 	else:
 		gq_plot.draw(
@@ -238,7 +245,7 @@ UA2,CDF_Run1,CDF_Run2,EXO16057_SR2_obs,_GOMall", help="Analyses to plot (CADI li
 			gom_x=6000.,
 			model_label={"x":5500., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills,
-			conference_label={"x":3000., "y":2. * 1.1, "text":"Moriond 2018"}			
+			conference_label={"x":3000., "y":2. * 1.1, "text":args.conference_label}			
 			)
 
 	gq_plot.save("plots", exts=["pdf", "png"])

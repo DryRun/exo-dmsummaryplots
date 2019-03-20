@@ -12,11 +12,13 @@ from cms_label import CMSLabel
 
 from seaborn_colors import SeabornColors
 seaborn_colors = SeabornColors()
-seaborn_colors.load_palette("Blues_d", palette_dir="./python/seaborn_palettes")
-seaborn_colors.load_palette("Reds_d", palette_dir="./python/seaborn_palettes")
-seaborn_colors.load_palette("Oranges_d", palette_dir="./python/seaborn_palettes")
-seaborn_colors.load_palette("Greens_d", palette_dir="./python/seaborn_palettes")
-seaborn_colors.load_palette("Purples_d", palette_dir="./python/seaborn_palettes")
+palette_dir = os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/GQSummary/python/seaborn_palettes")
+seaborn_colors.load_palette("Blues_d", palette_dir=palette_dir)
+seaborn_colors.load_palette("Reds_d", palette_dir=palette_dir)
+seaborn_colors.load_palette("Oranges_d", palette_dir=palette_dir)
+seaborn_colors.load_palette("Greens_d", palette_dir=palette_dir)
+seaborn_colors.load_palette("Purples_d", palette_dir=palette_dir)
+seaborn_colors.load_palette("RdPu_r", palette_dir=palette_dir)
 
 
 class GQSummaryPlot:
@@ -307,6 +309,7 @@ class GQSummaryPlot:
 		draw_Z_constraint=False,
 		z_width_legend_entry="#splitline{Z width (all #Gamma_{Z'}/M_{Z'})}{#it{[arXiv:1404.3947]}}",
 		draw_upsilon_constraint=False,
+		upsilon_width_legend_entry="#splitline{#Upsilon width (all #Gamma_{Z'}/M_{Z'})}{#it{[arXiv:1404.3947]}}",
 		gom_x=None, # x coordinate for Gamma/M labels
 		model_label=False, # Add a string specifying the model on the plot
 		gom_fills=False, # Draw limit fills including upper boundaries
@@ -379,19 +382,26 @@ class GQSummaryPlot:
 			self._limit_fills[name].SetFillColor(self._style[name]["fill_color"])
 			self._limit_fills[name].Draw("F")
 
+		legend_entry_count = 0
 		for analysis_name in self._analyses:
 			if self._graphs[analysis_name]:
 				self.style_graph(self._graphs[analysis_name], analysis_name)
 				self._graphs[analysis_name].Draw("lp")
 				if self._legend_entries[analysis_name] != False:
 					self._legend.AddEntry(self._graphs[analysis_name], self._legend_entries[analysis_name], "l")
+					legend_entry_count += 1
 			else:
 				self._legend.AddEntry(0, self._legend_entries[analysis_name], "")
+				legend_entry_count += 1
+
+		# Add an empty entry if needed, to put Z/Y constraints on the same line
+		if legend_entry_count % 2 == 1:
+		   self._legend.AddEntry(0, "", "")
 
 		if draw_Z_constraint:
 			self._tf_Z_constraint = TF1("Z_constraint", gq_Z_constraint, x_range[0], x_range[1], 0)
 			self._tf_Z_constraint.SetNpx(1000)
-			self._tf_Z_constraint.SetLineColor(15)
+			self._tf_Z_constraint.SetLineColor(17)
 			ROOT.gStyle.SetLineStyleString(9, "40 20");
 			self._tf_Z_constraint.SetLineStyle(9)
 			self._tf_Z_constraint.SetLineWidth(2)
@@ -401,12 +411,12 @@ class GQSummaryPlot:
 		if draw_upsilon_constraint:
 			self._tf_upsilon_constraint = TF1("upsilon_constraint", gq_upsilon_constraint, x_range[0], x_range[1], 0)
 			self._tf_upsilon_constraint.SetNpx(1000)
-			self._tf_upsilon_constraint.SetLineColor(15)
-			ROOT.gStyle.SetLineStyleString(9, "40 20");
-			self._tf_upsilon_constraint.SetLineStyle(9)
+			self._tf_upsilon_constraint.SetLineColor(17)
+			ROOT.gStyle.SetLineStyleString(11, "20 10");
+			self._tf_upsilon_constraint.SetLineStyle(11)
 			self._tf_upsilon_constraint.SetLineWidth(2)
 			self._tf_upsilon_constraint.Draw("same")
-			self._legend.AddEntry(self._tf_Z_constraint, "#splitline{#Upsilon width}{#it{[arXiv:1404.3947]}}", "l")
+			self._legend.AddEntry(self._tf_upsilon_constraint, upsilon_width_legend_entry, "l")
 
 		# Lines at fixed Gamma / M
 		self._GoM_tf1s = {}
@@ -445,7 +455,9 @@ class GQSummaryPlot:
 		# Vector label
 		if model_label:
 			self._model_label = TLatex(model_label["x"], model_label["y"], model_label["text"])
-			self._model_label.SetTextSize(0.04)
+			if not "size_modifier" in model_label.keys():
+				model_label["size_modifier"] = 1.
+			self._model_label.SetTextSize(0.04 * model_label["size_modifier"])
 			self._model_label.SetTextColor(1)
 			self._model_label.Draw("same")
 
@@ -460,6 +472,9 @@ class GQSummaryPlot:
 			self._conference_label.SetTextSize(0.045)
 			self._conference_label.SetTextColor(1)
 			self._conference_label.Draw("same")
+
+		# Redraw axis
+		self._frame.Draw("axis same")
 
 	def cd(self):
 		self._canvas.cd()

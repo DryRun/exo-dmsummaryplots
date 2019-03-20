@@ -1,8 +1,8 @@
 import os
 import sys
-sys.path.append("./python/")
-from gq_summary_plot import GQSummaryPlot, seaborn_colors
-from dijet_data import DijetData
+#sys.path.append("../python/")
+from ExoDMSummaryPlots.GQSummary.gq_summary_plot import GQSummaryPlot, seaborn_colors
+from ExoDMSummaryPlots.GQSummary.dijet_data import DijetData
 
 # Set all the plot styling here
 style = {
@@ -16,19 +16,37 @@ style = {
 		"fill_style":3004,
 		"fill_color":0,
 	}, "EXO16046_obs":{
-		"line_color":seaborn_colors.get_root_color("Blues_d", 3),		
+		"line_color":seaborn_colors.get_root_color("Blues_d", 1),		
 		"line_style":1,
-		"fill_color":seaborn_colors.get_root_color("Blues_d", 3),		
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 1),		
 	}, "EXO16046_exp":{
-		"line_color":seaborn_colors.get_root_color("Blues_d", 5),		
+		"line_color":seaborn_colors.get_root_color("Blues_d", 4),		
 		"line_style":2,
 		"line_width":2,
-		"fill_color":seaborn_colors.get_root_color("Blues_d", 5),		
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),		
 	}, "EXO16056_narrow_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 3),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 3),		
+	}, "EXO16056_narrow_exp":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 5),		
+		"line_style":2,
+		"line_width":2,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 5),		
+	}, "EXO16056_narrow_lowmass_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 1),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 1),		
+	}, "EXO16056_narrow_lowmass_exp":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 3),		
+		"line_style":2,
+		"line_width":2,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 3),		
+	}, "EXO16056_narrow_highmass_obs":{
 		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
 		"line_style":1,
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
-	}, "EXO16056_narrow_exp":{
+	}, "EXO16056_narrow_highmass_exp":{
 		"line_color":seaborn_colors.get_root_color("Reds_d", 5),		
 		"line_style":2,
 		"line_width":2,
@@ -70,23 +88,32 @@ style = {
 		"line_width":2,
 		"fill_color":seaborn_colors.get_root_color("Greens_d", 5),		
 	}, "EXO14005_obs":{
-		"line_color":seaborn_colors.get_root_color("Blues_d", 1),
+		"line_color":seaborn_colors.get_root_color("Blues_d", 3),
 		"line_style":1, 
-		"fill_color":seaborn_colors.get_root_color("Blues_d", 1),
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 3),
 	}, "EXO14005_exp":{
-		"line_color":seaborn_colors.get_root_color("Blues_d", 4),
+		"line_color":seaborn_colors.get_root_color("Blues_d", 5),
 		"line_style":2, 
 		"line_width":2,
-		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 5),
 	}, "EXO17026_obs":{
-		"line_color":seaborn_colors.get_root_color("Greens_d", 1),		
+		"line_color":seaborn_colors.get_root_color("Greens_d", 0),		
 		"line_style":1,
-		"fill_color":seaborn_colors.get_root_color("Greens_d", 1),		
+		"fill_color":seaborn_colors.get_root_color("Greens_d", 0),		
 	}, "EXO17026_exp":{
 		"line_color":seaborn_colors.get_root_color("Greens_d", 4),		
 		"line_style":2,
 		"line_width":2,
 		"fill_color":seaborn_colors.get_root_color("Greens_d", 4),		
+	}, "EXO17027_obs":{
+		"line_color":seaborn_colors.get_root_color("RdPu_r", 1),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("RdPu_r", 1),		
+	}, "EXO17027_exp":{
+		"line_color":seaborn_colors.get_root_color("RdPu_r", 3),		
+		"line_style":2,
+		"line_width":2,
+		"fill_color":seaborn_colors.get_root_color("RdPu_r", 3),		
 	}
 }
 
@@ -94,7 +121,11 @@ legend_entries = {
 	"EXO16046_obs":"#splitline{Dijet #chi #it{[EXO-16-046]}}{35.9 fb^{-1}, 13 TeV}",
 	"EXO16046_exp":False,
 	"EXO16056_narrow_obs":"#splitline{Dijet #it{[arXiv:1806.00843]}}{35.9 fb^{-1}, 13 TeV}",
+	"EXO16056_narrow_lowmass_obs":"#splitline{Dijet scouting #it{[arXiv:1806.00843]}}{35.9 fb^{-1}, 13 TeV}",
+	"EXO16056_narrow_highmass_obs":"#splitline{Dijet #it{[arXiv:1806.00843]}}{35.9 fb^{-1}, 13 TeV}",
 	"EXO16056_narrow_exp":False,
+	"EXO16056_narrow_lowmass_exp":False,
+	"EXO16056_narrow_highmass_exp":False,
 	"EXO16056_wide_obs":"#splitline{Broad Dijet #it{[arXiv:1806.00843]}}{35.9 fb^{-1}, 13 TeV}",
 	"EXO16056_wide_exp":False,
 	"EXO16057_SR1_obs":"#splitline{Dijet b-tagged #it{[arXiv:1802.06149]}}{19.7 fb^{-1}, 8 TeV}",
@@ -103,10 +134,12 @@ legend_entries = {
 	"EXO16057_SR2_exp":False,
 	"EXO17001_obs":"#splitline{Boosted Dijet #it{[arXiv:1710.00159]}}{35.9 fb^{-1}, 13 TeV}",
 	"EXO17001_exp":False,
-	"EXO14005_obs":"#splitline{Dijet #it{[arXiv:1604.08907]}}{19.7 fb^{-1}, 8 TeV}",
+	"EXO14005_obs":"#splitline{Dijet scouting #it{[arXiv:1604.08907]}}{19.7 fb^{-1}, 8 TeV}",
 	"EXO14005_exp":False,
 	"EXO17026_obs":"#splitline{Dijet #it{[EXO-17-026]}}{77.8 fb^{-1}, 13 TeV}",
 	"EXO17026_exp":False,
+	"EXO17027_obs":"#splitline{Boosted Dijet+#gamma #it{[EXO-17-027]}}{35.9 fb^{-1}, 13 TeV}",
+	"EXO17027_exp":False,
 	"_GOM100":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~100%}}}{}",
 	"_GOM30":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~30%}}}{}",
 	"_GOM10":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~10%}}}{}",
@@ -115,6 +148,8 @@ legend_entries = {
 # Maximum Gamma/M values
 max_gom = {
 	"EXO16056_narrow_obs":0.12,
+	"EXO16056_narrow_lowmass_obs":0.12,
+	"EXO16056_narrow_highmass_obs":0.12,
 	"EXO16056_wide_obs":0.3,
 	"EXO16057_SR1_obs":0.12,
 	"EXO16057_SR2_obs":0.12,
@@ -127,20 +162,27 @@ max_gq = {
 	"EXO16046_obs":1.45,
 }
 
+analyses = "_GOM10,EXO17027_obs,EXO17027_exp,\
+EXO17001_obs,EXO17001_exp,\
+EXO16057_SR1_obs,EXO16057_SR1_exp,\
+EXO16057_SR2_obs,EXO16057_SR2_exp,\
+EXO14005_obs,EXO14005_exp,\
+EXO16056_narrow_lowmass_obs,\
+EXO16056_narrow_lowmass_exp,\
+EXO16056_narrow_highmass_obs,\
+EXO16056_narrow_highmass_exp,\
+EXO17026_obs,EXO17026_exp,\
+_GOM30,EXO16056_wide_obs,\
+EXO16056_wide_exp,\
+_GOM100,EXO16046_obs,\
+EXO16046_exp"
+
+
 
 if __name__ == "__main__":
 	from argparse import ArgumentParser
 	parser = ArgumentParser(description='Make g_q summary plot')
-	parser.add_argument('--analyses', type=str, default="\
-_GOM100,EXO16046_obs,EXO16046_exp,\
-_GOM30,EXO16056_wide_obs,EXO16056_wide_exp,\
-_GOM10,EXO16056_narrow_obs,EXO16056_narrow_exp,\
-EXO17026_obs,EXO17026_exp,\
-EXO14005_obs,EXO14005_exp,\
-EXO17001_obs,EXO17001_exp,\
-EXO16057_SR1_obs,EXO16057_SR1_exp,\
-EXO16057_SR2_obs,EXO16057_SR2_exp\
-", help="Analyses to plot (CADI lines, comma-separated)") 
+	parser.add_argument('--analyses', type=str, default=analyses, help="Analyses to plot (CADI lines, comma-separated)") 
 	# _GOM30,EXO16056_wide_obs,EXO16056_wide_exp - didn't make Moriond
 	parser.add_argument('--logx', action='store_true', help='Log x')
 	parser.add_argument('--logy', action='store_true', help='Log y')
@@ -170,7 +212,7 @@ EXO16057_SR2_obs,EXO16057_SR2_exp\
 			continue
 
 		analysis_data[analysis] = DijetData(analysis)
-		analysis_data[analysis].load_data("data/{}.dat".format(analysis))
+		analysis_data[analysis].load_data(os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/GQSummary/data/{}.dat".format(analysis)))
 		# Max Gamma/M fill
 		if args.gom_fills and analysis in max_gom:
 			this_max_gom_fill = max_gom[analysis]
@@ -207,16 +249,16 @@ EXO16057_SR2_obs,EXO16057_SR2_exp\
 			draw_cms=cms_label_option,
 			x_title="M_{Z'} [GeV]",
 			y_title="g'_{q}",
-			x_range=[40., 7000.],
+			x_range=[6., 8000.],
 			y_range=y_range,
 			canvas_dim=[1800, 1200],
-			legend_coords=[0.69, 0.1, 0.99, 0.95],
-			legend_text_size=0.026,
+			legend_coords=[0.69, 0.02, 0.99, 0.95],
+			legend_text_size=0.025,
 			legend_obsexp=True,
 			model_label={"x":2000., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_x=60.,
 			gom_fills=args.gom_fills,
-			conference_label={"x":1500., "y":y_range[1] * 1.1, "text":args.conference_label}
+			conference_label={"x":900., "y":y_range[1] * 1.1, "text":args.conference_label}
 			)
 	else:
 		gq_plot.draw(
@@ -228,14 +270,14 @@ EXO16057_SR2_obs,EXO16057_SR2_exp\
 			x_range=[0., 6000.],
 			y_range=y_range,
 			canvas_dim=[1800, 1200],
-			legend_coords=[0.69, 0.1, 0.99, 0.95],
-			legend_text_size=0.026,
+			legend_coords=[0.69, 0.02, 0.99, 0.95],
+			legend_text_size=0.025,
 			legend_obsexp=True,
 			model_label={"x":4500., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_x=1250.,
 			gom_fills=args.gom_fills,
 			conference_label={"x":4000., "y":y_range[1] * 1.1, "text":args.conference_label},
 			)
-	gq_plot.save("plots", exts=["pdf", "png"])
+	gq_plot.save(os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/GQSummary/plots"), exts=["pdf", "png", "eps"])
 
 

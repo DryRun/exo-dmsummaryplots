@@ -10,7 +10,7 @@ from ROOT import TColor
 
 class SeabornColors:
 	def __init__(self):
-		self._default_palette_dir = os.path.expandvars("$CMSSW_BASE/src/MyTools/RootUtils/data/seaborn_palettes")
+		self._default_palette_dir = os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/GQSummary/python/seaborn_palettes")
 		self._palettes = {}
 		self._root_palettes = {}
 
@@ -74,14 +74,16 @@ class SeabornColors:
 if __name__ == "__main__":
 	seaborn_colors = SeabornColors()
 	args = ("Blues_d")
-	seaborn_colors.create_palette("Blues_d", "Blues_d", palette_dir="./")
-	seaborn_colors.create_palette("Reds_d", "Reds_d", palette_dir="./")
-	seaborn_colors.create_palette("Greens_d", "Greens_d", palette_dir="./")
-	seaborn_colors.create_palette("Oranges_d", "Oranges_d", palette_dir="./")
-	seaborn_colors.create_palette("Purples_d", "Purples_d", palette_dir="./")
+	seaborn_colors.create_palette("Blues_d", "Blues_d", palette_dir="./seaborn_palettes")
+	seaborn_colors.create_palette("Reds_d", "Reds_d", palette_dir="./seaborn_palettes")
+	seaborn_colors.create_palette("Greens_d", "Greens_d", palette_dir="./seaborn_palettes")
+	seaborn_colors.create_palette("Oranges_d", "Oranges_d", palette_dir="./seaborn_palettes")
+	seaborn_colors.create_palette("Purples_d", "Purples_d", palette_dir="./seaborn_palettes")
+	seaborn_colors.create_palette("RdPu_r", "RdPu_r", palette_dir="./seaborn_palettes")
 
-	seaborn_colors.test_palette("Blues_d")
-	seaborn_colors.test_palette("Reds_d")
-	seaborn_colors.test_palette("Greens_d")
-	seaborn_colors.test_palette("Oranges_d")
-	seaborn_colors.test_palette("Purples_d")
+	#seaborn_colors.test_palette("Blues_d")
+	#seaborn_colors.test_palette("Reds_d")
+	#seaborn_colors.test_palette("Greens_d")
+	#seaborn_colors.test_palette("Oranges_d")
+	#seaborn_colors.test_palette("Purples_d")
+	#seaborn_colors.test_palette("RdPu")

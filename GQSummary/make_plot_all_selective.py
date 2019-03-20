@@ -26,6 +26,14 @@ style = {
 		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
 		"line_style":1,
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
+	}, "EXO16056_narrow_lowmass_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
+	}, "EXO16056_narrow_highmass_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
 	}, "EXO16056_wide_obs":{
 		"line_color":seaborn_colors.get_root_color("Purples_d", 3),		
 		"line_style":1,
@@ -95,15 +103,17 @@ style = {
 		"line_style":2, 
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 1),
 	}, "ATLAS_EXOT16033_obs":{
-		"line_color":ROOT.kMagenta,
+		"line_color":ROOT.kAzure+10,
 		"line_style":2, 
-		"fill_color":ROOT.kMagenta,
+		"fill_color":ROOT.kAzure+10,
 	}
 }
 
 legend_entries = {
 	"EXO16046_obs":"#splitline{CMS Dijet #chi, 13 TeV}{#it{[EXO-16-046]}}",
 	"EXO16056_narrow_obs":"#splitline{CMS Dijet, 13 TeV}{#it{[arXiv:1806.00843]}}",
+	"EXO16056_narrow_lowmass_obs":"#splitline{CMS Dijet, 13 TeV}{#it{[arXiv:1806.00843]}}",
+	"EXO16056_narrow_highmass_obs":False, # Low mass and high mass are shown together, so only add legend for one
 	"EXO16056_wide_obs":"#splitline{CMS Broad Dijet, 13 TeV}{#it{[arXiv:1806.00843]}}",
 	"EXO16057_SR1_obs":"#splitline{CMS Dijet b tagged, 8 TeV}{#it{[arXiv:1802.06149]}}",
 	"EXO16057_SR2_obs":False, # Only need one of SR1/SR2 for the legend
@@ -177,6 +187,7 @@ CDF_Run2,EXO16057_SR2_obs",
 	cms_label_group = parser.add_mutually_exclusive_group(required=False)
 	cms_label_group.add_argument('--cms', action='store_true', help="Draw CMS label")
 	cms_label_group.add_argument('--cms_text', type=str, help="Draw CMS label with extra text")
+	parser.add_argument('--conference_label', type=str, default="", help="Text for specifying conference or time period")
 	args = parser.parse_args()
 
 	gq_plot = GQSummaryPlot("gq_selective_2c{}".format(args.save_tag))
@@ -252,7 +263,7 @@ CDF_Run2,EXO16057_SR2_obs",
 			gom_x=60.,
 			model_label={"x":2100., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills,
-			conference_label={"x":1500., "y":2. * 1.1, "text":"ICHEP 2018"}			
+			conference_label={"x":1500., "y":2. * 1.1, "text":args.conference_label}			
 			)
 	else:
 		gq_plot.draw(
@@ -271,7 +282,7 @@ CDF_Run2,EXO16057_SR2_obs",
 			gom_x=6000.,
 			model_label={"x":5500., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
 			gom_fills=args.gom_fills,
-			conference_label={"x":3000., "y":2. * 1.1, "text":"ICHEP 2018"}
+			conference_label={"x":3000., "y":2. * 1.1, "text":args.conference_label}
 			)
 
 	gq_plot.save("plots", exts=["pdf", "png"])

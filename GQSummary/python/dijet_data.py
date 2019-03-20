@@ -16,11 +16,11 @@ class DijetData:
 		self._reference_xses = {
 			8.:{
 				"gq0":0.25, 
-				"txt":os.path.expandvars("$CMSSW_BASE/src/MetxCombo2016/GQSummary/data/reference/ZPrime_8TeV_gq0p25.dat")
+				"txt":os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/GQSummary/data/reference/ZPrime_8TeV_gq0p25.dat")
 			},
 			13.:{
 				"gq0":0.25, 
-				"txt":os.path.expandvars("$CMSSW_BASE/src/MetxCombo2016/GQSummary/data/reference/ZPrime_13TeV_gq0p25.dat")			
+				"txt":os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/GQSummary/data/reference/ZPrime_13TeV_gq0p25.dat")			
 			}
 		}
 
@@ -83,8 +83,11 @@ class DijetData:
 				gq_av = float(line_contents[1])
 				# Gammaqq_tot: Gammaqq_tot(gq,Mmed,style):
 				# Gammaqq(gq,Mmed,qflavor,style):
-				gq_v = gq_av * sqrt(sum([Gammaqq(0.25, mZp, qflavor, "Axial") for qflavor in ["u", "d"]]) / sum([Gammaqq(0.25, mZp, qflavor, "Vector") for qflavor in ["u", "d"]]))
-				print "[debug] mZp={}, converted gq_av={} ==> gq_v={}".format(mZp, gq_av, gq_v)
+				num = sum([Gammaqq(0.25, mZp, qflavor, "Axial") for qflavor in ["u", "d"]]) * sum([Gammaqq(0.25, mZp, qflavor, "Axial") for qflavor in ["u", "d", "s", "c", "b"]]) / Gammaqq_tot(0.25, mZp, "Axial")
+				den = sum([Gammaqq(0.25, mZp, qflavor, "Vector") for qflavor in ["u", "d"]]) * sum([Gammaqq(0.25, mZp, qflavor, "Vector") for qflavor in ["u", "d", "s", "c", "b"]]) / Gammaqq_tot(0.25, mZp, "Vector")
+				gq_v = gq_av * sqrt(num / den)
+				#gq_v = gq_av * sqrt(sum([Gammaqq(0.25, mZp, qflavor, "Axial") for qflavor in ["u", "d"]]) / sum([Gammaqq(0.25, mZp, qflavor, "Vector") for qflavor in ["u", "d"]]))
+				print "[debug] mZp={}, converted gq_av={} ==> gq_v={}\tRatio={}".format(mZp, gq_av, gq_v, gq_av/gq_v)
 				self._masses.append(mZp)
 				self._gqs.append(float(gq_v))
 		self._data_loaded = True

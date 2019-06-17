@@ -11,7 +11,7 @@ EXO14005_obs,EXO16057_SR1_obs,EXO16057_SR2_obs,\
 EXO16056_narrow_lowmass_obs,EXO16056_narrow_highmass_obs,\
 EXO17001_obs,EXO17026_obs,\
 EXO17027_obs,UA2,\
-CDF_Run1,CDF_Run1 \
+CDF_Run1,CDF_Run2 \
 --save_tag _moriond19 \
 --conference_label "Moriond 2019"
 
@@ -25,7 +25,7 @@ EXO14005_obs,EXO16057_SR1_obs,EXO16057_SR2_obs,\
 EXO16056_narrow_lowmass_obs,EXO16056_narrow_highmass_obs,\
 EXO17001_obs,EXO17026_obs,\
 EXO17027_obs,UA2,\
-CDF_Run1,CDF_Run1 \
+CDF_Run1,CDF_Run2 \
 --save_tag _moriond19 \
 --conference_label "Moriond 2019"
 

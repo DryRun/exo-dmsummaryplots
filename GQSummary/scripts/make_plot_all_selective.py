@@ -17,23 +17,23 @@ style = {
 		"marker_color":1,
 		"fill_style":0,
 		"fill_color":0,
-		"alpha":1.0,
+		"alpha":1,
 	}, "EXO16046_obs":{
-		"line_color":seaborn_colors.get_root_color("Blues_d", 3),		
+		"line_color":seaborn_colors.get_root_color("RdPu_r", 0),		
 		"line_style":1,
-		"fill_color":seaborn_colors.get_root_color("Blues_d", 3),		
+		"fill_color":seaborn_colors.get_root_color("RdPu_r", 0),		
 	}, "EXO16056_narrow_obs":{
-		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"line_color":seaborn_colors.get_root_color("Greens_d", 0),		
 		"line_style":1,
-		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"fill_color":seaborn_colors.get_root_color("Greens_d", 0),		
 	}, "EXO16056_narrow_lowmass_obs":{
-		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"line_color":seaborn_colors.get_root_color("Blues_d", 4),		
 		"line_style":1,
-		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),		
 	}, "EXO16056_narrow_highmass_obs":{
-		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"line_color":seaborn_colors.get_root_color("Greens_d", 0),		
 		"line_style":1,
-		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"fill_color":seaborn_colors.get_root_color("Greens_d", 0),		
 	}, "EXO16056_wide_obs":{
 		"line_color":seaborn_colors.get_root_color("Purples_d", 3),		
 		"line_style":1,
@@ -50,10 +50,22 @@ style = {
 		"line_color":seaborn_colors.get_root_color("Greens_d", 2),		
 		"line_style":1,
 		"fill_color":seaborn_colors.get_root_color("Greens_d", 2),		
+	}, "EXO18012_AK8_obs":{
+		"line_color":seaborn_colors.get_root_color("Greens_d", 1),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Greens_d", 1),		
+	}, "EXO18012_CA15_obs":{
+		"line_color":seaborn_colors.get_root_color("Greens_d", 1),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Greens_d", 1),		
+	}, "EXO17026_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
 	}, "CDF_Run1":{
-		"line_color":seaborn_colors.get_root_color("Purples_d", 4),		
+		"line_color":seaborn_colors.get_root_color("Purples_d", 5),		
 		"line_style":8,
-		"fill_color":seaborn_colors.get_root_color("Purples_d", 4),		
+		"fill_color":seaborn_colors.get_root_color("Purples_d", 5),		
 	}, "CDF_Run2":{
 		"line_color":seaborn_colors.get_root_color("Purples_d", 3),		
 		"line_style":6,
@@ -71,13 +83,13 @@ style = {
 		"line_style":3, 
 		"fill_color":seaborn_colors.get_root_color("Greens_d", 4),
 	}, "ATLAS_EXOT1701_obs":{
-		"line_color":seaborn_colors.get_root_color("Reds_d", 5),
-		"line_style":2, 
-		"fill_color":seaborn_colors.get_root_color("Reds_d", 5),
-	}, "ATLAS_EXOT1621_obs":{
 		"line_color":seaborn_colors.get_root_color("Greens_d", 4),
-		"line_style":2,
+		"line_style":2, 
 		"fill_color":seaborn_colors.get_root_color("Greens_d", 4),
+	}, "ATLAS_EXOT1621_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 3),
+		"line_style":2,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 3),
 	}, "ATLAS_CONF16030_low_obs":{
 		"line_color":seaborn_colors.get_root_color("Blues_d", 4),
 		"line_style":2, 
@@ -87,13 +99,13 @@ style = {
 		"line_style":2, 
 		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),
 	}, "ATLAS_EXOT2016020_low_obs":{
-		"line_color":seaborn_colors.get_root_color("Blues_d", 4),
+		"line_color":seaborn_colors.get_root_color("Blues_d", 5),
 		"line_style":2, 
-		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 5),
 	}, "ATLAS_EXOT2016020_high_obs":{
-		"line_color":seaborn_colors.get_root_color("Blues_d", 4),
+		"line_color":seaborn_colors.get_root_color("Blues_d", 5),
 		"line_style":2, 
-		"fill_color":seaborn_colors.get_root_color("Blues_d", 4),
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 5),
 	}, "ATLAS_CONF16070_ISRy_obs":{
 		"line_color":seaborn_colors.get_root_color("Blues_d", 2),
 		"line_style":2, 
@@ -103,9 +115,30 @@ style = {
 		"line_style":2, 
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 1),
 	}, "ATLAS_EXOT16033_obs":{
-		"line_color":ROOT.kAzure+10,
+		"line_color":ROOT.kMagenta,
 		"line_style":2, 
-		"fill_color":ROOT.kAzure+10,
+		"fill_color":ROOT.kMagenta,
+	}, "EXO17027_obs":{
+		"line_color":seaborn_colors.get_root_color("RdPu_r", 1),		
+		"line_style":1,
+		"line_width":2,
+		"fill_color":seaborn_colors.get_root_color("RdPu_r", 1),		
+	}, "ATLAS_EXOT201805_incl_PhoTrig_obs":{
+		"line_color":seaborn_colors.get_root_color("Blues_d", 2),
+		"line_style":2, 
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 2),
+	}, "ATLAS_EXOT201805_incl_CombTrig_obs":{
+		"line_color":seaborn_colors.get_root_color("Blues_d", 2),
+		"line_style":2, 
+		"fill_color":seaborn_colors.get_root_color("Blues_d", 2),
+	}, "ATLAS_EXOT201805_btag_PhoTrig_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 1),
+		"line_style":2, 
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 1),
+	}, "ATLAS_EXOT201805_btag_CombTrig_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 1),
+		"line_style":2, 
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 1),
 	}
 }
 

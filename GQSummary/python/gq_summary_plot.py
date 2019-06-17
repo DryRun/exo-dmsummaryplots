@@ -1,6 +1,7 @@
 import os
 import sys
 import math
+from scipy.optimize import fsolve
 import ROOT
 from ROOT import TCanvas, TLegend, TGraph, TF1, TLatex, TH1D, TColor
 ROOT.gROOT.SetBatch(True)
@@ -57,27 +58,72 @@ class GQSummaryPlot:
 			raise ValueError("[set_vtype] Argument vtype must be 'vector' or 'axial'")
 		self._vtype = vtype
 
-	def add_data(self, dijet_data, name, legend, max_gq=False, max_gom_fill=False, max_gq_fill=False):
+	def add_data(self, dijet_data, name, legend, truncate_gq=False, truncate_gom=False, min_gom=False):
 		self._analyses.append(name)
 		self._dijet_data[name] = dijet_data
 		self._legend_entries[name] = legend
 
-		if max_gq:
-			# Truncation at max_gq can result in multiple graphs. Store these as extra graphs with _#
-			truncated_graphs = self.truncate_graph_gq(dijet_data.get_graph(), max_gq)
+		if truncate_gq and truncate_gom:
+			raise ValueError("[GQSummaryPlot::add_data] ERROR : Cannot specify both truncate_gq and truncate_gom.")
+
+		if truncate_gq:
+			max_truncated_graphs = self.truncate_graph_gq(dijet_data.get_graph(), truncate_gq[1])
+			truncated_graphs = []
+			if truncate_gq[0] > 0:
+				for tmpgraph in max_truncated_graphs:
+					truncated_graphs.extend(self.truncate_graph_gq(tmpgraph, truncate_gq[0], invert=-1))
+			else:
+				truncated_graphs = max_truncated_graphs
+
+			# If the truncation deleted all points, abandon
+			if len(truncated_graphs) == 0:
+				print "[GQSummaryPlot::add_data] ERROR : Applying truncate_gq resulted in an empty graph! Remove from the input list."
+				print "[GQSummaryPlot::add_data] ERROR : truncate_gq = {}".format(truncate_gq)
+				dijet_data.get_graph().Print("all")
+				sys.exit(1)
+
+			# Save the new set of graphs
 			for i, graph in enumerate(truncated_graphs):
 				piece_name = name
 				if i != 0:
 					piece_name += str(i)
+					self._analyses.append(piece_name)
+					self._style[piece_name] = self._style[name]
+					self._legend_entries[piece_name] = False
+				self._graphs[piece_name] = truncated_graphs[i]
+		elif truncate_gom:
+			print "DEBUG : Truncating graph {} to range {}".format(name, truncate_gom)
+			max_truncated_graphs = self.truncate_graph_gom(dijet_data.get_graph(), truncate_gom[1])
+			truncated_graphs = []
+			if truncate_gom[0] > 0:
+				for tmpgraph in max_truncated_graphs:
+					truncated_graphs.extend(self.truncate_graph_gom(tmpgraph, truncate_gom[0], invert=-1))
+			else:
+				truncated_graphs = max_truncated_graphs
+
+			# If the truncation deleted all points, abandon
+			if len(truncated_graphs) == 0:
+				print "[GQSummaryPlot::add_data] ERROR : Applying truncate_gom resulted in an empty graph! Remove from the input list."
+				print "[GQSummaryPlot::add_data] ERROR : truncate_gom = {}".format(truncate_gom)
+				dijet_data.get_graph().Print("all")
+				sys.exit(1)
+
+			# Save the new set of graphs
+			for i, graph in enumerate(truncated_graphs):
+				piece_name = name
+				if i != 0:
+					piece_name += str(i)
+					self._analyses.append(piece_name)
+					self._style[piece_name] = self._style[name]
 					self._legend_entries[piece_name] = False
 				self._graphs[piece_name] = truncated_graphs[i]
 		else:
 			self._graphs[name] = dijet_data.get_graph()
 
-		if max_gom_fill:
-			self._limit_fills[name] = self.create_limit_gom_fill(dijet_data.get_graph(), max_gom_fill)
-		if max_gq_fill:
-			self._limit_fills[name] = self.create_limit_gq_fill(dijet_data.get_graph(), max_gq_fill)
+		#if max_gom_fill:
+		#	self._limit_fills[name] = self.create_limit_gom_fill(dijet_data.get_graph(), max_gom_fill)
+		#if max_gq_fill:
+		#	self._limit_fills[name] = self.create_limit_gq_fill(dijet_data.get_graph(), max_gq_fill)
 
 	# Add legend entry with no object
 	def add_legend_only(self, name, legend_entry):
@@ -144,121 +190,36 @@ class GQSummaryPlot:
 			else:
 				graph.SetFillColor(self._style["default"]["fill_color"])
 
-	# Create a polygon TGraph corresponding to the excluded range including an upper limit from Gamma/M
-	# This is pretty ugly. Can it be improved?
-	def create_limit_gom_fill(self, limit_graph, max_gom):
-		tf_gom = TF1("tmp_tf1_gq_{}".format(max_gom), lambda x, this_gom=max_gom: gom_to_gq(this_gom, x[0], self._vtype), 0.1, 10000., 0) # 
-
-		# Calculate new graph that stays at or below the gom curve
-		new_limit_points = {}
-		limit_x = limit_graph.GetX()
-		limit_y = limit_graph.GetY()
-		for i in xrange(limit_graph.GetN() - 1):
-			x1 = limit_x[i]
-			x2 = limit_x[i+1]
-			y1 = limit_y[i]
-			y2 = limit_y[i+1]
-			gom1 = tf_gom.Eval(x1)
-			gom2 = tf_gom.Eval(x2)
-			if (y1 < gom1 and y2 > gom2) or (y1 > gom1 and y2 < gom2):
-				# Calculate intersection of interpolation with GOM using bisection
-				xlow  = x1
-				xhigh = x2
-				ylow  = y1
-				yhigh  = y2
-				gomlow = tf_gom.Eval(xlow)
-				gomhigh = tf_gom.Eval(xhigh)
-				for j in xrange(20):
-					xmid = (xlow + xhigh) / 2.
-					ymid = (ylow + yhigh) / 2.
-					gommid = tf_gom.Eval(xmid)
-					if (ylow < gomlow and ymid < gommid) or (ylow > gomlow and ymid > gommid):
-						xlow = xmid
-						ylow = ymid
-						gomlow = gommid
-					elif (yhigh < gomhigh and ymid < gommid) or (yhigh > gomhigh and yhigh > gomhigh):
-						xhigh = xmid
-						yhigh = ymid
-						gomhigh = gommid
-				int_x = (xhigh + xlow) / 2.
-				int_y = (yhigh + ylow) / 2.
-				new_limit_points[int_x] = int_y
-
-		# Move any old points above the GOM to the GOM
-		for i in xrange(limit_graph.GetN()):
-			if limit_y[i] > tf_gom.Eval(limit_x[i]):
-				new_limit_points[limit_x[i]] = tf_gom.Eval(limit_x[i])
-			else:
-				new_limit_points[limit_x[i]] = limit_y[i]
-
-		# New graph: limit points
-		new_graph = TGraph(len(new_limit_points) + 10000)
-		for i, x in enumerate(sorted(new_limit_points.keys())):
-			new_graph.SetPoint(i, x, new_limit_points[x])
-
-		# New graph: upper boundary corresponding to GOM
-		xmin = min(new_limit_points.keys())
-		xmax = max(new_limit_points.keys())
-		for i in xrange(10001):
-			this_x = xmax + (xmin - xmax) * i / 10000.
-			new_graph.SetPoint(len(new_limit_points) + i, this_x, tf_gom.Eval(this_x))
-		return new_graph
-
-	def create_limit_gq_fill(self, limit_graph, max_gq):
-		# Calculate new graph that stays at or below max_gq
-		new_limit_points = {}
-		limit_x = limit_graph.GetX()
-		limit_y = limit_graph.GetY()
-		for i in xrange(limit_graph.GetN() - 1):
-			x1 = limit_x[i]
-			x2 = limit_x[i+1]
-			y1 = limit_y[i]
-			y2 = limit_y[i+1]
-			if (y1 < max_gq and y2 > max_gq) or (y1 > max_gq and y2 < max_gq):
-				# Calculate intersection of interpolation with gq
-				int_x = (max_gq - y1) * (x2 - x1) / (y2 - y1) + x1 
-				int_y = max_gq
-				new_limit_points[int_x] = int_y
-
-		# Move any old points above gq to gq
-		for i in xrange(limit_graph.GetN()):
-			if limit_y[i] > max_gq:
-				new_limit_points[limit_x[i]] = max_gq
-			else:
-				new_limit_points[limit_x[i]] = limit_y[i]
-
-		# New graph: limit points
-		new_graph = TGraph(len(new_limit_points) + 3)
-		for i, x in enumerate(sorted(new_limit_points.keys())):
-			new_graph.SetPoint(i, x, new_limit_points[x])
-
-		# New graph: upper boundary corresponding to gq
-		xmin = min(new_limit_points.keys())
-		xmax = max(new_limit_points.keys())
-		new_graph.SetPoint(len(new_limit_points), xmax, max_gq)
-		new_graph.SetPoint(len(new_limit_points) + 1, xmin, max_gq)
-		new_graph.SetPoint(len(new_limit_points) + 2, xmin, new_limit_points[xmin])
-		return new_graph
-
-	# Returns a set of graphs with a maximum g_q
-	def truncate_graph_gq(self, limit_graph, max_gq):
+	# Returns a set of graphs with a maximum g_q (or minimum; specify invert=-1)
+	def truncate_graph_gq(self, limit_graph, max_gq, invert=1):
 		# Calculate the sets of x values for the new graphs
 		limit_x = limit_graph.GetX()
 		limit_y = limit_graph.GetY()
 		x_points = [[]]
 		y_points = [[]]
-		if limit_x[0] < max_gq:
+		if invert * limit_y[0] < invert * max_gq:
 			x_points[-1].append(limit_x[0])
 			y_points[-1].append(limit_y[0])
 		for i in xrange(1, len(limit_x)):
-			if limit_y[i - 1] < max_gq and limit_y[i] < max_gq:
+			if invert * limit_y[i - 1] < invert * max_gq and invert * limit_y[i] < invert * max_gq:
 				x_points[-1].append(limit_x[i])
 				y_points[-1].append(limit_y[i])
-			elif limit_y[i - 1] > max_gq and limit_y[i] < max_gq: # limit crosses max_gq going down: new set
+			elif invert * limit_y[i - 1] > invert * max_gq and invert * limit_y[i] < invert * max_gq: # limit crosses max_gq going down: new set
+				print "Solving for bad-to-good crossing (max_gq={}).".format(max_gq)
+				print "(m1, gq1) = ({}, {})".format(limit_x[i-1], limit_y[i-1])
+				print "(m2, gq2) = ({}, {})".format(limit_x[i], limit_y[i])
+
 				if len(x_points[-1]) >= 1:
 					x_points.append([])
 					y_points.append([])
-				# Calculate crossing point
+				# Calculate crossing point		
+				x_cross_array = fsolve(lambda x : limit_graph.Eval(x) - max_gq, (limit_x[i-1]+limit_x[i])/2.)
+				if len(x_cross_array) != 1:
+					raise ValueError("ERROR : Found more than one crossing!")
+				x_cross = x_cross_array[0]
+				print "Found crossing (m, gq) = ({}, {})".format(x_cross, limit_graph.Eval(x_cross))
+				'''
+				# Old method: analytical solution by hand
 				# max_gq = limit_y[i-1] + (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1]) * dx
 				slope = (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1])
 				dx = (max_gq - limit_y[i-1]) / slope
@@ -267,12 +228,110 @@ class GQSummaryPlot:
 				x_points[-1].append(limit_x[i])
 				y_points[-1].append(limit_graph.Eval(x_cross))
 				y_points[-1].append(limit_graph.Eval(limit_x[i]))
-			elif limit_y[i - 1] < max_gq and limit_y[i] > max_gq: # limit crosses max_gq going up: end this set with crossing value
+				'''
+				x_points[-1].append(x_cross)
+				x_points[-1].append(limit_x[i])
+				y_points[-1].append(limit_graph.Eval(x_cross))
+				y_points[-1].append(limit_graph.Eval(limit_x[i]))
+
+			elif invert * limit_y[i - 1] < invert * max_gq and invert * limit_y[i] > invert * max_gq: # limit crosses max_gq going up: end this set with crossing value
+				print "Solving for good-to-bad crossing (max_gq={}).".format(max_gq)
+				print "(m1, gq1) = ({}, {})".format(limit_x[i-1], limit_y[i-1])
+				print "(m2, gq2) = ({}, {})".format(limit_x[i], limit_y[i])
 				# Calculate crossing point
+				x_cross_array = fsolve(lambda x : limit_graph.Eval(x) - max_gq, (limit_x[i-1]+limit_x[i])/2.)
+				if len(x_cross_array) != 1:
+					raise ValueError("ERROR : Found more than one crossing!")
+				x_cross = x_cross_array[0]
 				# max_gq = limit_y[i-1] + (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1]) * dx
+				'''
+				# Old method: analytical solution by hand
 				slope = (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1])
 				dx = (max_gq - limit_y[i-1]) / slope
 				x_cross = limit_x[i-1] + dx
+				'''
+				x_points[-1].append(x_cross)
+				y_points[-1].append(limit_graph.Eval(x_cross))
+				print "Found crossing (m, gq) = ({}, {})".format(x_cross, limit_graph.Eval(x_cross))
+			else: # Both above limit: ignore point
+				pass
+
+		# Convert sets of points to graphs
+		new_graphs = []
+		for igraph in xrange(len(x_points)):
+			if len(x_points[igraph]) == 0:
+				print "[gq_summary_plot::truncate_graph_gq] WARNING : Graph has zero points".format(self._name)
+				print x_points
+				print y_points
+			else:
+				new_graphs.append(TGraph(len(x_points[igraph])))
+				for ipoint in xrange(len(x_points[igraph])):
+					new_graphs[igraph].SetPoint(ipoint, x_points[igraph][ipoint], y_points[igraph][ipoint])
+		return new_graphs
+
+
+	# Returns a set of graphs with a maximum Gamma/M (or minimum; specify invert=-1)
+	def truncate_graph_gom(self, limit_graph, max_gom, invert=1):
+		# Calculate the sets of x values for the new graphs
+		limit_x = limit_graph.GetX()
+		limit_y = limit_graph.GetY()
+		limit_gom = [Gamma_qq_tot(limit_y[i], limit_x[i], "vector") / limit_x[i] for i in xrange(limit_graph.GetN())]
+		x_points = [[]]
+		y_points = [[]]
+		if invert * limit_gom[0] < invert * max_gom:
+			x_points[-1].append(limit_x[0])
+			y_points[-1].append(limit_y[0])
+		for i in xrange(1, len(limit_x)):
+			if invert * limit_gom[i - 1] < invert * max_gom and invert * limit_gom[i] < invert * max_gom:
+				x_points[-1].append(limit_x[i])
+				y_points[-1].append(limit_y[i])
+			elif invert * limit_gom[i - 1] > invert * max_gom and invert * limit_gom[i] < invert * max_gom: # limit crosses max_gom going down: new set
+				if len(x_points[-1]) >= 1:
+					x_points.append([])
+					y_points.append([])
+
+				# Calculate crossing point				
+				print "Solving for good-to-bad crossing (max_gom={}).".format(max_gom)
+				print "(m1, gq1, gom1) = ({}, {}, {})".format(limit_x[i-1], limit_y[i-1], limit_gom[i-1])
+				print "(m2, gq2, gom2) = ({}, {}, {})".format(limit_x[i], limit_y[i], limit_gom[i])
+				x_cross_array = fsolve(lambda x : Gamma_qq_tot(limit_graph.Eval(x), x, "vector") / x - max_gom, (limit_x[i-1]+limit_x[i])/2.)
+				if len(x_cross_array) != 1:
+					raise ValueError("ERROR : Found more than one crossing!")
+				x_cross = x_cross_array[0]
+				print "Found crossing (m, gq, gom) = ({}, {}, {})".format(x_cross, limit_graph.Eval(x_cross), Gamma_qq_tot(limit_graph.Eval(x_cross), x_cross, "vector") / x_cross)
+				'''
+				# Old method: analytical solution by hand
+				# max_gom = limit_y[i-1] + (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1]) * dx
+				slope = (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1])
+				dx = (max_gom - limit_y[i-1]) / slope
+				x_cross = limit_x[i-1] + dx
+				x_points[-1].append(x_cross)
+				x_points[-1].append(limit_x[i])
+				y_points[-1].append(limit_graph.Eval(x_cross))
+				y_points[-1].append(limit_graph.Eval(limit_x[i]))
+				'''
+				x_points[-1].append(x_cross)
+				x_points[-1].append(limit_x[i])
+				y_points[-1].append(limit_graph.Eval(x_cross))
+				y_points[-1].append(limit_graph.Eval(limit_x[i]))
+
+			elif invert * limit_gom[i - 1] < invert * max_gom and invert * limit_gom[i] > invert * max_gom: # limit crosses max_gom going up: end this set with crossing value
+				# Calculate crossing point
+				print "Solving for good-to-bad crossing (max_gom={}).".format(max_gom)
+				print "(m1, gq1, gom1) = ({}, {}, {})".format(limit_x[i-1], limit_y[i-1], limit_gom[i-1])
+				print "(m2, gq2, gom2) = ({}, {}, {})".format(limit_x[i], limit_y[i], limit_gom[i])
+				x_cross_array = fsolve(lambda x : Gamma_qq_tot(limit_graph.Eval(x), x, "vector") / x - max_gom, (limit_x[i-1]+limit_x[i])/2.)
+				if len(x_cross_array) != 1:
+					raise ValueError("ERROR : Found more than one crossing!")
+				x_cross = x_cross_array[0]
+				print "Found crossing (m, gq, gom) = ({}, {}, {})".format(x_cross, limit_graph.Eval(x_cross), Gamma_qq_tot(limit_graph.Eval(x_cross), x_cross, "vector") / x_cross)
+				# max_gom = limit_y[i-1] + (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1]) * dx
+				'''
+				# Old method: analytical solution by hand
+				slope = (limit_y[i]-limit_y[i-1])/(limit_x[i]-limit_x[i-1])
+				dx = (max_gom - limit_y[i-1]) / slope
+				x_cross = limit_x[i-1] + dx
+				'''
 				x_points[-1].append(x_cross)
 				y_points[-1].append(limit_graph.Eval(x_cross))
 			else: # Both above limit: ignore point
@@ -282,13 +341,13 @@ class GQSummaryPlot:
 		new_graphs = []
 		for igraph in xrange(len(x_points)):
 			if len(x_points[igraph]) == 0:
-				print "[gq_summary_plot::truncate_graph_gq] ERROR : Graph has zero points".format(self._name)
+				print "[gq_summary_plot::truncate_graph_gom] WARNING : Graph has zero points : {}".format(self._name)
 				print x_points
 				print y_points
-				sys.exit(1)
-			new_graphs.append(TGraph(len(x_points[igraph])))
-			for ipoint in xrange(len(x_points[igraph])):
-				new_graphs[igraph].SetPoint(ipoint, x_points[igraph][ipoint], y_points[igraph][ipoint])
+			else:
+				new_graphs.append(TGraph(len(x_points[igraph])))
+				for ipoint in xrange(len(x_points[igraph])):
+					new_graphs[igraph].SetPoint(ipoint, x_points[igraph][ipoint], y_points[igraph][ipoint])
 		return new_graphs
 
 	def draw(self, 

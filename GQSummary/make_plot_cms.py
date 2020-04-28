@@ -87,6 +87,15 @@ style = {
 		"line_style":2,
 		"line_width":2,
 		"fill_color":seaborn_colors.get_root_color("Greens_d", 4),		
+	}, "EXO19004_obs":{
+		"line_color":seaborn_colors.get_root_color("hls", 1),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("hls", 1),		
+	}, "EXO19004_exp":{
+		"line_color":seaborn_colors.get_root_color("hls_light", 1),		
+		"line_style":2,
+		"line_width":2,
+		"fill_color":seaborn_colors.get_root_color("hls_light", 1),		
 	}
 }
 
@@ -107,6 +116,8 @@ legend_entries = {
 	"EXO14005_exp":False,
 	"EXO17026_obs":"#splitline{Dijet #it{[EXO-17-026]}}{77.8 fb^{-1}, 13 TeV}",
 	"EXO17026_exp":False,
+	"EXO19004_obs":"#splitline{Dijet #it{[EXO-19-004]}}{18.3 fb^{-1}, 13 TeV}",
+	"EXO19004_exp":False,
 	"_GOM100":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~100%}}}{}",
 	"_GOM30":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~30%}}}{}",
 	"_GOM10":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~10%}}}{}",
@@ -120,6 +131,7 @@ max_gom = {
 	"EXO16057_SR2_obs":0.12,
 	"EXO17001_obs":0.12,
 	"EXO14005_obs":0.12,
+	"EXO19004_obs":0.12,
 }
 
 # Maximum gq values 
@@ -210,7 +222,7 @@ EXO16057_SR2_obs,EXO16057_SR2_exp\
 			x_range=[40., 7000.],
 			y_range=y_range,
 			canvas_dim=[1800, 1200],
-			legend_coords=[0.69, 0.1, 0.99, 0.95],
+			legend_coords=[0.67, 0.1, 0.99, 0.95],
 			legend_text_size=0.026,
 			legend_obsexp=True,
 			model_label={"x":2000., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},
@@ -228,7 +240,7 @@ EXO16057_SR2_obs,EXO16057_SR2_exp\
 			x_range=[0., 6000.],
 			y_range=y_range,
 			canvas_dim=[1800, 1200],
-			legend_coords=[0.69, 0.1, 0.99, 0.95],
+			legend_coords=[0.67, 0.1, 0.99, 0.95],
 			legend_text_size=0.026,
 			legend_obsexp=True,
 			model_label={"x":4500., "y":0.05, "text":"Z'#rightarrowq#bar{q}"},

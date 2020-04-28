@@ -1,35 +1,37 @@
 from ROOT import *
 import ast
 
-def extrapolation( tgraph, Resonances, metless, metx, mDM_lb ):
+def extrapolation( tgraph, DijetOnly, Resonances, metless, metx, mDM_lb ):
 
     DDgraph_extr = {}
     num_extr = 100
+
 
 ####################
 ## MET+X
 #Step1 : Extrapolate from first non -100 point downto mDM_lb)
 ####################
-    for analysis in metx :
-        print "Analysis ", analysis
-        DDgraph_extr[analysis]=TGraph()
-        #extrapolation based on the first point
-        mDM_ref  = Double(0)
-        xsec_ref = Double(0)
-        tgraph[analysis].GetPoint(0,mDM_ref,xsec_ref);
-        mR_ref = 0.939*mDM_ref/(0.939+mDM_ref);
-        for i in range(0, num_extr) :
-            mDM_i = mDM_lb + i*(mDM_ref-mDM_lb)/num_extr
-            mR_i = 0.939*mDM_i/(0.939+mDM_i);
-            xsec_i = xsec_ref*(mR_i*mR_i)/(mR_ref*mR_ref)
-            DDgraph_extr[analysis].SetPoint(i,mDM_i,xsec_i)
-            for i in range(0,tgraph[analysis].GetN()) :
-                mDM  = Double(0)
-                xsec  = Double(0)
-                tgraph[analysis].GetPoint(i,mDM,xsec)
-                DDgraph_extr[analysis].SetPoint(i+num_extr,mDM,xsec)
+    if not DijetOnly :
+        for analysis in metx :
+            print "Analysis ", analysis
+            DDgraph_extr[analysis]=TGraph()
+            #extrapolation based on the first point
+            mDM_ref  = Double(0)
+            xsec_ref = Double(0)
+            tgraph[analysis].GetPoint(0,mDM_ref,xsec_ref);
+            mR_ref = 0.939*mDM_ref/(0.939+mDM_ref);
+            for i in range(0, num_extr) :
+                mDM_i = mDM_lb + i*(mDM_ref-mDM_lb)/num_extr
+                mR_i = 0.939*mDM_i/(0.939+mDM_i);
+                xsec_i = xsec_ref*(mR_i*mR_i)/(mR_ref*mR_ref)
+                DDgraph_extr[analysis].SetPoint(i,mDM_i,xsec_i)
+                for i in range(0,tgraph[analysis].GetN()) :
+                    mDM  = Double(0)
+                    xsec  = Double(0)
+                    tgraph[analysis].GetPoint(i,mDM,xsec)
+                    DDgraph_extr[analysis].SetPoint(i+num_extr,mDM,xsec)
 
-        tgraph[analysis] = DDgraph_extr[analysis]
+            tgraph[analysis] = DDgraph_extr[analysis]
 ####################
 
 
@@ -183,7 +185,7 @@ def rescale_graph_axis(graph,rescale_x=1,rescale_y=1):
         g.SetPoint(i,rescale_x * x, rescale_y * y)
     return g
 
-def add_text(x1, x2, y1, y2, TEXT, color=1, alignment=22, angle = 0, argument="NDC"):
+def add_text(x1, x2, y1, y2, text, color=1, alignment=22, angle = 0, argument="NDC"):
    import ROOT as r
    T = r.TPaveText(x1,y1,x2,y2, argument);
    T.SetFillColor(0);
@@ -192,13 +194,13 @@ def add_text(x1, x2, y1, y2, TEXT, color=1, alignment=22, angle = 0, argument="N
    T.SetTextAlign(alignment);
    T.SetTextColor(color);
 
-   if (not isinstance(TEXT, str)):
-      for this_text in TEXT:
+   if (not isinstance(text, str)):
+      for this_text in text:
          text = T.AddText(this_text);
          text.SetTextAngle(angle);
          text.SetTextAlign(alignment);
    else:
-      text = T.AddText(TEXT);
+      text = T.AddText(text);
       text.SetTextAngle(angle);
       text.SetTextAlign(alignment);
    T.SetTextFont(42);
@@ -206,117 +208,14 @@ def add_text(x1, x2, y1, y2, TEXT, color=1, alignment=22, angle = 0, argument="N
    T.SetBorderSize(0);
    return T
 
-def load_inputs(analyses,scenarios,quantiles):
-
-    inputfiles = {}
-    objects = {}
-    for a in analyses:
-        inputfiles[a] = {}
-        objects[a] = {}
-        for s in scenarios:
-            inputfiles[a][s] = {}
-            objects[a][s] = {}
-            for q in quantiles:
-                inputfiles[a][s][q] = None
-                objects[a][s][q] = None
-
-
-    inputfiles["monojet"]["A1"]["obs"] = "input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_axial.root"
-    inputfiles["monojet"]["A1"]["exp"] = "input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_axial.root"
-    inputfiles["monojet"]["V1"]["obs"] = "input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_vector.root"
-    inputfiles["monojet"]["V1"]["exp"] = "input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_vector.root"
-    inputfiles["dilepton"]["A2"]["obs"] = "input/CMS/Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root"
-    inputfiles["dilepton"]["A2"]["exp"] = "input/CMS/Dilepton/EXO-16-031/ScanMM/contours_dilepton_A2_smooth.root"
-    inputfiles["dilepton"]["V2"]["obs"] = "input/CMS/Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root"
-    inputfiles["dilepton"]["V2"]["exp"] = "input/CMS/Dilepton/EXO-16-031/ScanMM/contours_dilepton_V2_smooth.root"
-    inputfiles["monoz"]["A1"]["obs"] = "input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt"
-    inputfiles["monoz"]["A1"]["exp"] = "input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_axial_cl95.txt"
-    inputfiles["monoz"]["V1"]["obs"] = "input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt"
-    inputfiles["monoz"]["V1"]["exp"] = "input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_vector_cl95.txt"
-    inputfiles["monophoton"]["A1"]["obs"] ="input/CMS/Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root"
-    inputfiles["monophoton"]["A1"]["exp"] ="input/CMS/Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_exp.root"
-    inputfiles["monophoton"]["V1"]["obs"] ="input/CMS/Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root"
-    inputfiles["monophoton"]["V1"]["exp"] ="input/CMS/Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_exp.root"
-    inputfiles["monoHgg"]["V1"]["obs"] = "input/CMS/MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
-    inputfiles["monoHgg"]["V1"]["exp"] = "input/CMS/MonoHgg/ScanMM/input_combo_MonoHgg_25April.root"
-    inputfiles["monotop"]["V4"]["obs"] = "input/CMS/Monotop/ScanMM/fcnc2d_obs_vector.root"
-    inputfiles["dijet"]["A1"]["obs"] = "input/CMS/Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_MT.root"
-    inputfiles["dijet"]["A1"]["exp"] = "input/CMS/Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.root"
-    inputfiles["dijet"]["A2"]["obs"] = "input/CMS/Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1_MT.root"
-    inputfiles["dijet"]["A2"]["exp"] = "input/CMS/Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1.root"
-    inputfiles["dijet"]["V1"]["obs"] = "input/CMS/Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_MT.root"
-    inputfiles["dijet"]["V1"]["exp"] = "input/CMS/Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root"
-    inputfiles["dijet"]["V2"]["obs"] = "input/CMS/Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1_MT.root"
-    inputfiles["dijet"]["V2"]["exp"] = "input/CMS/Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1.root"
-    inputfiles["dijetchi"]["A3"]["obs"] = "input/CMS/DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root"
-    inputfiles["dijetchi"]["V3"]["obs"] = "input/CMS/DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root"
-    inputfiles["trijet"]["A1"]["obs"] = "input/CMS/Trijet/ScanMM/MMedMDM_av.root"
-    inputfiles["trijet"]["A1"]["exp"] = "input/CMS/Trijet/ScanMM/MMedMDM_av.root"
-    inputfiles["trijet"]["A2"]["obs"] = "input/CMS/Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1_MT.root"
-    inputfiles["trijet"]["A2"]["exp"] = "input/CMS/Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root"
-    inputfiles["trijet"]["V1"]["obs"] = "input/CMS/Trijet/ScanMM/MMedMDM_v.root"
-    inputfiles["trijet"]["V1"]["exp"] = "input/CMS/Trijet/ScanMM/MMedMDM_v.root"
-    inputfiles["trijet"]["V2"]["obs"] = "input/CMS/Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1_MT.root"
-    inputfiles["trijet"]["V2"]["exp"] = "input/CMS/Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root"
-
-    objects["monojet"]["A1"]["obs"] = "contour_observed"
-    objects["monojet"]["A1"]["exp"] = "contour_expected"
-    objects["monojet"]["V1"]["obs"] = "contour_observed"
-    objects["monojet"]["V1"]["exp"] = "contour_expected"
-    objects["dilepton"]["A2"]["obs"] = "obs"
-    objects["dilepton"]["A2"]["exp"] = "exp"
-    objects["dilepton"]["V2"]["obs"] = "obs"
-    objects["dilepton"]["V2"]["exp"] = "exp"
-    objects["monoz"]["A1"]["obs"] = ""
-    objects["monoz"]["A1"]["exp"] = ""
-    objects["monoz"]["V1"]["obs"] = ""
-    objects["monoz"]["V1"]["exp"] = ""
-    objects["monophoton"]["A1"]["obs"] = "monophoton_obs"
-    objects["monophoton"]["A1"]["exp"] = "monophoton_exp"
-    objects["monophoton"]["V1"]["obs"] = "monophoton_obs"
-    objects["monophoton"]["V1"]["exp"] = "monophoton_exp"
-    objects["monoHgg"]["V1"]["obs"] = "observed_baryonic_MonoHgg"
-    objects["monoHgg"]["V1"]["exp"] = "expected_baryonic_MonoHgg"
-    objects["monotop"]["V4"]["obs"] = "observed"
-    objects["dijet"]["A1"]["obs"] = "Obs_90"
-    objects["dijet"]["A1"]["exp"] = "Obs_90"
-    objects["dijet"]["A2"]["obs"] = "obs_025"
-    objects["dijet"]["A2"]["exp"] = "exp_025"
-    objects["dijet"]["V1"]["obs"] = "Obs_90"
-    objects["dijet"]["V1"]["exp"] = "Obs_90"
-    objects["dijet"]["V2"]["obs"] = "obs_025"
-    objects["dijet"]["V2"]["exp"] = "exp_025"
-    objects["dijetchi"]["A3"]["obs"] = "obs_MvsM"
-    objects["dijetchi"]["V3"]["obs"] = "obs_MvsM"
-    objects["trijet"]["A1"]["obs"] = "obs_025"
-    objects["trijet"]["A1"]["exp"] = "exp_025"
-    objects["trijet"]["A2"]["obs"] = "obs_025"
-    objects["trijet"]["A2"]["exp"] = "exp_025"
-    objects["trijet"]["V1"]["obs"] = "obs_025"
-    objects["trijet"]["V1"]["exp"] = "exp_025"
-    objects["trijet"]["V2"]["obs"] = "obs_025"
-    objects["trijet"]["V2"]["exp"] = "exp_025"
-    objects["relic"]["A1"]["obs"] = "mytlist"
-    objects["relic"]["A2"]["obs"] = "mytlist"
-    objects["relic"]["A3"]["obs"] = "mytlist"
-    objects["relic"]["V1"]["obs"] = "mytlist"
-    objects["relic"]["V2"]["obs"] = "mytlist"
-    objects["relic"]["V3"]["obs"] = "mytlist"
-    objects["relic"]["V4"]["obs"] = "mytlist"
-
-
-
-    return inputfiles,objects
-
 def read_graphs():
     import ROOT as r
 
     ### Initialize
     graphs = {}
-    inputfiles = {}
     scenarios = ["A1", "A2", "A3","A4","V1", "V2", "V3","V4"]
     quantiles = ["obs", "exp"]
-    analyses = ["monojet","monophoton","monoz","dilepton","dijet","monoHgg","monotop","dijet","trijet","dijetchi","relic"]
+    analyses = ["monojet","monophoton","monoz","dilepton","dijet","monoHgg","monotop","dijet","dijetbb","boosted_dijet_isrj","dijetchi","relic","trijet"]
     for a in analyses:
         graphs[a] = {}
         for s in scenarios:
@@ -325,27 +224,134 @@ def read_graphs():
                 graphs[a][s][q] = None
 
 
-    inputfiles,objects = load_inputs(analyses,scenarios,quantiles)
+    graphs["monojet"]["A1"]["obs"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_observed")
+    graphs["monojet"]["A1"]["exp"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_expected")
+    graphs["monojet"]["V1"]["obs"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_observed")
+    graphs["monojet"]["V1"]["exp"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_expected")
+
+    #graphs["dilepton"]["A2"]["obs"] = rescale_graph_axis(TFile("input/CMS/Dilepton/EXO-16-047/ScanMM/contours_dilepton_A2_smooth.root").Get("obs0"),1e3,1e3)
+    #graphs["dilepton"]["A2"]["exp"] = rescale_graph_axis(TFile("input/CMS/Dilepton/EXO-16-047/ScanMM/contours_dilepton_A2_smooth.root").Get("exp0"),1e3,1e3)
+    #graphs["dilepton"]["V2"]["obs"] = rescale_graph_axis(TFile("input/CMS/Dilepton/EXO-16-047/ScanMM/contours_dilepton_V2_smooth.root").Get("obs0"),1e3,1e3)
+    #graphs["dilepton"]["V2"]["exp"] = rescale_graph_axis(TFile("input/CMS/Dilepton/EXO-16-047/ScanMM/contours_dilepton_V2_smooth.root").Get("exp0"),1e3,1e3)
+    graphs["dilepton"]["A2"]["obs"] = TFile("input/CMS/Dilepton/EXO-19-019/ScanMM/contours_dilepton_A2.root").Get("obs_combined")
+    graphs["dilepton"]["A2"]["exp"] = TFile("input/CMS/Dilepton/EXO-19-019/ScanMM/contours_dilepton_A2.root").Get("exp_combined_med")
+    graphs["dilepton"]["V2"]["obs"] = TFile("input/CMS/Dilepton/EXO-19-019/ScanMM/contours_dilepton_V2.root").Get("obs_combined")
+    graphs["dilepton"]["V2"]["exp"] = TFile("input/CMS/Dilepton/EXO-19-019/ScanMM/contours_dilepton_V2.root").Get("exp_combined_med")
 
 
+    graphs["monoz"]["A1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
+    graphs["monoz"]["A1"]["exp"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_axial_cl95.txt")
+    graphs["monoz"]["V1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
+    graphs["monoz"]["V1"]["exp"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_vector_cl95.txt")
 
-    for a in analyses:
-        for s in scenarios:
-            for q in quantiles:
-                if inputfiles[a][s][q] == None : continue
-
-                if a == "monoz" :
-                    graphs[a][s][q] = r.TGraph(inputfiles[a][s][q]) #txt files
-                elif a == "relic":
-                    graphs[a][s][q] = TFile(inputfiles[a][s][q]).Get(objects[a][s][q]).At(0)
-                else :
-                    graphs[a][s][q] = TFile(inputfiles[a][s][q]).Get(objects[a][s][q])
+    #graphs["monophoton"]["A1"]["obs"] =TFile("input/CMS/Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root").Get("monophoton_obs")
+    #graphs["monophoton"]["A1"]["exp"] =TFile("input/CMS/Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_exp.root").Get("monophoton_exp")
+    #graphs["monophoton"]["V1"]["obs"] =TFile("input/CMS/Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_obs.root").Get("monophoton_obs")
+    #graphs["monophoton"]["V1"]["exp"] =TFile("input/CMS/Monophoton/ScanMM/Monophoton_V_MM_ICHEP2016_exp.root").Get("monophoton_exp")
+    graphs["monophoton"]["A1"]["obs"] =TFile("input/CMS/Monophoton/ScanMM/EXO-16-053/monophoton_limit_curves_95CL.root").Get("monophoton_limit_curve_AV")
+    graphs["monophoton"]["A1"]["exp"] =TFile("input/CMS/Monophoton/ScanMM/EXO-16-053/monophoton_expected_95CL.root").Get("monophoton_expected_AV")
+    graphs["monophoton"]["V1"]["obs"] =TFile("input/CMS/Monophoton/ScanMM/EXO-16-053/monophoton_limit_curves_95CL.root").Get("monophoton_limit_curve_V")
+    graphs["monophoton"]["V1"]["exp"] =TFile("input/CMS/Monophoton/ScanMM/EXO-16-053/monophoton_expected_95CL.root").Get("monophoton_expected_V")
 
 
-    graphs["dilepton"]["A2"]["obs"] = rescale_graph_axis(graphs["dilepton"]["A2"]["obs"],1e3,1e3)
-    graphs["dilepton"]["A2"]["exp"] = rescale_graph_axis(graphs["dilepton"]["A2"]["exp"],1e3,1e3)
-    graphs["dilepton"]["V2"]["obs"] = rescale_graph_axis(graphs["dilepton"]["V2"]["obs"],1e3,1e3)
-    graphs["dilepton"]["V2"]["exp"] = rescale_graph_axis(graphs["dilepton"]["V2"]["exp"],1e3,1e3)
+    graphs["monoHgg"]["V1"]["obs"] = TFile("input/CMS/MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("observed_baryonic_MonoHgg")
+    graphs["monoHgg"]["V1"]["exp"] = TFile("input/CMS/MonoHgg/ScanMM/input_combo_MonoHgg_25April.root").Get("expected_baryonic_MonoHgg")
+
+    graphs["monotop"]["V4"]["obs"] = TFile("input/CMS/Monotop/ScanMM/fcnc2d_obs_vector.root").Get("observed")
+
+    #graphs["dijet"]["A1"]["obs"] = TFile("input/CMS/Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_obs_MT.root").Get("Obs_90")
+    #graphs["dijet"]["A1"]["exp"] = TFile("input/CMS/Dijet/ScanMM/Dijet_MM_A_Dijetpaper2016_exp.root").Get("Obs_90")
+    #graphs["dijet"]["A2"]["obs"] = TFile("input/CMS/Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1_MT.root").Get("obs_025")
+    #graphs["dijet"]["A2"]["exp"] = TFile("input/CMS/Dijet/ScanMM/MMedMDM_dijet_av_gq01gl01gDM1.root").Get("exp_025")
+
+    #graphs["dijet"]["V1"]["obs"] = TFile("input/CMS/Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_obs_MT.root").Get("Obs_90")
+    #graphs["dijet"]["V1"]["exp"] = TFile("input/CMS/Dijet/ScanMM/Dijet_MM_V_Dijetpaper2016_exp.root").Get("Obs_90")
+    #graphs["dijet"]["V2"]["obs"] = TFile("input/CMS/Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1_MT.root").Get("obs_025")
+    #graphs["dijet"]["V2"]["exp"] = TFile("input/CMS/Dijet/ScanMM/MMedMDM_dijet_v_gq01gl001gDM1.root").Get("exp_025")
+
+    graphs["dijet"]["A1"]["obs"] = TFile("input/CMS/Dijet/ScanMM/DijetRun2_obs_A1.root").Get("tg_limit_contour")
+    graphs["dijet"]["A1"]["exp"] = TFile("input/CMS/Dijet/ScanMM/DijetRun2_exp_A1.root").Get("tg_limit_contour")
+    graphs["dijet"]["A2"]["obs"] = TFile("input/CMS/Dijet/ScanMM/DijetRun2_obs_A2.root").Get("tg_limit_contour")
+    graphs["dijet"]["A2"]["exp"] = TFile("input/CMS/Dijet/ScanMM/DijetRun2_exp_A2.root").Get("tg_limit_contour")
+
+    graphs["dijet"]["V1"]["obs"] = TFile("input/CMS/Dijet/ScanMM/DijetRun2_obs_V1.root").Get("tg_limit_contour")
+    graphs["dijet"]["V1"]["exp"] = TFile("input/CMS/Dijet/ScanMM/DijetRun2_exp_V1.root").Get("tg_limit_contour")
+    graphs["dijet"]["V2"]["obs"] = TFile("input/CMS/Dijet/ScanMM/DijetRun2_obs_V2.root").Get("tg_limit_contour")
+    graphs["dijet"]["V2"]["exp"] = TFile("input/CMS/Dijet/ScanMM/DijetRun2_exp_V2.root").Get("tg_limit_contour")
+
+    #graphs["dijetbb"]["A1"]["obs"] = r.TGraph("input/CMS/Dijetbb/ScanMM/MMedMDM_dijetbb_av_MT_obs.txt")
+    #graphs["dijetbb"]["A1"]["exp"] = r.TGraph("input/CMS/Dijetbb/ScanMM/MMedMDM_dijetbb_av_MT_exp.txt")
+    #graphs["dijetbb"]["V1"]["obs"] = TFile("input/CMS/Dijetbb/ScanMM/MMedMDM_dijetbb_v.root").Get("obs_025")
+    #graphs["dijetbb"]["V1"]["exp"] = r.TGraph("input/CMS/Dijetbb/ScanMM/MMedMDM_dijetbb_v_MT_exp.txt") 
+
+    graphs["dijetbb"]["A1"]["obs"] = TFile("input/CMS/Dijetbb/ScanMM/dijetbb_obs_A1.root").Get("tg_limit_contour")
+    graphs["dijetbb"]["A1"]["exp"] = TFile("input/CMS/Dijetbb/ScanMM/dijetbb_exp_A1.root").Get("tg_limit_contour")
+
+    graphs["dijetbb"]["V1"]["obs"] = TFile("input/CMS/Dijetbb/ScanMM/dijetbb_obs_V1.root").Get("tg_limit_contour")
+    graphs["dijetbb"]["V1"]["exp"] = TFile("input/CMS/Dijetbb/ScanMM/dijetbb_exp_V1.root").Get("tg_limit_contour")
+
+    # David's attempt at conversion
+    #graphs["dibjet"]["A1"]["obs"] = TFile("input/CMS/Dijetbb/ScanMM/EXO16057_obs_A1.root").Get("tg_limit_contour")
+    #graphs["dibjet"]["A1"]["exp"] = TFile("input/CMS/Dijetbb/ScanMM/EXO16057_exp_A1.root").Get("tg_limit_contour")
+    #graphs["dibjet"]["A2"]["obs"] = TFile("input/CMS/Dijetbb/ScanMM/EXO16057_obs_A2.root").Get("tg_limit_contour")
+    #graphs["dibjet"]["A2"]["exp"] = TFile("input/CMS/Dijetbb/ScanMM/EXO16057_exp_A2.root").Get("tg_limit_contour")
+
+    #graphs["dibjet"]["V1"]["obs"] = TFile("input/CMS/Dijetbb/ScanMM/EXO16057_obs_V1.root").Get("tg_limit_contour")
+    #graphs["dibjet"]["V1"]["exp"] = TFile("input/CMS/Dijetbb/ScanMM/EXO16057_exp_V1.root").Get("tg_limit_contour")
+    #graphs["dibjet"]["V2"]["obs"] = TFile("input/CMS/Dijetbb/ScanMM/EXO16057_obs_V2.root").Get("tg_limit_contour")
+    #graphs["dibjet"]["V2"]["exp"] = TFile("input/CMS/Dijetbb/ScanMM/EXO16057_exp_V2.root").Get("tg_limit_contour")
+
+    graphs["dijetchi"]["A3"]["obs"] = TFile("input/CMS/DijetChi/ScanMM/limitsLHC_DMAxial_MDM_MMed_MT.root").Get("obs_MvsM")
+    graphs["dijetchi"]["V3"]["obs"] = TFile("input/CMS/DijetChi/ScanMM/limitsLHC_DMVector_MDM_MMed_MT.root").Get("obs_MvsM")
+
+    # Old ones from Marco and Andreas... contours don't go all the way around?
+    #graphs["boosted_dijet_isrj"]["A1"]["obs"] = TFile("input/CMS/Trijet/ScanMM/MMedMDM_AV.root").Get("obs_025")
+    #graphs["boosted_dijet_isrj"]["A1"]["exp"] = TFile("input/CMS/Trijet/ScanMM/MMedMDM_AV.root").Get("exp_025")
+    #graphs["boosted_dijet_isrj"]["A2"]["obs"] = TFile("input/CMS/Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1_MT.root").Get("obs_025")
+    #graphs["boosted_dijet_isrj"]["A2"]["exp"] = TFile("input/CMS/Trijet/ScanMM/MMedMDM_trijet_av_gq01gl01gDM1.root").Get("exp_025")
+    #graphs["boosted_dijet_isrj"]["V1"]["obs"] = TFile("input/CMS/Trijet/ScanMM/MMedMDM_V.root").Get("obs_025")
+    #graphs["boosted_dijet_isrj"]["V1"]["exp"] = TFile("input/CMS/Trijet/ScanMM/MMedMDM_V.root").Get("exp_025")
+    #graphs["boosted_dijet_isrj"]["V2"]["obs"] = TFile("input/CMS/Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1_MT.root").Get("obs_025")
+    #graphs["boosted_dijet_isrj"]["V2"]["exp"] = TFile("input/CMS/Trijet/ScanMM/MMedMDM_trijet_v_gq01gl001gDM1.root").Get("exp_025")
+
+    # New ones from David
+    # 2016 only
+    #graphs["boosted_dijet_isrj"]["A1"]["obs"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO17001_obs_A1.root").Get("tg_limit_contour")
+    #graphs["boosted_dijet_isrj"]["A1"]["exp"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO17001_exp_A1.root").Get("tg_limit_contour")
+    #graphs["boosted_dijet_isrj"]["A2"]["obs"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO17001_obs_A2.root").Get("tg_limit_contour")
+    #graphs["boosted_dijet_isrj"]["A2"]["exp"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO17001_exp_A2.root").Get("tg_limit_contour")
+    #graphs["boosted_dijet_isrj"]["V1"]["obs"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO17001_obs_V1.root").Get("tg_limit_contour")
+    #graphs["boosted_dijet_isrj"]["V1"]["exp"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO17001_exp_V1.root").Get("tg_limit_contour")
+    #graphs["boosted_dijet_isrj"]["V2"]["obs"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO17001_obs_V2.root").Get("tg_limit_contour")
+    #graphs["boosted_dijet_isrj"]["V2"]["exp"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO17001_exp_V2.root").Get("tg_limit_contour")
+
+    # 2016+2017
+    graphs["boosted_dijet_isrj"]["A1"]["obs"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO18012_obs_A1.root").Get("tg_limit_contour")
+    graphs["boosted_dijet_isrj"]["A1"]["exp"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO18012_exp_A1.root").Get("tg_limit_contour")
+    graphs["boosted_dijet_isrj"]["A2"]["obs"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO18012_obs_A2.root").Get("tg_limit_contour")
+    graphs["boosted_dijet_isrj"]["A2"]["exp"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO18012_exp_A2.root").Get("tg_limit_contour")
+    graphs["boosted_dijet_isrj"]["V1"]["obs"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO18012_obs_V1.root").Get("tg_limit_contour")
+    graphs["boosted_dijet_isrj"]["V1"]["exp"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO18012_exp_V1.root").Get("tg_limit_contour")
+    graphs["boosted_dijet_isrj"]["V2"]["obs"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO18012_obs_V2.root").Get("tg_limit_contour")
+    graphs["boosted_dijet_isrj"]["V2"]["exp"] = TFile("input/CMS/BoostedDijetISRj/ScanMM/EXO18012_exp_V2.root").Get("tg_limit_contour")
+
+    graphs["relic"]["A1"]["obs"] = TFile("input/relic/madDMv2_0_6/relic_A1.root").Get("mytlist").At(0)
+    graphs["relic"]["A2"]["obs"] = TFile("input/relic/madDMv2_0_6/relic_A2.root").Get("mytlist").At(0)
+    graphs["relic"]["A3"]["obs"] = TFile("input/relic/madDMv2_0_6/relic_axial_gq1.root").Get("mytlist").At(0)
+    graphs["relic"]["V1"]["obs"] = TFile("input/relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
+    graphs["relic"]["V2"]["obs"] = TFile("input/relic/madDMv2_0_6/relic_V2.root").Get("mytlist").At(0)
+    graphs["relic"]["V3"]["obs"] = TFile("input/relic/madDMv2_0_6/relic_vector_gq1.root").Get("mytlist").At(0)
+    graphs["relic"]["V4"]["obs"] = TFile("input/relic/madDMv2_0_6/relic_V1.root").Get("mytlist").At(0)
+
+    graphs["trijet"]["A1"]["obs"] = TFile("input/CMS/Trijet/ScanMM/EXO19004_obs_A1.root").Get("tg_limit_contour")
+    graphs["trijet"]["A1"]["exp"] = TFile("input/CMS/Trijet/ScanMM/EXO19004_exp_A1.root").Get("tg_limit_contour")
+    #graphs["trijet"]["A2"]["obs"] = TFile("input/CMS/Trijet/ScanMM/EXO19004_obs_A2.root").Get("tg_limit_contour")
+    #graphs["trijet"]["A2"]["exp"] = TFile("input/CMS/Trijet/ScanMM/EXO19004_exp_A2.root").Get("tg_limit_contour")
+
+    graphs["trijet"]["V1"]["obs"] = TFile("input/CMS/Trijet/ScanMM/EXO19004_obs_V1.root").Get("tg_limit_contour")
+    graphs["trijet"]["V1"]["exp"] = TFile("input/CMS/Trijet/ScanMM/EXO19004_exp_V1.root").Get("tg_limit_contour")
+    #graphs["trijet"]["V2"]["obs"] = TFile("input/CMS/Trijet/ScanMM/EXO19004_obs_V2.root").Get("tg_limit_contour")
+    #graphs["trijet"]["V2"]["exp"] = TFile("input/CMS/Trijet/ScanMM/EXO19004_exp_V2.root").Get("tg_limit_contour")
 
 
     return graphs
@@ -474,7 +480,7 @@ def get_text():
     text["dijet"]          = "#splitline{#bf{Dijet} (35.9 fb^{-1})}{#it{[EXO-16-056]}}"
     text["dijetchi"]       = "#bf{Dijet #chi}  (36.5 fb^{-1}) #it{[EXO-16-046]}"
     #~ text["dilepton"]       = "#splitline{Dilepton: ee (12.4 fb^{-1}) + #mu#mu (13.0 fb^{-1})}{#it{[EXO-16-031]}}"
-    text["dilepton"]       = "#splitline{#bf{Dilepton} (12.4 fb^{-1} / 13.0 fb^{-1})}{#it{[EXO-16-031]}}"
+    text["dilepton"]       = "#splitline{#bf{Dilepton} (12.4 fb^{-1} / 13.0 fb^{-1})}{#it{[EXO-19-019]}}"
     text["dijet_2016"]     = "Observed"
     text["dijet_2016_exp"] = "Expected"
     text["trijet"]         = "#splitline{#bf{Boosted dijet} (35.9 fb^{-1})}{#it{[EXO-17-001]}}"

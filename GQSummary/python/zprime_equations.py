@@ -1,71 +1,70 @@
 from ROOT import *
 import ROOT,sys,os,math
 from math import sqrt
-import numpy as np
 
 mq = {"u":2.3e-3, "d":4.8e-3, "c":1.275, "s":0.095, "b":4.18, "t":173.21}
 
 
 # Partial width Gamma(Z' -> qq)
 # @param gq
-# @param m_med = mediator mass
+# @param mZp = mediator mass
 # @param qtype = quark flavor, u, d, c, s, b, or t
 # @param vtype = "axial" or "vector"
 
-def Gamma_qq(gq, m_med, vtype, qtype):
-    if m_med < 2. * mq[qtype]:
+def Gamma_qq(gq, mZp, vtype, qtype):
+    if mZp < 2. * mq[qtype]:
         return 0.
     elif vtype == "axial":
-        return 3. * gq**2 * m_med * (1. - (4. * mq[qtype]**2) / m_med**2)**1.5 / (12. * math.pi)
+        return 3. * gq**2 * mZp * (1. - (4. * mq[qtype]**2) / mZp**2)**1.5 / (12. * math.pi)
     elif vtype == "vector":
-        return 3. * gq**2 * m_med * (1. - (4. * mq[qtype]**2) / m_med**2)**0.5 * (1. + 2. * mq[qtype]**2 / m_med**2) / (12. * math.pi)
+        return 3. * gq**2 * mZp * (1. - (4. * mq[qtype]**2) / mZp**2)**0.5 * (1. + 2. * mq[qtype]**2 / mZp**2) / (12. * math.pi)
     else:
         print "[Gamma_qq] ERROR : Unknown vtype {}".format(vtype)
         sys.exit(1)
 
 # Total width Gamma(Z' -> quarks)
 # @param gq
-# @param m_med = mediator mass
+# @param mZp = mediator mass
 # @param vtype = "axial" or "vector"
-def Gamma_qq_tot(gq, m_med, vtype):
+def Gamma_qq_tot(gq, mZp, vtype):
     this_width = 0.
     for qtype in ["u", "d", "s", "c", "b", "t"]:
-        this_width += Gamma_qq(gq, m_med, vtype, qtype)
+        this_width += Gamma_qq(gq, mZp, vtype, qtype)
     return this_width
 
 # Partial width Gamma(Z' -> chi chi)
 # @param gq
-# @param m_med = mediator mass
-# @param m_DM = dark matter mass
+# @param mZp = mediator mass
+# @param mDM = dark matter mass
 # @param vtype = "axial" or "vector"
-def Gamma_DM(gDM, m_med, m_DM, vtype):
-    if 2 * m_DM > m_med:
+def Gamma_DM(gDM, mZp, mDM, vtype):
+    if 2 * mDM > mZp:
         return 0.
     elif vtype == "axial":
-        return gDM**2 * m_med * (1. - (4. * mDM**2) / m_med**2)**1.5 / (12. * math.pi)
+        return gDM**2 * mZp * (1. - (4. * mDM**2) / mZp**2)**1.5 / (12. * math.pi)
     elif vtype == "vector":
-        return gDM**2 * m_med * (1. - (4. * mDM**2) / m_med**2)**0.5 * (1. + 2. * mDM**2 / m_med**2) / (12. * math.pi)
+        return gDM**2 * mZp * (1. - (4. * mDM**2) / mZp**2)**0.5 * (1. + 2. * mDM**2 / mZp**2) / (12. * math.pi)
     else:
         print "[Gamma_DM] ERROR : Unknown vtype {}".format(vtype)
         sys.exit(1)
 
 # Convert Z' width (Gamma(Z' -> qq)) to g_q
-def width_to_gq(width, m_med, vtype):
+def width_to_gq(width, mZp, vtype):
     den = 0.
     for qtype in ["u", "d", "s", "c", "b", "t"]:
-        if m_med > 2. * mq[qtype]:
+        if mZp > 2. * mq[qtype]:
             if vtype == "vector":
-                den += 1. / (4. * math.pi) * (1. - 4. * mq[qtype]**2 / m_med**2)**0.5 * (1. + 2. * mq[qtype]**2 / m_med**2)
+                den += 1. / (4. * math.pi) * (1. - 4. * mq[qtype]**2 / mZp**2)**0.5 * (1. + 2. * mq[qtype]**2 / mZp**2)
             elif vtype == "axial":
-                den += 1. / (4. * math.pi) * (1. - 4. * mq[qtype]**2 / m_med**2)**1.5
+                den += 1. / (4. * math.pi) * (1. - 4. * mq[qtype]**2 / mZp**2)**1.5
             else:
                 print "[width_to_gq] ERROR : Unknown vtype {}".format(vtype)
                 sys.exit(1)
-    return sqrt(width / m_med / den)
+    return sqrt(width / mZp / den)
 
 # Convert Gamma-over-mass (Gamma(Z'->qq)) to g_q
-def gom_to_gq(gom, m_med, vtype):
-    return width_to_gq(gom * m_med, m_med, vtype)
+def gom_to_gq(gom, mZp, vtype):
+    return width_to_gq(gom * mZp, mZp, vtype)
 
 # g_q constraint from Z width
 def gq_Z_constraint(x):
@@ -114,17 +113,23 @@ def gq_upsilon_constraint(x):
 
     return math.sqrt(y)/6.
 
+def convert_gq(gq, mZp, gDM, mDM, vtype):
+    '''
+    Convert excluded gq(mZp, mDM, gDM=0) to gq(mZp, mDM, gDM)
+    '''
+    return gq * math.sqrt(0.5 * (1. + math.sqrt(1. + 4. * Gamma_DM(gDM=gDM, mZp=mZp, mDM=mDM, vtype=vtype) / Gamma_qq_tot(gq=gq, mZp=mZp, vtype=vtype))))
 
-#def A(gq,m_med,mDM,vtype):
-#    return gq**2*Gammaqq_tot(gq,m_med,vtype)/(Gammaqq_tot(gq,m_med,vtype)+GammaDM(1,m_med,mDM,vtype))
+
+#def A(gq,mZp,mDM,vtype):
+#    return gq**2*Gammaqq_tot(gq,mZp,vtype)/(Gammaqq_tot(gq,mZp,vtype)+GammaDM(1,mZp,mDM,vtype))
 #
-#def B(gq,m_med,mDM,vtype):
-#    return gq**4*GammaDM(1,m_med,1,vtype)/(Gammaqq_tot(gq,m_med,vtype)+GammaDM(1,m_med,mDM,vtype))
+#def B(gq,mZp,mDM,vtype):
+#    return gq**4*GammaDM(1,mZp,1,vtype)/(Gammaqq_tot(gq,mZp,vtype)+GammaDM(1,mZp,mDM,vtype))
 #
 #### transfer the limit from gDM=1 & mDM=1 to arbitrary mDM
 #### used by dijet chi analysis
-#def g_q(gq,m_med,mDM,vtype):
-#    return math.pow((A(gq,m_med,mDM,vtype)+math.pow(A(gq,m_med,mDM,vtype)**2+4*B(gq,m_med,mDM,vtype),0.5))*0.5,0.5)
+#def g_q(gq,mZp,mDM,vtype):
+#    return math.pow((A(gq,mZp,mDM,vtype)+math.pow(A(gq,mZp,mDM,vtype)**2+4*B(gq,mZp,mDM,vtype),0.5))*0.5,0.5)
 #
 #
 #
@@ -136,20 +141,20 @@ def gq_upsilon_constraint(x):
 #
 #
 #### width(gq, MMed) function (mDM=1, gDM=1)
-#def medWidth(gq,m_med,vtype):
-#  return Gammaqq_tot(gq, m_med, vtype)/float(m_med)+1/(12*3.141592653)
+#def medWidth(gq,mZp,vtype):
+#  return Gammaqq_tot(gq, mZp, vtype)/float(mZp)+1/(12*3.141592653)
 #
 #
 #### width(gqprime, MMed) function (2mDM>MMed)
-#def medWidth_gqprime(gq,m_med,vtype):
+#def medWidth_gqprime(gq,mZp,vtype):
 #    #return 6*gq**2/(4*3.141592653)
-#    return Gammaqq_tot(gq, m_med, vtype)/float(m_med)
+#    return Gammaqq_tot(gq, mZp, vtype)/float(mZp)
 #
 #
 #### gqprime(width, MMed) function
-#def gqprime(width, m_med,vtype):
+#def gqprime(width, mZp,vtype):
 #    for gq in np.linspace(0,1.5,1001):
-#        if medWidth_gqprime(gq,m_med,vtype)<=width:
+#        if medWidth_gqprime(gq,mZp,vtype)<=width:
 #            gqprime=gq
 #    return gqprime
 #

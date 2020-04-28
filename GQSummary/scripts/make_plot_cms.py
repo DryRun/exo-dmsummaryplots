@@ -122,6 +122,15 @@ style = {
 		"line_style":2,
 		"line_width":2,
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 5),		
+	}, "EXO19012_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
+	}, "EXO19012_exp":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 5),		
+		"line_style":2,
+		"line_width":2,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 5),		
 	}, "EXO17027_obs":{
 		"line_color":seaborn_colors.get_root_color("RdPu_r", 1),		
 		"line_style":1,
@@ -158,6 +167,15 @@ style = {
 		"line_style":2,
 		"line_width":2,
 		"fill_color":seaborn_colors.get_root_color("Greens_d", 2),		
+	}, "EXO19004_obs":{
+		"line_color":seaborn_colors.get_root_color("hls", 1),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("hls", 1),		
+	}, "EXO19004_exp":{
+		"line_color":seaborn_colors.get_root_color("hls_light", 1),		
+		"line_style":2,
+		"line_width":2,
+		"fill_color":seaborn_colors.get_root_color("hls_light", 1),		
 	}
 }
 
@@ -178,7 +196,7 @@ legend_entries = {
 	"EXO16057_SR2_exp":False,
 	"EXO17001_obs":"#splitline{Boosted Dijet #it{[arXiv:1710.00159]}}{#lower[-0.1]{35.9 fb^{-1}, 13 TeV}}",
 	"EXO17001_exp":False,
-	"EXO18012_AK8_obs":"#splitline{Boosted Dijet #it{[EXO-18-012]}}{#lower[-0.1]{77.0 fb^{-1}, 13 TeV}}",
+	"EXO18012_AK8_obs":"#splitline{Boosted Dijet #it{[arXiv:1909.04114]}}{#lower[-0.1]{77.0 fb^{-1}, 13 TeV}}",
 	"EXO18012_CA15_obs":False,
 	"EXO18012_AK8_exp":False,
 	"EXO18012_CA15_exp":False,
@@ -186,14 +204,18 @@ legend_entries = {
 	"EXO14005_exp":False,
 	"EXO17026_obs":"#splitline{Dijet #it{[EXO-17-026]}}{#lower[-0.1]{77.8 fb^{-1}, 13 TeV}}",
 	"EXO17026_exp":False,
-	"EXO17027_obs":"#splitline{Boosted Dijet+#gamma #it{[EXO-17-027]}}{#lower[-0.1]{35.9 fb^{-1}, 13 TeV}}",
+	"EXO17027_obs":"#splitline{Boosted Dijet+#gamma #it{[arXiv:1905.10331]}}{#lower[-0.1]{35.9 fb^{-1}, 13 TeV}}",
 	"EXO17027_exp":False,
+	"EXO19012_obs":"#splitline{Dijet #it{[arXiv:1911.03947]}}{#lower[-0.1]{137 fb^{-1}, 13 TeV}}",
+	"EXO19012_exp":False,
 	"B2G17017_w0p01_obs":"#splitline{t#bar{t} resonance, #it{[arXiv:1810.05905]}}{#lower[-0.1]{35.9 fb^{-1}, 13 TeV}}",
 	"B2G17017_w0p1_obs":False,
 	"B2G17017_w0p3_obs":False,
 	"B2G17017_w0p01_exp":False,
 	"B2G17017_w0p1_exp":False,
 	"B2G17017_w0p3_exp":False,
+	"EXO19004_obs":"#splitline{Dijet+ISR jet #it{[arXiv:1911.03761]}}{18.3 fb^{-1}, 13 TeV}",
+	"EXO19004_exp":False,
 	"_GOM100":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~100%}}}{}",
 	"_GOM30":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~30%}}}{}",
 	"_GOM10":"#frac{#scale[1.1]{#bf{#Gamma_{Z'}#kern[-0.5]{ }/#kern[-0.5]{ }M_{Z'}#kern[-0.5]{ }<#kern[-0.5]{ }~10%}}}{}",
@@ -210,6 +232,7 @@ truncate_gom = {
 	"EXO16057_SR2_obs":[0., 0.12],
 	"EXO17001_obs":[0., 0.12],
 	"EXO17027_obs":[0., 0.12],
+	"EXO19004_obs":[0., 0.12],
 	"EXO14005_obs":[0., 0.12],
 	"EXO18012_AK8_obs":[0., 0.12],
 	"EXO18012_CA15_obs":[0., 0.12],
@@ -234,7 +257,7 @@ EXO16057_SR2_obs,EXO16057_SR2_exp,\
 EXO14005_obs,EXO14005_exp,\
 EXO16056_narrow_lowmass_obs,\
 EXO16056_narrow_lowmass_exp,\
-EXO17026_obs,EXO17026_exp,\
+EXO19012_obs,EXO19012_exp,\
 _GOM30,EXO16056_wide_obs,\
 EXO16056_wide_exp,\
 _GOM100,EXO16046_obs,\
@@ -333,7 +356,7 @@ if __name__ == "__main__":
 			y_title="g'_{q}",
 			x_range=[6., 8000.],
 			y_range=y_range,
-			canvas_dim=[1800, 1200],
+			canvas_dim=[1875, 1200],
 			legend_coords=[0.7, 0.005, 0.99, 0.98],
 			legend_text_size=0.025,
 			legend_obsexp=True,
@@ -351,7 +374,7 @@ if __name__ == "__main__":
 			y_title="g'_{q}",
 			x_range=[0., 6000.],
 			y_range=y_range,
-			canvas_dim=[1800, 1200],
+			canvas_dim=[1875, 1200],
 			legend_coords=[0.7, 0.005, 0.99, 0.98],
 			legend_text_size=0.025,
 			legend_obsexp=True,

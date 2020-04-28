@@ -20,6 +20,8 @@ seaborn_colors.load_palette("Oranges_d", palette_dir=palette_dir)
 seaborn_colors.load_palette("Greens_d", palette_dir=palette_dir)
 seaborn_colors.load_palette("Purples_d", palette_dir=palette_dir)
 seaborn_colors.load_palette("RdPu_r", palette_dir=palette_dir)
+seaborn_colors.load_palette("hls", palette_dir=palette_dir)
+seaborn_colors.load_palette("hls_light", palette_dir=palette_dir)
 
 
 class GQSummaryPlot:
@@ -539,6 +541,19 @@ class GQSummaryPlot:
 		self._canvas.cd()
 
 	def save(self, folder, exts=["pdf"]):
+		exts = [x.lower() for x in exts]
+		if "png" in exts:
+			eps_created = False
 		for ext in exts:
-			self._canvas.SaveAs("{}/{}.{}".format(folder, self._canvas.GetName(), ext))
+			if ext == "png":
+				eps_filename = "{}/{}.{}".format(folder, self._canvas.GetName(), "eps")
+				if not eps_created:
+					self._canvas.SaveAs(eps_filename)
+					eps_created = True
+				png_filename = "{}/{}.{}".format(folder, self._canvas.GetName(), "png")
+				os.system("convert -trim -density 300 {} {}".format(eps_filename, png_filename))
+			else:
+				self._canvas.SaveAs("{}/{}.{}".format(folder, self._canvas.GetName(), ext))
+			if ext == "eps":
+				eps_created = True
 

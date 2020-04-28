@@ -62,6 +62,14 @@ style = {
 		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
 		"line_style":1,
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
+	}, "EXO19004_obs":{
+		"line_color":seaborn_colors.get_root_color("hls", 1),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("hls", 1),		
+	}, "EXO19012_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 2),		
+		"line_style":1,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 2),		
 	}, "B2G17017_w0p01_obs":{
 		"line_color":seaborn_colors.get_root_color("Greens_d", 5),		
 		"line_style":1,
@@ -99,6 +107,14 @@ style = {
 		"line_style":2, 
 		"fill_color":seaborn_colors.get_root_color("Greens_d", 4),
 	}, "ATLAS_EXOT1621_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 3),
+		"line_style":2,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 3),
+	}, "ATLAS_EXOT201903_obs":{
+		"line_color":seaborn_colors.get_root_color("Reds_d", 3),
+		"line_style":2,
+		"fill_color":seaborn_colors.get_root_color("Reds_d", 3),
+	}, "ATLAS_EXOT201903_2b_obs":{ # Note: same as ATLAS_EXOT201903_obs, don't show both!
 		"line_color":seaborn_colors.get_root_color("Reds_d", 3),
 		"line_style":2,
 		"fill_color":seaborn_colors.get_root_color("Reds_d", 3),
@@ -171,10 +187,12 @@ legend_entries = {
 	"EXO16057_SR1_obs":"#splitline{CMS Dijet b tagged, 8 TeV}{#it{[arXiv:1802.06149]}}",
 	"EXO16057_SR2_obs":False, # Only need one of SR1/SR2 for the legend
 	"EXO17001_obs":"#splitline{CMS Boosted Dijet '16, 13 TeV}{#it{[arXiv:1710.00159]}}",
-	"EXO18012_AK8_obs":"#splitline{CMS Boosted Dijet, 13 TeV}{#it{[EXO-18-012]}}",
+	"EXO18012_AK8_obs":"#splitline{CMS Boosted Dijet, 13 TeV}{#it{[arXiv:1909.04114]}}",
 	"EXO18012_CA15_obs":False,
 	"EXO17026_obs":"#splitline{CMS Dijet '16+'17, 13 TeV}{#it{[EXO-17-026]}}",
-	"EXO17027_obs":"#splitline{CMS Boosted Dijet+#gamma, 13 TeV}{#it{[EXO-17-027]}}",
+	"EXO17027_obs":"#splitline{CMS Boosted Dijet+#gamma, 13 TeV}{#it{[arXiv:1905.10331]}}",
+	"EXO19012_obs":"#splitline{CMS Dijet, 13 TeV}{#it{[arXiv:1911.03947]}}",
+	"EXO19004_obs":"#splitline{CMS Dijet+ISR jet, 13 TeV}{#it{[arXiv:1911.03761]}}",
 	"B2G17017_w0p01_obs":"#splitline{CMS t#bar{t}, 13 TeV}{#it{[arXiv:1810.05905]}}",
 	"B2G17017_w0p1_obs":False,
 	"B2G17017_w0p3_obs":False,
@@ -185,6 +203,8 @@ legend_entries = {
 	"ATLAS_8TeV":"#splitline{ATLAS Dijet, 8 TeV}{#it{[arXiv:1407.1376]}}",
 	"ATLAS_EXOT1701_obs":"#splitline{ATLAS Boosted Dijet, 13 TeV}{#it{[arXiv:1801.08769]}}",
 	"ATLAS_EXOT1621_obs":"#splitline{ATLAS Dijet, 13 TeV}{#it{[arXiv:1703.09127]}}",
+	"ATLAS_EXOT201903_obs":"#splitline{ATLAS Dijet, 13 TeV}{#it{[arXiv:1910.08447]}}",
+	"ATLAS_EXOT201903_2b_obs":"#splitline{ATLAS Dijet, 13 TeV}{#it{[arXiv:1910.08447]}}",
 	"ATLAS_CONF16030_low_obs":"#splitline{ATLAS Dijet TLA, 13 TeV}{#it{[ATLAS-CONF-2016-030]}}",
 	"ATLAS_CONF16030_high_obs":False,
 	"ATLAS_EXOT2016020_low_obs":"#splitline{ATLAS Dijet TLA, 13 TeV}{#it{[arXiv:1804.03496]}}",
@@ -218,12 +238,15 @@ truncate_gom = {
 	"EXO17027_obs":[0., 0.12],
 	"EXO18012_AK8_obs":[0., 0.12],
 	"EXO18012_CA15_obs":[0., 0.12],
+	"EXO19004_obs":[0., 0.12],
 	"EXO14005_obs":[0., 0.12],
 	#"CDF_Run1":[0., 0.12],
 	#"CDF_Run2":[0., 0.12],
 	#"UA2":[0., 0.12],
 	"ATLAS_8TeV":[0., 0.12],
 	"ATLAS_EXOT1621_obs":[0., 0.12],
+	"ATLAS_EXOT201903_obs":[0, 0.12],
+	"ATLAS_EXOT201903_2b_obs":[0, 0.12],
 	"ATLAS_EXOT1701_obs":[0., 0.12],
 	"ATLAS_EXOT201805_incl_PhoTrig_obs":[0., 0.12],
 	"ATLAS_EXOT201805_incl_CombTrig_obs":[0., 0.12],
@@ -248,7 +271,7 @@ if __name__ == "__main__":
 	parser = ArgumentParser(description='Make g_q summary plot')
 	parser.add_argument('--analyses', type=str, default="\
 _GOM100,ATLAS_EXOT1701_obs,\
-EXO16046_obs,ATLAS_EXOT1621_obs,\
+EXO16046_obs,ATLAS_EXOT201903_obs,\
 _GOM10,ATLAS_CONF16030_low_obs,ATLAS_CONF16030_high_obs,\
 EXO16056_narrow_obs,ATLAS_CONF16070_ISRy_obs,\
 EXO14005_obs,ATLAS_CONF16070_ISRj_obs,\
@@ -375,6 +398,6 @@ CDF_Run2,EXO16057_SR2_obs",
 			conference_label={"x":3900., "y":2. * 1.1, "text":args.conference_label}
 			)
 
-	gq_plot.save(os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/GQSummary/plots"), exts=["pdf", "eps"])
+	gq_plot.save(os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/GQSummary/plots"), exts=["pdf", "eps", "png"])
 
 

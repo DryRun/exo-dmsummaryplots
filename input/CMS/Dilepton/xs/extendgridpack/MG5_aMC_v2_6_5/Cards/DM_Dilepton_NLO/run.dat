@@ -1,0 +1,64 @@
+set auto_update 0
+set automatic_html_opening False
+set run_mode 2
+set ninja /disk1/albert/test/2017-03-13_dmsimp_dilepton/MG5_aMC_v2_5_2/HEPTools/lib
+set collier /disk1/albert/test/2017-03-13_dmsimp_dilepton/MG5_aMC_v2_5_2/HEPTools/lib
+set mg5amc_py8_interface_path /disk1/albert/test/2017-03-13_dmsimp_dilepton/MG5_aMC_v2_5_2/HEPTools/MG5aMC_PY8_interface
+set pythia8_path /disk1/albert/test/2017-03-13_dmsimp_dilepton/MG5_aMC_v2_5_2/HEPTools/pythia8
+import DMsimp_s_spin1
+# Define multiparticle labels
+define l+ = mu+ e+ ta+
+define l- = mu- e- ta-
+generate       p p  > y1 > l+ l-[QCD]
+output output_folder
+
+
+
+launch
+#madspin=ON
+shower=OFF
+#./Cards/DM_Dilepton_NLO/madspin_card.dat
+./Cards/DM_Dilepton_NLO/run_card.dat
+./Cards/DM_Dilepton_NLO/shower_card.dat
+
+#put card customizations here (change top and higgs mass for example)
+
+set run_card nevents 500
+
+set param_card mass  5000001 1000.0
+set param_card mass  5000521 1.0
+set param_card decay 5000001 auto
+
+set param_card gVXd 1.0
+set param_card gAXd 0.0
+
+set param_card gVd11 0.25
+set param_card gVd22 0.25
+set param_card gVd33 0.25
+set param_card gVu11 0.25
+set param_card gVu22 0.25
+set param_card gVu33 0.25
+
+set param_card gVl11 0.01
+set param_card gVl22 0.01
+set param_card gVl33 0.01
+
+set param_card gAd11 0.25
+set param_card gAd22 0.25
+set param_card gAd33 0.25
+set param_card gAu11 0.25
+set param_card gAu22 0.25
+set param_card gAu33 0.25
+
+set param_card gAl11 0.0
+set param_card gAl22 0.0
+set param_card gAl33 0.0
+
+set param_card gnu11 0.0
+set param_card gnu22 0.0
+set param_card gnu33 0.0
+
+set param_card gVu31 0.0
+set param_card gVd31 0.0
+set param_card gAu31 0.0
+set param_card gAd31 0.0

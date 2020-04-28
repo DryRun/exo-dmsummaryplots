@@ -1,0 +1,57 @@
+set auto_update 0
+set automatic_html_opening False
+set run_mode 0
+
+import model DMsimp_s_spin1
+define l+ = mu+ e+ ta+
+define l- = mu- e- ta-
+generate p p > Y1 > l+ l- [QCD]
+output Zpll_MMED@MMED@_MDM@MDM@_@SCENARIO@
+launch
+
+# customizecards.dat
+shower=ON
+./Cards/run_card.dat
+./Cards/shower_card.dat
+
+set lhaid 292200
+set maxjetflavor 5
+set MY1 @MMED@
+set MXd @MDM@
+set gVh 0
+set gAd11 @GQA@
+set gAd22 @GQA@
+set gAd33 @GQA@
+set gAu11 @GQA@
+set gAu22 @GQA@
+set gAu33 @GQA@
+set gAl11 @GLA@
+set gAl22 @GLA@
+set gAl33 @GLA@
+set gaxd @GDMA@
+set gaxc 0
+set gVd11 @GQV@
+set gVd22 @GQV@
+set gVd33 @GQV@
+set gVu11 @GQV@
+set gVu22 @GQV@
+set gVu33 @GQV@
+set gVl11 @GLV@
+set gVl22 @GLV@
+set gVl33 @GLV@
+set gnu11 @GNU@
+set gnu22 @GNU@
+set gnu33 @GNU@
+set gVxd @GDMV@
+set gVxc 0
+#set gVu31 0
+#set gAu31 0
+#set gVd31 0
+#set gAd31 0
+set nevents 6000
+set ebeam1 6500
+set ebeam2 6500
+set WY1 auto
+
+launch Zpll_MMED@MMED@_MDM@MDM@_@SCENARIO@ -i
+exit

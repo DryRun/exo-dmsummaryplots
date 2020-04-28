@@ -1,0 +1,47 @@
+#madspin=ON
+shower=OFF
+#./Cards/DM_Dilepton_NLO/madspin_card.dat
+./Cards/DM_Dilepton_NLO/run_card.dat
+./Cards/DM_Dilepton_NLO/shower_card.dat
+
+#put card customizations here (change top and higgs mass for example)
+
+set run_card nevents NEVENTS
+
+set param_card mass  5000001 MMED
+set param_card mass  5000521 MDM
+set param_card decay 5000001 auto
+
+set param_card gVXd GDMV
+set param_card gAXd GDMA
+
+set param_card gVd11 GQV
+set param_card gVd22 GQV
+set param_card gVd33 GQV
+set param_card gVu11 GQV
+set param_card gVu22 GQV
+set param_card gVu33 GQV
+
+set param_card gVl11 GLV
+set param_card gVl22 GLV
+set param_card gVl33 GLV
+
+set param_card gAd11 GQA
+set param_card gAd22 GQA
+set param_card gAd33 GQA
+set param_card gAu11 GQA
+set param_card gAu22 GQA
+set param_card gAu33 GQA
+
+set param_card gAl11 GLA
+set param_card gAl22 GLA
+set param_card gAl33 GLA
+
+set param_card gnu11 GNU
+set param_card gnu22 GNU
+set param_card gnu33 GNU
+
+set param_card gVu31 0.0
+set param_card gVd31 0.0
+set param_card gAu31 0.0
+set param_card gAd31 0.0

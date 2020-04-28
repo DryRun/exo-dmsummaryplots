@@ -1,0 +1,5 @@
+import model DMsimp_s_spin1
+define l+ = mu+ e+ ta+
+define l- = mu- e- ta-
+generate p p > Y1 > l+ l- [QCD]
+output Zpll_template

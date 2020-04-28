@@ -1,0 +1,61 @@
+set auto_update 0
+set automatic_html_opening False
+set run_mode 0
+
+#set collier /afs/cern.ch/user/d/dryu/MCI/DMSummaryPlots/src/ExoDMSummaryPlots/input/CMS/Dilepton/xs/MG5_aMC_v2_6_1/HEPTools/lib
+#set mg5amc_py8_interface_path /afs/cern.ch/user/d/dryu/MCI/DMSummaryPlots/src/ExoDMSummaryPlots/input/CMS/Dilepton/xs/MG5_aMC_v2_6_1/HEPTools/MG5aMC_PY8_interface
+#set pythia8_path /afs/cern.ch/user/d/dryu/MCI/DMSummaryPlots/src/ExoDMSummaryPlots/input/CMS/Dilepton/xs/MG5_aMC_v2_6_1/HEPTools/pythia8
+
+import model DMsimp_s_spin1
+define l+ = mu+ e+ ta+
+define l- = mu- e- ta-
+generate p p > Y1 > l+ l- [QCD]
+output Zpll_MMED2000_MDM500_V2
+launch
+
+# customizecards.dat
+shower=OFF
+./Cards/run_card.dat
+./Cards/shower_card.dat
+
+set lhaid 292200
+set maxjetflavor 5
+set MY1 2000
+set MXd 500
+set gVh 0
+set gAd11 0
+set gAd22 0
+set gAd33 0
+set gAu11 0
+set gAu22 0
+set gAu33 0
+set gAl11 0
+set gAl22 0
+set gAl33 0
+set gaxd 0
+set gaxc 0
+set gVd11 0.1
+set gVd22 0.1
+set gVd33 0.1
+set gVu11 0.1
+set gVu22 0.1
+set gVu33 0.1
+set gVl11 0.01
+set gVl22 0.01
+set gVl33 0.01
+set gnu11 0.01
+set gnu22 0.01
+set gnu33 0.01
+set gVxd 0.1
+set gVxc 0
+set gVu31 0
+set gAu31 0
+set gVd31 0
+set gAd31 0
+set nevents 1500
+set ebeam1 6500
+set ebeam2 6500
+set WY1 auto
+
+launch Zpll_MMED2000_MDM500_V2 -i
+exit

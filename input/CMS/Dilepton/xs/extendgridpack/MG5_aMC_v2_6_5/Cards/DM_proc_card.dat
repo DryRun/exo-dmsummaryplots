@@ -1,0 +1,9 @@
+import DMsimp_s_spin1
+# Define multiparticle labels
+define l+ = mu+ e+ ta+
+define l- = mu- e- ta-
+generate       p p  > y1 > l+ l-[QCD]
+output output_folder
+
+
+

@@ -215,7 +215,7 @@ def read_graphs():
     graphs = {}
     scenarios = ["A1", "A2", "A3","A4","V1", "V2", "V3","V4"]
     quantiles = ["obs", "exp"]
-    analyses = ["monojet","monophoton","monoz","dilepton","dijet","monoHgg","monotop","dijet","dijetbb","boosted_dijet_isrj","dijetchi","relic","trijet"]
+    analyses = ["monojet","monophoton","monoz","dilepton","dileptonfake", "dijet","monoHgg","monotop","dijet","dijetbb","boosted_dijet_isrj","dijetchi","relic","trijet"]
     for a in analyses:
         graphs[a] = {}
         for s in scenarios:
@@ -237,6 +237,11 @@ def read_graphs():
     graphs["dilepton"]["A2"]["exp"] = TFile("input/CMS/Dilepton/EXO-19-019/ScanMM/contours_dilepton_A2.root").Get("exp_combined_med")
     graphs["dilepton"]["V2"]["obs"] = TFile("input/CMS/Dilepton/EXO-19-019/ScanMM/contours_dilepton_V2.root").Get("obs_combined")
     graphs["dilepton"]["V2"]["exp"] = TFile("input/CMS/Dilepton/EXO-19-019/ScanMM/contours_dilepton_V2.root").Get("exp_combined_med")
+
+    graphs["dileptonfake"]["A2"]["obs"] = TFile("input/CMS/Dilepton/EXO-20-fake/ScanMM/contours_dilepton_A2.root").Get("obs_1")
+    graphs["dileptonfake"]["A2"]["exp"] = TFile("input/CMS/Dilepton/EXO-20-fake/ScanMM/contours_dilepton_A2.root").Get("exp_combined_med")
+    graphs["dileptonfake"]["V2"]["obs"] = TFile("input/CMS/Dilepton/EXO-20-fake/ScanMM/contours_dilepton_V2.root").Get("obs_combined")
+    graphs["dileptonfake"]["V2"]["exp"] = TFile("input/CMS/Dilepton/EXO-20-fake/ScanMM/contours_dilepton_V2.root").Get("exp_combined_med")
 
 
     graphs["monoz"]["A1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
@@ -379,6 +384,7 @@ def get_line_style():
     linestyle["dijet_2016"]     = r.kSolid
     linestyle["dijet_2016_exp"] = r.kDashed
     linestyle["dilepton"]       = r.kSolid
+    linestyle["dileptonfake"]       = r.kSolid
     linestyle["trijet"]         = r.kSolid
     ### MET+X
     linestyle["monophoton"]     = r.kSolid
@@ -398,6 +404,7 @@ def get_fill_style():
     fillstyle["dijet"]          = 1001
     fillstyle["dijetchi"]       = 1001
     fillstyle["dilepton"]       = 1001
+    fillstyle["dileptonfake"]       = 1001
     fillstyle["trijet"]         = 1001
     ### MET+X
     fillstyle["monophoton"]     = 3005
@@ -417,6 +424,7 @@ def get_line_width():
     linewidth["dijet"]          = 2
     linewidth["dijetchi"]       = 2
     linewidth["dilepton"]       = 2
+    linewidth["dileptonfake"]       = 2
     linewidth["trijet"]         = 2
     ### MET+X
     linewidth["monophoton"]     = 102
@@ -438,6 +446,7 @@ def get_color():
     color["dijet"]          = r.kYellow-10
     color["dijetchi"]       = r.kAzure
     color["dilepton"]       = r.kGreen-10
+    color["dileptonfake"]       = r.kGreen-10
     color["trijet"]         = r.kCyan-10
     color["chi"]            = r.kBlue
     ### MET+X
@@ -460,6 +469,7 @@ def get_line_color():
     color["dijet"]          = r.kYellow+3
     color["dijetchi"]       = r.kAzure
     color["dilepton"]       = r.kGreen+3
+    color["dileptonfake"]       = r.kGreen+3
     color["dijet_2016"]     = r.kAzure
     color["dijet_2016_exp"] = r.kAzure+1
     color["trijet"]         = r.kAzure+1
@@ -481,6 +491,7 @@ def get_text():
     text["dijetchi"]       = "#bf{Dijet #chi}  (36.5 fb^{-1}) #it{[EXO-16-046]}"
     #~ text["dilepton"]       = "#splitline{Dilepton: ee (12.4 fb^{-1}) + #mu#mu (13.0 fb^{-1})}{#it{[EXO-16-031]}}"
     text["dilepton"]       = "#splitline{#bf{Dilepton} (12.4 fb^{-1} / 13.0 fb^{-1})}{#it{[EXO-19-019]}}"
+    text["dileptonfake"]       = "#splitline{#bf{Dilepton} (-1 fb^{-1})}{#it{[Fake data]}}"
     text["dijet_2016"]     = "Observed"
     text["dijet_2016_exp"] = "Expected"
     text["trijet"]         = "#splitline{#bf{Boosted dijet} (35.9 fb^{-1})}{#it{[EXO-17-001]}}"
@@ -512,7 +523,7 @@ def get_scenario_label_coordinates(metxonly=False,logx=False):
         coords["A2"] = (0.65,0.9,0.7,0.9)
         coords["A3"] = (0.1,0.3,0.6,0.85)
         coords["A4"] = (0.1,0.3,0.6,0.85)
-        coords["V1"] = (0.215,0.415,0.6,0.85)
+        coords["V1"] = (0.12,0.415,0.6,0.85)
         coords["V2"] = (0.55,0.75,0.6,0.85)
         coords["V3"] = (0.1,0.3,0.6,0.85)
         coords["V4"] = (0.1,0.3,0.6,0.85)

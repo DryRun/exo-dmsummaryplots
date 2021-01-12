@@ -67,7 +67,7 @@ style = {
         "line_style":ROOT.kSolid,
         "line_width":2,
         "fill_style":1001,
-        "fill_color":ROOT.kYellow-10,
+        "fill_color":ROOT.kMagenta-10,
         "legend":"#splitline{#bf{Dijet w/ btag} (19.7 fb^{-1})}{#it{[arXiv:1802.06149]}}",
     },
     "trijet":{
@@ -75,7 +75,8 @@ style = {
         "line_style":ROOT.kSolid,
         "line_width":2,
         "fill_style":1001,
-        "fill_color":ROOT.kYellow-10,
+        #"fill_color":ROOT.kYellow-10,
+        "fill_color":ROOT.kRed-10,
         "legend":"#splitline{#bf{Dijet w/ ISR j} (18.3 fb^{-1})}{#it{[arXiv:1911.03761]}}",
     },
     "dilepton":{
@@ -87,12 +88,21 @@ style = {
         "legend":"#splitline{#bf{Dilepton} (137 fb^{-1})}{#it{[EXO-19-019]}}",
         #"legend":"#splitline{#bf{Dilepton} (35.9-36.3 fb^{-1})}{#it{[arXiv:1803.06292]}}",
     },
+    "dileptonfake":{
+        "line_color":ROOT.kGreen+3,
+        "line_style":ROOT.kSolid,
+        "line_width":2,
+        "fill_style":1001,
+        "fill_color":ROOT.kGreen-10,
+        "legend":"#splitline{#bf{Dilepton} (-1 fb^{-1})}{#it{[Fake data]}}",
+        #"legend":"#splitline{#bf{Dilepton} (35.9-36.3 fb^{-1})}{#it{[arXiv:1803.06292]}}",
+    },
     "boosted_dijet_isrj":{
         "line_color":ROOT.kCyan-5,
         "line_style":ROOT.kSolid,
         "line_width":2,
         "fill_style":1001,
-        "fill_color":ROOT.kYellow-10,
+        "fill_color":ROOT.kCyan-10,
         "legend":"#splitline{#bf{Boosted dijet} (77 fb^{-1})}{#it{[arXiv:1909.04114]}}",
     },
 
@@ -162,7 +172,7 @@ canvas_style = {
     "scenario_coords_linearx":{
         #"A1":(0.2,0.7,0.6,0.85),
         "A1":(0.3,0.8,0.6,0.85),
-        "A2":(0.5,0.7,0.6,0.85),
+        "A2":(0.42,0.62,0.6,0.85),
         "A3":(0.1,0.3,0.6,0.85),
         "A4":(0.1,0.3,0.6,0.85),
         "V1":(0.3,0.5,0.6,0.85),
@@ -175,7 +185,7 @@ canvas_style = {
         "A2":(0.65,0.9,0.7,0.9),
         "A3":(0.1,0.3,0.6,0.85),
         "A4":(0.1,0.3,0.6,0.85),
-        "V1":(0.215,0.415,0.6,0.85),
+        "V1":(0.14,0.415,0.6,0.85),
         "V2":(0.55,0.75,0.6,0.85),
         "V3":(0.1,0.3,0.6,0.85),
         "V4":(0.1,0.3,0.6,0.85),
@@ -274,9 +284,9 @@ def style_graph(analysis, tgraph, obsexp):
     this_style = style[analysis]
 
     if "fill_color" in this_style:
-        tgraph.SetFillColor(this_style["fill_color"])
+        tgraph.SetFillColorAlpha(this_style["fill_color"], 0.5)
     else:
-        tgraph.SetFillColor(default_style["fill_color"])
+        tgraph.SetFillColorAlpha(default_style["fill_color"], 0.5)
     if "fill_style" in this_style:
         tgraph.SetFillStyle(this_style["fill_style"])
     else:
@@ -326,7 +336,7 @@ pad.SetTickx()
 pad.SetTicky()
 
 if args.logx:
-    frame = pad.DrawFrame(40,0,4e4,2000)
+    frame = pad.DrawFrame(40,0,1.e4,2000)
     pad.SetLogx()
 else :
     if args.scenario in ["A3","V3"]:
@@ -339,10 +349,13 @@ else :
         frame = pad.DrawFrame(0,0,4500,2000)
 
 frame.SetXTitle("Mediator mass M_{ med} [GeV]")
-frame.SetYTitle("Dark matter mass m_{ DM} [GeV]")
+frame.SetYTitle("Dark matter mass M_{ DM} [GeV]")
 frame.GetXaxis().SetTitleSize(0.052)
 frame.GetYaxis().SetTitleSize(0.052)
-frame.GetXaxis().SetTitleOffset(0.85)
+if args.logx:
+    frame.GetXaxis().SetTitleOffset(0.9)
+else:
+    frame.GetXaxis().SetTitleOffset(0.85)
 frame.GetYaxis().SetTitleOffset(0.85)
 
 #### Legend
@@ -357,7 +370,7 @@ leg.SetHeader("#bf{Exclusion at 95% CL}")
 auxleg = ROOT.TLegend(*canvas_style["auxlegend_coordinates"][args.scenario])
 auxleg.SetBorderSize(1)
 auxleg.SetTextFont(42)
-auxleg.SetFillColor(ROOT.kWhite)
+auxleg.SetFillColorAlpha(ROOT.kWhite, 0.75)
 auxleg.SetFillStyle(1001)
 auxleg.SetTextSize(canvas_style["auxlegend_textsize"][args.scenario])
 
@@ -460,7 +473,7 @@ texts[-1].Draw("same")
 
 # CMS label
 if args.cms:
-    texts.append(add_text(0.08,0.33,0.9,1.0,"#bf{CMS}"))
+    texts.append(add_text(0.07, 0.2, 0.91, 0.99,"#bf{CMS}")) #x1, x2, y1, y2
     texts[-1].Draw("same")
 elif args.cms_label:
     texts.append(add_text(0.08,0.33,0.9,1.0,"#bf{{CMS}} {}".format(args.cms_label)))
@@ -477,12 +490,12 @@ canvas.Update()
 ############
 formats = args.formats.split(",")
 if "png" in formats:
-    if "eps" in formats:
-        formats.remove("eps")
-    formats.insert(formats.index("png"), "eps")
+    if "pdf" in formats:
+        formats.remove("pdf")
+    formats.insert(formats.index("png"), "pdf")
 for ext in formats:
     if ext == "png":
-        os.system("convert -density 600 -trim {}/{}.eps  {}/{}.png".format(output_directory, canvas.GetName(), output_directory, canvas.GetName()))
+        os.system("convert -density 600 -trim {}/{}.pdf  {}/{}.png".format(output_directory, canvas.GetName(), output_directory, canvas.GetName()))
     else:
         canvas.SaveAs("{}/{}.{}".format(output_directory, canvas.GetName(), ext))
 

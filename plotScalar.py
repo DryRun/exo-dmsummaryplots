@@ -11,6 +11,7 @@ import os
 from ROOT import *
 import ast
 from Utilities import *
+gROOT.SetBatch(True)
 ################
 ### Settings ###
 ################
@@ -26,20 +27,21 @@ def do_plot(Mediator,ObsOnly):
 	analyses = ["BSM",
 				"monojet_obs",
 				"monoz_obs",
-				#"DMtt_obs",
+				"DMt_obs",
 				#"METbb_DMtt_obs",
 				#"METbb_DMbb_obs"
 				#,"METbb_DMhf_obs"
-				"METHF_DMhf_obs"
+				#"METHF_DMhf_obs"
 				]
 	
 	if not ObsOnly: analyses=["BSM",
 							"monojet_obs",   "monojet_exp",
 							"monoz_obs",     "monoz_exp",
+							"DMt_obs",       "DMt_exp",
 							#"DMtt_obs",      "DMtt_exp",
 							#"METbb_DMbb_obs","METbb_DMbb_exp"
 							#"METbb_DMtt_exp","METbb_DMtt_obs",
-							"METHF_DMhf_obs","METHF_DMhf_exp",
+							#"METHF_DMhf_obs","METHF_DMhf_exp",
 							]
 	
 	tgraph    = {}
@@ -51,13 +53,15 @@ def do_plot(Mediator,ObsOnly):
 	############# 
 	### Files ###
 	#############
-	
+	inputs_dir = os.path.expandvars("$CMSSW_BASE/src/ExoDMSummaryPlots/input/CMS/")
 	if Mediator == "Scalar":
-		filepath["monojet_obs"]    = "Monojet/EXO-16-048/ScanMM/limit_scalar_1D.root"
- 		filepath["monojet_exp"]    = "Monojet/EXO-16-048/ScanMM/limit_scalar_1D.root"
+		filepath["monojet_obs"]    = "Monojet/EXO-16-048/ScanMM/scalar_1D_limits.root"
+		filepath["monojet_exp"]    = "Monojet/EXO-16-048/ScanMM/scalar_1D_limits.root"
 		filepath["monoz_obs"]      = "MonoZll/EXO-16-052/ScanMM/spin0/monoz_limit_S_obs.txt"
 		filepath["monoz_exp"]      = "MonoZll/EXO-16-052/ScanMM/spin0/monoz_limit_S_exp.txt"
 		
+		filepath["DMt_obs"]        = "DMt/DMt_scalar_obs.txt"
+		filepath["DMt_exp"]        = "DMt/DMt_scalar_exp.txt"
 		filepath["DMtt_obs"]       = "DMtt/DMtt_Scalar_ICHEP2016_Mx_obs.txt"
 		filepath["DMtt_exp"]       = "DMtt/DMtt_Scalar_ICHEP2016_Mx_exp.txt"
 		filepath["METbb_DMtt_obs"] = "DMbb/2015/Limits_hfDMs.root"
@@ -69,8 +73,10 @@ def do_plot(Mediator,ObsOnly):
 		filepath["METbb_DMhf_exp"] = "DMbb/2015/Limits_hfDMs.root"
 		filepath["METHF_DMhf_exp"] = "DMHF/2015/HF_spin0_limits.root"
 	if Mediator == "Pseudo":
-		filepath["monojet_obs"]    = "Monojet/EXO-16-048/ScanMM/limit_pseudoscalar_1D.root"
-		filepath["monojet_exp"]    = "Monojet/EXO-16-048/ScanMM/limit_pseudoscalar_1D.root"
+		filepath["DMt_obs"]        = "DMt/DMt_pseudoscalar_obs.txt"
+		filepath["DMt_exp"]        = "DMt/DMt_pseudoscalar_exp.txt"		
+		filepath["monojet_obs"]    = "Monojet/EXO-16-048/ScanMM/pseudoscalar_1D_limits.root"
+		filepath["monojet_exp"]    = "Monojet/EXO-16-048/ScanMM/pseudoscalar_1D_limits.root"
 		filepath["monoz_obs"]      = "MonoZll/EXO-16-052/ScanMM/spin0/monoz_limit_P_obs.txt"
 		filepath["monoz_exp"]      = "MonoZll/EXO-16-052/ScanMM/spin0/monoz_limit_P_exp.txt"
 		filepath["DMtt_obs"]       = "DMtt/DMtt_Pseudo_ICHEP2016_Mx_obs.txt"
@@ -84,6 +90,9 @@ def do_plot(Mediator,ObsOnly):
 		filepath["METbb_DMhf_exp"] = "DMbb/2015/Limits_hfDMps.root"
 		filepath["METHF_DMhf_exp"] = "DMHF/2015/HF_spin0_limits.root"
 	
+	for name, path in filepath.iteritems():
+		filepath[name] = "{}/{}".format(inputs_dir, path)
+
 	#######################
 	### Plot linestyles ###
 	#######################
@@ -95,12 +104,14 @@ def do_plot(Mediator,ObsOnly):
 	linestyle["monoz_obs"]    = kSolid
 	linestyle["monoz_exp"]    = kDashed
 	# HF
+	linestyle["DMt_obs"]       = kSolid
 	linestyle["DMtt_obs"]       = kSolid
 	linestyle["METbb_DMtt_obs"] = kSolid
 	linestyle["METbb_DMbb_obs"] = kSolid
 	linestyle["METbb_DMhf_obs"] = kSolid
 	linestyle["METHF_DMhf_obs"] = kSolid
 	linestyle["DMtt_exp"]       = kDashed
+	linestyle["DMt_exp"]       = kDashed
 	linestyle["METbb_DMtt_exp"] = kDashed
 	linestyle["METbb_DMbb_exp"] = kDashed
 	linestyle["METbb_DMhf_exp"] = kDashed
@@ -113,6 +124,7 @@ def do_plot(Mediator,ObsOnly):
 	color["BSM"]            = kBlack
 	color["monojet_obs"]    = kRed+1
 	color["monoz_obs"]      = kOrange-3
+	color["DMt_obs"]       = kGreen+2
 	color["DMtt_obs"]       = kGreen+2
 	color["METbb_DMbb_obs"] = kGreen+1
 	##
@@ -122,6 +134,7 @@ def do_plot(Mediator,ObsOnly):
 	##
 	color["monojet_exp"]    = color["monojet_obs"]
 	color["monoz_exp"]    = color["monoz_obs"]
+	color["DMt_exp"]       = color["DMt_obs"]
 	color["DMtt_exp"]       = color["DMtt_obs"]
 	color["METbb_DMbb_exp"] = color["METbb_DMbb_obs"]
 	color["METbb_DMtt_exp"] = color["METbb_DMtt_obs"]
@@ -132,14 +145,15 @@ def do_plot(Mediator,ObsOnly):
 	### Plot texts ###
 	##################
 	
-	text["BSM"]            = "#sigma_{theory} (LHC DM WG)"
-	text["monojet_obs"] = "#splitline{#bf{DM + j/V(qq)} (35.9 fb^{-1})}{[EXO-16-048]}"
-	text["monoz_obs"]       = "#splitline{#bf{DM + Z(ll)} (35.9 fb^{-1})}{[EXO-16-052]}"
+	text["BSM"]         = "#sigma_{theory} (LHC DM WG)"
+	text["monojet_obs"] = "#splitline{#bf{DM + j/V(qq)} (35.9 fb^{-1})}{[arXiv:1712.02345]}"
+	text["monoz_obs"]   = "#splitline{#bf{DM + Z(ll)} (35.9 fb^{-1})}{[arXiv:1711.00431]}"
+	text["DMt_obs"]     = "#splitline{#bf{DM + t/tt} (35.9 fb^{-1})}{[arXiv:1901.01553]}"
 	#~ text["DMtt_obs"]       = "DM + tt (2.2 fb^{-1}) #it{EXO-16-005}"
 	#~ text["METbb_DMbb_obs"] = "DM + bb (2.2 fb^{-1}) #it{B2G-15-007}"
 	#~ text["METbb_DMtt_obs"] = "DM + tt (nj<4) [B2G-15-007]"
 	#~ text["METbb_DMhf_obs"] = "MET+bb: DM+HF [B2G-15-007]"
-	text["METHF_DMhf_obs"] = "#splitline{#bf{DM + tt/bb} (2.2 fb^{-1})}{[EXO-16-005]}"
+	#text["METHF_DMhf_obs"] = "#splitline{#bf{DM + tt/bb} (2.2 fb^{-1})}{[EXO-16-005]}"
 	#exp
 	#~ text["monojet_exp"]    = "exp.excl 95%CL"
 	#~ text["monoz_exp"]    = "exp.excl 95%CL"
@@ -161,8 +175,8 @@ def do_plot(Mediator,ObsOnly):
 	
 	for analysis in analyses: 
 		if   analysis == "BSM"            : tgraph[analysis] = TGraph(f1)
-		elif analysis == "monojet_obs"    : tgraph[analysis] = convert_spline_to_graph(TFile(filepath[analysis]).Get("observed_limit"),20,600)
- 		elif analysis == "monojet_exp"    : tgraph[analysis] = convert_spline_to_graph(TFile(filepath[analysis]).Get("expected_limit"),20,600) 		
+		elif analysis == "monojet_obs"    : tgraph[analysis] = convert_spline_to_graph(TFile(filepath[analysis]).Get("Observed_limit"),20,600)
+		elif analysis == "monojet_exp"    : tgraph[analysis] = convert_spline_to_graph(TFile(filepath[analysis]).Get("Expected_limit"),20,600) 		
 		elif analysis == "METbb_DMbb_obs" : tgraph[analysis] = TFile(filepath[analysis]).Get("bbObs0s")
 		elif analysis == "METbb_DMtt_obs" : tgraph[analysis] = TFile(filepath[analysis]).Get("ttObs0s")
 		elif analysis == "METbb_DMhf_obs" : tgraph[analysis] = TFile(filepath[analysis]).Get("hfObs0s")
@@ -247,7 +261,7 @@ def do_plot(Mediator,ObsOnly):
 	texts = []
 	medname = Mediator if Mediator=="Scalar" else Mediator+"scalar"
 	texts.append(add_text(0.55,0.9,0.65,0.85,["#bf{{{MED} Mediator}}".format(MED=medname),"Dirac DM","g_{q} = 1.0", "g_{DM} = 1.0", "m_{DM} = 1 GeV"],alignment=12))
-	texts.append(add_text(0.7,0.85,0.86,1.0,"LHCP 2017"))
+	texts.append(add_text(0.7,0.85,0.86,1.0,"LHCP 2020"))
 	#~ leg3.SetHeader("2.2 fb^{-1} & 35.9 fb^{-1} (13 TeV)")
 	
 	############
@@ -311,8 +325,15 @@ def do_plot(Mediator,ObsOnly):
 	gPad.SetTickx()
 
 	if( not os.path.exists("./output") ): os.makedirs("./output")
-	if ObsOnly: C.SaveAs("./output/"+Mediator+"_METX_Summary_obsonly.pdf")
-	else      : C.SaveAs("./output/"+Mediator+"_METX_Summary_obsnexp.pdf")
+	if ObsOnly: 
+		savename = Mediator + "_METX_Summary_obsonly_lhcp2020"
+		C.SaveAs("./output/{}.pdf".format(savename))
+		os.system("convert -density 600 -trim ./output/{}.pdf  ./output/{}.png".format(savename, savename))
+	else: 
+		savename = Mediator + "_METX_Summary_obsnexp_lhcp2020"
+		C.SaveAs("./output/{}.pdf".format(savename))
+		os.system("convert -density 600 -trim ./output/{}.pdf  ./output/{}.png".format(savename, savename))
+
 	C.Close()
 
 do_plot("Scalar",0)

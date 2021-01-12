@@ -20,12 +20,12 @@ class DileptonConverterFine:
 			raise ValueError("Unknown scenario {}".format(self._scenario))
 
 		if self._scenario == "V2":
-			self._gq = 0.25
-			self._gl = 0.1
+			self._gq = 0.1
+			self._gl = 0.01
 			self._gDM = 1.0
 			self._vtype = "vector"
 		elif self._scenario == "A2":
-			self._gq = 0.25
+			self._gq = 0.1
 			self._gl = 0.1
 			self._gDM = 1.0
 			self._vtype = "axial"
@@ -59,6 +59,12 @@ class DileptonConverterFine:
 			data = np.loadtxt(path, dtype=float)
 			mmeds = data[:,0]
 			limits = data[:,1] * 1928 * 3
+
+			# For Run 2, 10% width limits are for >600 GeV only
+			if width == 0.1:
+				omitted_points = (mmeds < 600)
+				limits[omitted_points] = np.array([1.e20] * omitted_points.sum())
+
 			self._xslimit_vs_mmed_widthdict[width] = dict(zip(mmeds, limits))
 			#print "{mmed : xs limit} for width " + str(width)
 			#print self._xslimit_vs_mmed_widthdict[width]
@@ -119,7 +125,7 @@ class DileptonConverterFine:
 					missing_points[width].append(mmed)
 		if len(missing_points) >= 1:
 			print(missing_points)
-			raise ValueError("Missing input limit points.")
+			raise ValueError("Missing input limit points. Is the input limit grid complete? I need a full rectangular grid.")
 
 	def convert_width_to_mdm(self):
 		""" Convert dilepton limits (sigma95 vs width vs mZp) to (sigma95 vs mDM vs mZp)
@@ -365,7 +371,7 @@ if __name__ == "__main__":
 			0.0300: "raw/ZPrime_limitCard_Run2_width03_Obs_legcay.txt",
 			0.0325: "raw/ZPrime_limitCard_Run2_width0325_Obs_legcay.txt",
 			0.035: "raw/ZPrime_limitCard_Run2_width035_Obs_legcay.txt",
-			#0.05: "raw/ZPrime_limitCard_Run2_width05_Obs_legcay.txt",
+			0.05: "raw/ZPrime_limitCard_Run2_width05_Obs_legcay.txt",
 			#0.1: "raw/ZPrime_limitCard_Run2_width10_Obs_legcay.txt",
 		}
 		converter.load_obs_lllimits(input_path_dict_obs)

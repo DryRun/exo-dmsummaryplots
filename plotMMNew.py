@@ -85,7 +85,7 @@ style = {
         "line_width":2,
         "fill_style":1001,
         "fill_color":ROOT.kGreen-10,
-        "legend":"#splitline{#bf{Dilepton} (137 fb^{-1})}{#it{[EXO-19-019]}}",
+        "legend":"#splitline{#bf{Dilepton} (137 fb^{-1})}{#it{[arXiv:2103.02708]}}",
         #"legend":"#splitline{#bf{Dilepton} (35.9-36.3 fb^{-1})}{#it{[arXiv:1803.06292]}}",
     },
     "dileptonfake":{
@@ -112,7 +112,8 @@ style = {
         "line_width":102,
         "fill_style":3005,
         "fill_color":ROOT.kRed+2,
-        "legend":"#splitline{#bf{DM + j/V(qq)} (35.9 fb^{-1})}{#it{[arXiv:1712.02345]}}",
+        "legend":"#splitline{#bf{DM + j/V(qq)} (137 fb^{-1})}{#it{[2107.13021]}}",
+        #"legend":"#splitline{#bf{DM + j/V(qq)} (35.9 fb^{-1})}{#it{[arXiv:1712.02345]}}",
     },
     "monophoton":{
         "line_color":ROOT.kBlue-4,
@@ -128,7 +129,8 @@ style = {
         "line_width":-102,
         "fill_style":3005,
         "fill_color":ROOT.kOrange-3,
-        "legend":"#splitline{#bf{DM + Z(ll)} (35.9 fb^{-1})}{#it{[arXiv:1711.00431]}}",
+        "legend":"#splitline{#bf{DM + Z(ll)} (137 fb^{-1})}{#it{[arXiv:2008.04735]}}",
+        #"legend":"#splitline{#bf{DM + Z(ll)} (35.9 fb^{-1})}{#it{[arXiv:1711.00431]}}",
     },
     "monoHgg":{
         "line_color":ROOT.kMagenta-7,

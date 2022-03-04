@@ -224,10 +224,15 @@ def read_graphs():
                 graphs[a][s][q] = None
 
 
-    graphs["monojet"]["A1"]["obs"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_observed")
-    graphs["monojet"]["A1"]["exp"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_expected")
-    graphs["monojet"]["V1"]["obs"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_observed")
-    graphs["monojet"]["V1"]["exp"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_expected")
+    graphs["monojet"]["A1"]["obs"] = r.TGraph("input/CMS/Monojet/EXO-20-004/ScanMM/monojet_contour_observed_limit_axial_cl95.txt")
+    graphs["monojet"]["A1"]["exp"] = r.TGraph("input/CMS/Monojet/EXO-20-004/ScanMM/monojet_contour_expected_limit_axial_cl95.txt")
+    graphs["monojet"]["V1"]["obs"] = r.TGraph("input/CMS/Monojet/EXO-20-004/ScanMM/monojet_contour_observed_limit_vector_cl95.txt")
+    graphs["monojet"]["V1"]["exp"] = r.TGraph("input/CMS/Monojet/EXO-20-004/ScanMM/monojet_contour_expected_limit_vector_cl95.txt")
+    #graphs["monojet"]["A1"]["obs"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_observed")
+    #graphs["monojet"]["A1"]["exp"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_axial.root").Get("contour_expected")
+    #graphs["monojet"]["V1"]["obs"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_observed")
+    #graphs["monojet"]["V1"]["exp"] = TFile("input/CMS/Monojet/EXO-16-048/ScanMM/scan2D_vector.root").Get("contour_expected")
+    graphs["monojet"]["V1"]["obs"].Print("all")
 
     #graphs["dilepton"]["A2"]["obs"] = rescale_graph_axis(TFile("input/CMS/Dilepton/EXO-16-047/ScanMM/contours_dilepton_A2_smooth.root").Get("obs0"),1e3,1e3)
     #graphs["dilepton"]["A2"]["exp"] = rescale_graph_axis(TFile("input/CMS/Dilepton/EXO-16-047/ScanMM/contours_dilepton_A2_smooth.root").Get("exp0"),1e3,1e3)
@@ -244,10 +249,16 @@ def read_graphs():
     graphs["dileptonfake"]["V2"]["exp"] = TFile("input/CMS/Dilepton/EXO-20-fake/ScanMM/contours_dilepton_V2.root").Get("exp_combined_med")
 
 
-    graphs["monoz"]["A1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
-    graphs["monoz"]["A1"]["exp"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_axial_cl95.txt")
-    graphs["monoz"]["V1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
-    graphs["monoz"]["V1"]["exp"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_vector_cl95.txt")
+    # Mono-Z full Run 2
+    graphs["monoz"]["A1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-19-003/ScanMM/monoz_contour_observed_limit_axial_cl95.csv")
+    graphs["monoz"]["A1"]["exp"] = r.TGraph("input/CMS/MonoZll/EXO-19-003/ScanMM/monoz_contour_expected_limit_axial_cl95.csv")
+    graphs["monoz"]["V1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-19-003/ScanMM/monoz_contour_observed_limit_vector_cl95.csv")
+    graphs["monoz"]["V1"]["exp"] = r.TGraph("input/CMS/MonoZll/EXO-19-003/ScanMM/monoz_contour_expected_limit_vector_cl95.csv")
+    # Mono-Z 2016
+    #graphs["monoz"]["A1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_axial_cl95.txt")
+    #graphs["monoz"]["A1"]["exp"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_axial_cl95.txt")
+    #graphs["monoz"]["V1"]["obs"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_observed_limit_vector_cl95.txt")
+    #graphs["monoz"]["V1"]["exp"] = r.TGraph("input/CMS/MonoZll/EXO-16-052/ScanMM/monoz_contour_expected_limit_vector_cl95.txt")
 
     #graphs["monophoton"]["A1"]["obs"] =TFile("input/CMS/Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_obs.root").Get("monophoton_obs")
     #graphs["monophoton"]["A1"]["exp"] =TFile("input/CMS/Monophoton/ScanMM/Monophoton_A_MM_ICHEP2016_exp.root").Get("monophoton_exp")
